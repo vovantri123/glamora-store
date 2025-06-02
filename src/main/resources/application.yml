@@ -1,0 +1,28 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /
+    session:
+      cookie:
+        same-site: strict
+        http-only: true
+
+spring:
+  application:
+    name: glamora_store
+  datasource:
+    url: ${DB_URL:jdbc:mysql://localhost:3306/glamora_store}
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:1234567890}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+  mail:
+    host: ${MAIL_HOST:smtp.gmail.com}
+    port: ${MAIL_PORT:587}
+    username: ${USERNAME_MAIL:testMail@gmail.com}
+    password: ${PASSWORD_MAIL:pass-mail}
+
+
+
