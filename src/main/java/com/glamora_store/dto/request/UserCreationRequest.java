@@ -11,15 +11,15 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class UserCreationRequest {
-    @NotBlank(message = "Name is required")
+    @NotBlank(message = "NAME_REQUIRED")
     private String name;
 
-    @Email(message = "Email must be valid")
-    @NotBlank(message = "Email is required")
+    @Email(message = "EMAIL_INVALID")
+    @NotBlank(message = "EMAIL_REQUIRED")
     private String email;
 
-    @NotBlank(message = "Password is required")
-    @Size(min = 3, message = "Password must have at least 3 characters")
+    @NotBlank(message = "PASSWORD_REQUIRED")
+    @Size(min = 3, message = "PASSWORD_INVALID")
     private String password;
 
     private String phoneNumber;

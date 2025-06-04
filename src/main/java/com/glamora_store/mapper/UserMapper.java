@@ -13,7 +13,10 @@ import java.util.List;
 public interface UserMapper {
     User toUser(UserCreationRequest request);
 
+    UserResponse toUserResponse(User user);
+
     List<UserResponse> toListUserResponse(List<User> users);
 
-    void updateUser(@MappingTarget User user, UserUpdateRequest request); // @MappingTarget giúp cập nhật trực tiếp UserUpdateRequest vào User thay vì tạo mới một object khác.
+
+    void updateUser(@MappingTarget User user, UserUpdateRequest request); // @MappingTarget giúp cập nhật trực tiếp UserUpdateRequest vào User có sẵn (bởi sẽ có những trường mà target có nhưng source không có, phù hợp cho việc update)
 }

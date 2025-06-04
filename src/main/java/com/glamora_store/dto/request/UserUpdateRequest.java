@@ -11,11 +11,11 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class UserUpdateRequest {
-    @NotBlank(message = "Name is required")
+    @NotBlank(message = "NAME_REQUIRED")
     private String name;
 
-    @NotBlank(message = "Password is required")
-    @Size(min = 3, message = "Password must have at least 3 characters")
+    @NotBlank(message = "PASSWORD_REQUIRED")
+    @Size(min = 3, message = "PASSWORD_INVALID")
     private String password;
 
     private String phoneNumber;
