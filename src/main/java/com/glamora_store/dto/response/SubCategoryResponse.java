@@ -1,0 +1,16 @@
+package com.glamora_store.dto.response;
+
+import com.glamora_store.entity.SubCategory;
+import lombok.*;
+
+import java.util.Set;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class SubCategoryResponse {
+    private Long id;
+    private String name;
+}

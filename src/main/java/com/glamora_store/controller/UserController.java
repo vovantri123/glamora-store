@@ -21,7 +21,6 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
-    private final UserMapper userMapper;
 
     @GetMapping
     public ApiResponse<List<UserResponse>> getAllUsers() {
@@ -33,7 +32,7 @@ public class UserController {
     @GetMapping("/{id}")
     public ApiResponse<UserResponse> getUser(@PathVariable Long id) {
         ApiResponse<UserResponse> response = new ApiResponse<>();
-        response.setResult(userService.getUsersById(id));
+        response.setResult(userService.getUserById(id));
         return response;
     }
 
