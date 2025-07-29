@@ -3,19 +3,23 @@ package com.glamora_store.service;
 import com.glamora_store.dto.request.UserCreationRequest;
 import com.glamora_store.dto.request.UserUpdateRequest;
 import com.glamora_store.dto.response.UserResponse;
-import com.glamora_store.entity.User;
+import org.springframework.data.domain.Page;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface UserService {
-    List<UserResponse> getAllUsers();
 
-    UserResponse getUserById(Long id);
+  UserResponse createUser(UserCreationRequest request);
 
-    UserResponse createUser(UserCreationRequest request);
+  UserResponse updateUser(Long userId, UserUpdateRequest request);
 
-    UserResponse updateUser(Long id, UserUpdateRequest request);
+  void softDeleteUser(Long userId);
 
-    void deleteUser(Long id);
+  public UserResponse activeUser(Long userid);
 
+  Page<UserResponse> searchUsers(
+      String fullname, LocalDate dob, int page, int size, String sortBy, String sortDir);
+
+  UserResponse getUserById(Long userId);
 }

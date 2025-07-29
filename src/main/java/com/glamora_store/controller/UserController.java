@@ -4,58 +4,78 @@ import com.glamora_store.dto.request.UserCreationRequest;
 import com.glamora_store.dto.request.UserUpdateRequest;
 import com.glamora_store.dto.response.ApiResponse;
 import com.glamora_store.dto.response.UserResponse;
-import com.glamora_store.entity.User;
-import com.glamora_store.mapper.UserMapper;
+import com.glamora_store.enums.SuccessMessage;
 import com.glamora_store.service.UserService;
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
-import org.springframework.http.ResponseEntity;
+import lombok.*;
+import org.springframework.data.domain.Page;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-
+import java.time.LocalDate;
 import java.util.List;
 
+@Data
 @RestController
-@AllArgsConstructor
-@RequestMapping("/users")
+@RequiredArgsConstructor
+@RequestMapping("/api/users")
 public class UserController {
 
-    private final UserService userService;
+  private final UserService userService;
 
-    @GetMapping
-    public ApiResponse<List<UserResponse>> getAllUsers() {
-        ApiResponse<List<UserResponse>> response = new ApiResponse<>();
-        response.setResult(userService.getAllUsers());
-        return response;
-    }
+  @PostMapping
+  @ResponseStatus(HttpStatus.CREATED)
+  public ApiResponse<UserResponse> createUser(@Valid @RequestBody UserCreationRequest request) {
+    return new ApiResponse<>(
+        HttpStatus.CREATED.value(),
+        SuccessMessage.CREATE_USER_SUCCESS.getMessage(),
+        userService.createUser(request));
+  }
 
-    @GetMapping("/{id}")
-    public ApiResponse<UserResponse> getUser(@PathVariable Long id) {
-        ApiResponse<UserResponse> response = new ApiResponse<>();
-        response.setResult(userService.getUserById(id));
-        return response;
-    }
+  @PutMapping("/{userId}")
+  public ApiResponse<UserResponse> updateUser(
+      @PathVariable Long userId, @Valid @RequestBody UserUpdateRequest request) {
+    return new ApiResponse<>(
+        HttpStatus.OK.value(),
+        SuccessMessage.UPDATE_USER_SUCCESS.getMessage(),
+        userService.updateUser(userId, request));
+  }
 
-    @PostMapping
-    public ApiResponse<UserResponse> createUser(@RequestBody @Valid UserCreationRequest request) {
-        ApiResponse<UserResponse> response = new ApiResponse<>();
-        response.setResult(userService.createUser(request));
-        return response;
-    }
+  @DeleteMapping("/{userId}")
+  public ApiResponse<String> deleteUser(@PathVariable Long userId) {
+    userService.softDeleteUser(userId);
+    return new ApiResponse<>(
+        HttpStatus.OK.value(), SuccessMessage.DELETE_USER_SUCCESS.getMessage());
+  }
 
-    @PutMapping("/{id}")
-    public ApiResponse<UserResponse> updateUser(@PathVariable Long id, @RequestBody @Valid UserUpdateRequest request) {
-        ApiResponse<UserResponse> response = new ApiResponse<>();
-        response.setResult(userService.updateUser(id, request));
-        return response;
-    }
+  @PutMapping("/active/{userId}")
+  public ApiResponse<UserResponse> activateUser(@PathVariable Long userId) {
+    return new ApiResponse<>(
+        HttpStatus.OK.value(),
+        SuccessMessage.ACTIVATE_USER_SUCCESS.getMessage(),
+        userService.activeUser(userId));
+  }
 
-    @DeleteMapping("/{id}")
-    public ApiResponse<String> deleteUser(@PathVariable Long id) {
-        userService.deleteUser(id);
-        ApiResponse<String> response = new ApiResponse<>();
-        response.setResult("User has been deleted");
-        return response;
-    }
+  @GetMapping
+  public ApiResponse<Page<UserResponse>> searchUsers(
+      @RequestParam(required = false) String fullname,
+      @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dob,
+      @RequestParam(defaultValue = "0") int page,
+      @RequestParam(defaultValue = "4") int size,
+      @RequestParam(defaultValue = "userId") String sortBy,
+      @RequestParam(defaultValue = "desc") String sortDir) {
+    return new ApiResponse<>(
+        HttpStatus.OK.value(),
+        SuccessMessage.SEARCH_USER_SUCCESS.getMessage(),
+        userService.searchUsers(fullname, dob, page, size, sortBy, sortDir));
+  }
 
+  @GetMapping("/{userId}")
+  public ApiResponse<UserResponse> getUser(@PathVariable Long userId) {
+    return new ApiResponse<>(
+        HttpStatus.OK.value(),
+        SuccessMessage.GET_USER_SUCCESS.getMessage(),
+        userService.getUserById(userId));
+  }
 }

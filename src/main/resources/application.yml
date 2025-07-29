@@ -11,18 +11,37 @@ spring:
   application:
     name: glamora_store
   datasource:
-    url: ${DB_URL:jdbc:mysql://localhost:3306/glamora_store}
-    username: ${DB_USERNAME:root}
+    url: ${POSTGRES_URL:jdbc:postgresql://localhost:5432/glamora_store}
+    username: ${DB_USERNAME:postgres}
     password: ${DB_PASSWORD:1234567890}
   jpa:
     hibernate:
-      ddl-auto: update
-    show-sql: true
+      ddl-auto: update #update
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        envers:
+          audit_table_suffix: _aud
+          store_data_at_delete: true
+
+  flyway:
+    enabled: false
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+  #    baseline-version: 1
+  main:
+    allow-bean-definition-overriding: true
+
   mail:
-    host: ${MAIL_HOST:smtp.gmail.com}
+    host: ${MAIL_HOST:sandbox.smtp.mailtrap.io}
     port: ${MAIL_PORT:587}
-    username: ${USERNAME_MAIL:testMail@gmail.com}
-    password: ${PASSWORD_MAIL:pass-mail}
+    username: ${USERNAME_MAIL:nhap@gmail.com}
+    password: ${PASSWORD_MAIL:nhap}
 
 
-
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui

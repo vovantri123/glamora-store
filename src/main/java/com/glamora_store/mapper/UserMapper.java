@@ -4,18 +4,21 @@ import com.glamora_store.dto.request.UserCreationRequest;
 import com.glamora_store.dto.request.UserUpdateRequest;
 import com.glamora_store.dto.response.UserResponse;
 import com.glamora_store.entity.User;
-import org.mapstruct.Mapper;
-import org.mapstruct.MappingTarget;
-
 import java.util.List;
 
-@Mapper(componentModel = "spring") // Có thể mở trong target (sau khi run) để xem nó tạo @Mapper map dữ liệu thế nào
+import org.mapstruct.BeanMapping;
+import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
+import org.mapstruct.NullValuePropertyMappingStrategy;
+
+@Mapper(componentModel = "spring")
 public interface UserMapper {
-    User toUser(UserCreationRequest request);
+  User toUser(UserCreationRequest request);
 
-    UserResponse toUserResponse(User user);
+  UserResponse toUserResponse(User user);
 
-    List<UserResponse> toListUserResponse(List<User> users);
+  List<UserResponse> toListUserResponse(List<User> users);
 
-    void updateUser(@MappingTarget User user, UserUpdateRequest request); // @MappingTarget giúp cập nhật trực tiếp UserUpdateRequest vào User có sẵn (bởi sẽ có những trường mà target có nhưng source không có, phù hợp cho việc update)
+  @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+  void toUser(@MappingTarget User user, UserUpdateRequest request);
 }

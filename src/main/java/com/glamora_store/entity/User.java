@@ -1,39 +1,63 @@
 package com.glamora_store.entity;
 
+import com.glamora_store.enums.Gender;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
+import org.hibernate.envers.Audited;
 
-import java.util.Set;
+import java.time.LocalDate;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 @Entity
-public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+@Audited
+@Table(name = "`user`")
+public class User extends BaseEntity {
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long userId;
 
-    private String name;
+  @Column(name = "full_name")
+  @NotBlank(message = "FULL_NAME_REQUIRED")
+  @Size(min = 1, max = 100, message = "FULL_NAME_INVALID")
+  private String fullName;
 
-    @Column(unique = true, nullable = false)
-    private String email;
+  @Column(name = "gender", length = 10)
+  @Enumerated(EnumType.STRING)
+  private Gender gender;
 
-    private String password;
+  @Column(name = "dob")
+  @PastOrPresent(message = "DOB_INVALID")
+  private LocalDate dob;
 
-    private String phoneNumber;
+  @Column(name = "email", unique = true, nullable = false)
+  @NotBlank(message = "EMAIL_REQUIRED")
+  @Email(message = "EMAIL_INVALID")
+  private String email;
 
-    @Column(columnDefinition = "TEXT")
-    private String image;
+  @Column(name = "password", nullable = false)
+  @NotBlank(message = "PASSWORD_REQUIRED")
+  @Size(min = 8, max = 100, message = "PASSWORD_INVALID")
+  private String password;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<Address> addresses;
+  @Column(name = "phone_number", length = 15)
+  @Pattern(regexp = "^(0|\\+84)(3|5|7|8|9)[0-9]{8}$", message = "PHONE_NUMBER_INVALID")
+  private String phoneNumber;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<Order> orders;
+  @Column(name = "address", columnDefinition = "TEXT")
+  private String address;
 
-    @OneToMany(mappedBy = "user")
-    private Set<CartItem> cartItems;
+  @Column(name = "image", columnDefinition = "TEXT")
+  private String image;
+
+  //  @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  //  private Set<Order> orders;
+  //
+  //  @OneToMany(mappedBy = "user")
+  //  private Set<CartItem> cartItems;
 }

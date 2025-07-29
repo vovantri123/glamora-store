@@ -5,19 +5,19 @@ import lombok.*;
 
 import java.util.Set;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-@Entity
+// @Getter
+// @Setter
+// @NoArgsConstructor
+// @AllArgsConstructor
+// @Builder
+// @Entity
 public class Category {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    private String name;
-
-    @OneToMany(mappedBy = "category")
-    private Set<SubCategory> subCategories;
+  //  @Id
+  //  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  //  private Long id;
+  //
+  //  private String name;
+  //
+  //  @OneToMany(mappedBy = "category")
+  //  private Set<SubCategory> subCategories;
 }
