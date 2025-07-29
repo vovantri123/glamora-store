@@ -7,7 +7,8 @@ public enum SuccessMessage {
   SEARCH_USER_SUCCESS("Search user successfully"),
   DELETE_USER_SUCCESS("Patient has been deleted"),
   DELETE_LIST_USER_SUCCESS("Soft delete list user successfully"),
-  ACTIVATE_USER_SUCCESS("Activate user successfully");
+  ACTIVATE_USER_SUCCESS("Activate user successfully"),
+  LOGIN_SUCCESS("Login successfully");
 
   private final String message;
 

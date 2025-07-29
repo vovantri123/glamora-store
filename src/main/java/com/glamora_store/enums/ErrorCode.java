@@ -6,14 +6,14 @@ import lombok.Setter;
 @Getter
 public enum ErrorCode {
   UNCATEGORIZED_EXCEPTION(
-      9999,
-      "Uncategorized error"), // để thông báo Exception này chưa phân loại (kiểu xử lý cái exception
+    9999,
+    "Uncategorized error"), // để thông báo Exception này chưa phân loại (kiểu xử lý cái exception
   // chung chung)
   USER_EXISTS(1001, "Username already exists"),
   NAME_REQUIRED(1001, "Name is required"),
 
   INVALID_KEY(
-      1000, "Invalid message key") // Dùng khi message chứa ErrorCode bị sai chính tả (trong @Size)
+    1000, "Invalid message key") // Dùng khi message chứa ErrorCode bị sai chính tả (trong @Size)
   ,
 
   //
@@ -23,8 +23,8 @@ public enum ErrorCode {
   PATIENT_NOT_FOUND(10002, "Patient not found"),
   LIST_PATIENT_ID_NOT_FOUND(10003, "Some patient IDs were not found"),
   CANNOT_UPDATE_DELETED_PATIENT(10004, "Cannot update a deleted patient"),
-  GENDER_INVALID(
-      10007, "Gender must be one of: MALE, FEMALE, OTHER (or male, female, other). Unknown"),
+  GENDER_INVALID(10007, "Gender must be one of: MALE, FEMALE, OTHER (or male, female, other). Unknown"),
+  USER_NOT_EXISTED(10008, "User not existed"),
 
   // Cẩn thận xóa nhầm - Start (Chủ yếu lấy message detail, còn code với default message thì lấy của
   // VALIDATION_FAILED
@@ -50,6 +50,7 @@ public enum ErrorCode {
   URL_NOT_FOUND(10018, "Requested URL is not mapped"),
   INVALID_MESSAGE_KEY(10019, "Invalid message key"),
   CONSTRAINT_VIOLATION(10020, "Constraint violation in database");
+
 
   private int code;
   private String message;
