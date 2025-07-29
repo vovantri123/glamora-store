@@ -43,7 +43,7 @@ public class User extends BaseEntity {
   @Column(name = "password", nullable = false)
   @NotBlank(message = "PASSWORD_REQUIRED")
   @Size(min = 8, max = 100, message = "PASSWORD_INVALID")
-  private String password;
+  private String password; // Default in flyway is 12345678
 
   @Column(name = "phone_number", length = 15)
   @Pattern(regexp = "^(0|\\+84)(3|5|7|8|9)[0-9]{8}$", message = "PHONE_NUMBER_INVALID")

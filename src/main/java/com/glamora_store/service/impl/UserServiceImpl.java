@@ -17,6 +17,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -31,17 +33,21 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public UserResponse createUser(UserCreationRequest request) {
+    PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
+
     User user = userMapper.toUser(request);
     user.setIsDeleted(false);
+    user.setPassword(passwordEncoder.encode(request.getPassword()));
+
     return userMapper.toUserResponse(userRepository.save(user));
   }
 
   @Override
   public UserResponse updateUser(Long id, UserUpdateRequest request) {
     User user =
-        userRepository
-            .findById(id)
-            .orElseThrow(() -> ExceptionUtil.notFound(ErrorCode.USER_NOT_FOUND));
+      userRepository
+        .findById(id)
+        .orElseThrow(() -> ExceptionUtil.notFound(ErrorCode.USER_NOT_FOUND));
 
     userMapper.toUser(user, request);
     return userMapper.toUserResponse(userRepository.save(user));
@@ -50,9 +56,9 @@ public class UserServiceImpl implements UserService {
   @Override
   public void softDeleteUser(Long id) {
     User user =
-        userRepository
-            .findByUserIdAndIsDeletedFalse(id)
-            .orElseThrow(() -> ExceptionUtil.notFound(ErrorCode.USER_NOT_FOUND));
+      userRepository
+        .findByUserIdAndIsDeletedFalse(id)
+        .orElseThrow(() -> ExceptionUtil.notFound(ErrorCode.USER_NOT_FOUND));
 
     user.setIsDeleted(true);
 
@@ -61,16 +67,16 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public PageResponse<UserResponse> searchUsers(
-      String fullname, LocalDate dob, int page, int size, String sortBy, String sortDir) {
+    String fullname, LocalDate dob, int page, int size, String sortBy, String sortDir) {
     Specification<User> spec =
-        UserSpecification.isNotDeleted()
-            .and(UserSpecification.hasFullNameLike(fullname))
-            .and(UserSpecification.hasDobEqual(dob));
+      UserSpecification.isNotDeleted()
+        .and(UserSpecification.hasFullNameLike(fullname))
+        .and(UserSpecification.hasDobEqual(dob));
 
     Sort sort =
-        sortDir.equalsIgnoreCase("asc")
-            ? Sort.by(sortBy).ascending()
-            : Sort.by(sortBy).descending();
+      sortDir.equalsIgnoreCase("asc")
+        ? Sort.by(sortBy).ascending()
+        : Sort.by(sortBy).descending();
 
     Pageable pageable = PageRequest.of(page, size, sort);
     Page<User> userPage = userRepository.findAll(spec, pageable);
@@ -81,18 +87,18 @@ public class UserServiceImpl implements UserService {
   @Override
   public UserResponse getUserById(Long id) {
     User user =
-        userRepository
-            .findByUserIdAndIsDeletedFalse(id)
-            .orElseThrow(() -> ExceptionUtil.notFound(ErrorCode.USER_NOT_FOUND));
+      userRepository
+        .findByUserIdAndIsDeletedFalse(id)
+        .orElseThrow(() -> ExceptionUtil.notFound(ErrorCode.USER_NOT_FOUND));
     return userMapper.toUserResponse(user);
   }
 
   @Override
   public UserResponse activeUser(Long userId) {
     User user =
-        userRepository
-            .findById(userId)
-            .orElseThrow(() -> ExceptionUtil.notFound(ErrorCode.USER_NOT_FOUND));
+      userRepository
+        .findById(userId)
+        .orElseThrow(() -> ExceptionUtil.notFound(ErrorCode.USER_NOT_FOUND));
 
     user.setIsDeleted(false);
 

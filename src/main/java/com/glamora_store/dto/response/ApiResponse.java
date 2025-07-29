@@ -8,20 +8,21 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 public class ApiResponse<T> {
-  private int code = 1000; // Tự quy định, mặc định 1000 là thành công
+
+  private Integer code;
   private String message;
 
   @JsonInclude(JsonInclude.Include.NON_NULL)
   private T data;
 
   // DELETE, ERROR
-  public ApiResponse(int code, String message) {
+  public ApiResponse(Integer code, String message) {
     this.code = code;
     this.message = message;
   }
 
   // GET, PUT, POST,
-  public ApiResponse(int code, String message, T data) {
+  public ApiResponse(Integer code, String message, T data) {
     this.code = code;
     this.message = message;
     this.data = data;
