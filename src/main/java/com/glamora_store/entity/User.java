@@ -16,7 +16,7 @@ import java.time.LocalDate;
 @SuperBuilder
 @Entity
 @Audited
-@Table(name = "`user`")
+@Table(name = "users")
 public class User extends BaseEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,7 +28,7 @@ public class User extends BaseEntity {
   private String fullName;
 
   @Column(name = "gender", length = 10)
-  @Enumerated(EnumType.STRING)
+  @Enumerated(EnumType.STRING) // It save name to DB, not displayName
   private Gender gender;
 
   @Column(name = "dob")

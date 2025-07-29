@@ -3,6 +3,7 @@ package com.glamora_store.controller;
 import com.glamora_store.dto.request.UserCreationRequest;
 import com.glamora_store.dto.request.UserUpdateRequest;
 import com.glamora_store.dto.response.ApiResponse;
+import com.glamora_store.dto.response.PageResponse;
 import com.glamora_store.dto.response.UserResponse;
 import com.glamora_store.enums.SuccessMessage;
 import com.glamora_store.service.UserService;
@@ -58,7 +59,7 @@ public class UserController {
   }
 
   @GetMapping
-  public ApiResponse<Page<UserResponse>> searchUsers(
+  public ApiResponse<PageResponse<UserResponse>> searchUsers(
       @RequestParam(required = false) String fullname,
       @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dob,
       @RequestParam(defaultValue = "0") int page,

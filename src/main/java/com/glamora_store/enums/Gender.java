@@ -8,9 +8,9 @@ import org.springframework.http.HttpStatus;
 import java.util.Arrays;
 
 public enum Gender {
-  MALE("male"),
-  FEMALE("female"),
-  OTHER("other");
+  MALE("Nam"), // Chưa có dùng displayName
+  FEMALE("Nữ"),
+  OTHER("Khác");
 
   private final String displayName;
 
@@ -19,7 +19,8 @@ public enum Gender {
   }
 
   // When deserialize (From JSON sang Java object)
-  // It converts a given string ("male", "MALE", "Male") to the corresponding Gender enum name.
+  // It converts a given string ("male", "MALE", "Male") to the corresponding Gender enum name when
+  // create
   @JsonCreator
   public static Gender fromDisplayName(String value) {
     if (value == null) return null;

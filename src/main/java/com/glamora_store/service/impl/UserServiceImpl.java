@@ -2,6 +2,7 @@ package com.glamora_store.service.impl;
 
 import com.glamora_store.dto.request.UserCreationRequest;
 import com.glamora_store.dto.request.UserUpdateRequest;
+import com.glamora_store.dto.response.PageResponse;
 import com.glamora_store.dto.response.UserResponse;
 import com.glamora_store.entity.User;
 import com.glamora_store.enums.ErrorCode;
@@ -59,7 +60,7 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public Page<UserResponse> searchUsers(
+  public PageResponse<UserResponse> searchUsers(
       String fullname, LocalDate dob, int page, int size, String sortBy, String sortDir) {
     Specification<User> spec =
         UserSpecification.isNotDeleted()
@@ -73,7 +74,8 @@ public class UserServiceImpl implements UserService {
 
     Pageable pageable = PageRequest.of(page, size, sort);
     Page<User> userPage = userRepository.findAll(spec, pageable);
-    return userPage.map(userMapper::toUserResponse);
+    Page<UserResponse> userResponsePage = userPage.map(userMapper::toUserResponse);
+    return PageResponse.from(userResponsePage);
   }
 
   @Override

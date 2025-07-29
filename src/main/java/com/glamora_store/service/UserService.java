@@ -2,6 +2,7 @@ package com.glamora_store.service;
 
 import com.glamora_store.dto.request.UserCreationRequest;
 import com.glamora_store.dto.request.UserUpdateRequest;
+import com.glamora_store.dto.response.PageResponse;
 import com.glamora_store.dto.response.UserResponse;
 import org.springframework.data.domain.Page;
 
@@ -18,7 +19,7 @@ public interface UserService {
 
   public UserResponse activeUser(Long userid);
 
-  Page<UserResponse> searchUsers(
+  PageResponse<UserResponse> searchUsers(
       String fullname, LocalDate dob, int page, int size, String sortBy, String sortDir);
 
   UserResponse getUserById(Long userId);
