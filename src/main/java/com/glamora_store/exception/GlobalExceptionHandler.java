@@ -2,12 +2,12 @@ package com.glamora_store.exception;
 
 import com.glamora_store.dto.response.ApiResponse;
 import com.glamora_store.enums.ErrorCode;
+import com.nimbusds.jose.JOSEException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
@@ -20,8 +20,10 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @RestControllerAdvice
 @Slf4j
@@ -31,7 +33,7 @@ public class GlobalExceptionHandler {
   // exception classes
   @ExceptionHandler(ResponseStatusException.class)
   public ResponseEntity<ApiResponse<Void>> handleResponseStatusException(
-      ResponseStatusException ex) {
+    ResponseStatusException ex) {
     String reason = ex.getReason();
     int code = ErrorCode.UNCATEGORIZED_EXCEPTION.getCode();
     String message = reason;
@@ -55,7 +57,7 @@ public class GlobalExceptionHandler {
   */
 
   @ExceptionHandler(
-      MethodArgumentNotValidException.class) // @NotBlank, @NotEmpty, @Pattern, @Size,... in dto
+    MethodArgumentNotValidException.class) // @NotBlank, @NotEmpty, @Pattern, @Size,... in dto
   public ApiResponse<String> handleValidationErrors(MethodArgumentNotValidException ex) {
     List<String> messages = new ArrayList<>();
 
@@ -67,44 +69,44 @@ public class GlobalExceptionHandler {
         messages.add(message);
       } catch (IllegalArgumentException e) {
         return new ApiResponse<>(
-            ErrorCode.INVALID_MESSAGE_KEY.getCode(),
-            ErrorCode.INVALID_MESSAGE_KEY.getMessage() + ": " + key);
+          ErrorCode.INVALID_MESSAGE_KEY.getCode(),
+          ErrorCode.INVALID_MESSAGE_KEY.getMessage() + ": " + key);
       }
     }
 
     String combinedMessage = String.join("; ", messages) + ";";
 
     return new ApiResponse<>(
-        ErrorCode.VALIDATION_FAILED.getCode(),
-        ErrorCode.VALIDATION_FAILED.getMessage() + ": [" + combinedMessage + "]");
+      ErrorCode.VALIDATION_FAILED.getCode(),
+      ErrorCode.VALIDATION_FAILED.getMessage() + ": [" + combinedMessage + "]");
   }
 
   @ExceptionHandler(
-      ConstraintViolationException.class) // @NotBlank, @NotEmpty, @Pattern, @Size,... in Entity
+    ConstraintViolationException.class) // @NotBlank, @NotEmpty, @Pattern, @Size,... in Entity
   @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
   public ApiResponse<String> handleConstraintViolation(ConstraintViolationException ex) {
     List<String> messages = new ArrayList<>();
 
     for (ConstraintViolation<?> violation : ex.getConstraintViolations()) {
       String key =
-          violation
-              .getMessage(); // expected to be enum name like "PHONE_INVALID", "EMAIL_INVALID", etc.
+        violation
+          .getMessage(); // expected to be enum name like "PHONE_INVALID", "EMAIL_INVALID", etc.
 
       try {
         String message = ErrorCode.valueOf(key).getMessage();
         messages.add(message);
       } catch (IllegalArgumentException e) {
         return new ApiResponse<>(
-            ErrorCode.INVALID_MESSAGE_KEY.getCode(),
-            ErrorCode.INVALID_MESSAGE_KEY.getMessage() + ": " + key);
+          ErrorCode.INVALID_MESSAGE_KEY.getCode(),
+          ErrorCode.INVALID_MESSAGE_KEY.getMessage() + ": " + key);
       }
     }
 
     String combinedMessage = String.join("; ", messages) + ";";
 
     return new ApiResponse<>(
-        ErrorCode.VALIDATION_FAILED.getCode(),
-        ErrorCode.VALIDATION_FAILED.getMessage() + ": [" + combinedMessage + "]");
+      ErrorCode.VALIDATION_FAILED.getCode(),
+      ErrorCode.VALIDATION_FAILED.getMessage() + ": [" + combinedMessage + "]");
   }
 
   @ExceptionHandler(DataIntegrityViolationException.class)
@@ -137,7 +139,21 @@ public class GlobalExceptionHandler {
   @ResponseStatus(HttpStatus.NOT_FOUND)
   public ApiResponse<Void> handleNoResourceFound(NoResourceFoundException ex) {
     ErrorCode errorCode = ErrorCode.URL_NOT_FOUND;
-    return new ApiResponse<>(errorCode.getCode(), errorCode + ": " + ex.getMessage());
+    return new ApiResponse<>(errorCode.getCode(), errorCode.getMessage() + ": " + ex.getMessage());
+  }
+
+  @ExceptionHandler(JOSEException.class)
+  @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+  public ApiResponse<Void> handleJoseException(JOSEException ex) {
+    ErrorCode errorCode = ErrorCode.CANNOT_CREATE_TOKEN;
+    return new ApiResponse<>(errorCode.getCode(), errorCode.getMessage() + ": " + ex.getMessage());
+  }
+
+  @ExceptionHandler(ParseException.class)
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  public ApiResponse<Void> handleParseException(ParseException ex) {
+    ErrorCode errorCode = ErrorCode.INVALID_TOKEN_FORMAT;
+    return new ApiResponse<>(errorCode.getCode(), errorCode.getMessage() + ": " + ex.getMessage());
   }
 
   // Handle all other uncaught exceptions (fallback)
@@ -148,4 +164,6 @@ public class GlobalExceptionHandler {
     ErrorCode errorCode = ErrorCode.UNCATEGORIZED_EXCEPTION;
     return new ApiResponse<>(errorCode.getCode(), errorCode.getMessage());
   }
+
+
 }
