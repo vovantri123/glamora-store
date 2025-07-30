@@ -39,6 +39,8 @@ spring:
     username: ${USERNAME_MAIL:nhap@gmail.com}
     password: ${PASSWORD_MAIL:nhap}
 
+jwt:
+  secretKey: "nYWEYvaGHUfhmCyygqLwaeLPYDXbv9ZX7sbRmhEuhthrQnz5WLuEyO4Gh5e9nbjT"
 
 springdoc:
   api-docs:
