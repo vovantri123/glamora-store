@@ -80,4 +80,13 @@ public class UserController {
       SuccessMessage.GET_USER_SUCCESS.getMessage(),
       userService.getUserById(userId));
   }
+
+  @GetMapping("/myInfo")
+  public ApiResponse<UserResponse> getMyInfo() {
+    return new ApiResponse<>(
+      HttpStatus.OK.value(),
+      SuccessMessage.THIS_IS_MY_INFO.getMessage(),
+      userService.getMyInfo()
+    );
+  }
 }

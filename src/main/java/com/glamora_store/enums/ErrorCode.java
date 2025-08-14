@@ -22,6 +22,8 @@ public enum ErrorCode {
   USER_NOT_EXISTED(1001, "User not existed"),
   CANNOT_CREATE_TOKEN(1001, "Cannot create token"),
   INVALID_TOKEN_FORMAT(1001, "Invalid token format"),
+  ROLE_NOT_FOUND(1001, "Role not found"),
+  ACCESS_DENIED(1001, "Access denied"),
 
   // Cẩn thận xóa nhầm - Start (Chủ yếu lấy message detail, còn code với default message thì lấy của
   // VALIDATION_FAILED

@@ -11,6 +11,7 @@ public enum SuccessMessage {
   LOGIN_SUCCESS("Login successfully"),
   TOKEN_VALIDATION_SUCCESS("Token validation success"),
   TOKEN_VALIDATION_FAILURE("Token validation failure"),
+  THIS_IS_MY_INFO("This is my info"),
   ;
 
   private final String message;
