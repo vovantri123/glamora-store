@@ -12,6 +12,7 @@ import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,6 +25,7 @@ import java.text.ParseException;
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
+@Slf4j
 public class AuthenticationController {
   private final AuthenticationService authenticationService;
   private final RestClient.Builder builder;
@@ -45,9 +47,13 @@ public class AuthenticationController {
     throws ParseException, JOSEException {
     IntrospectResponse result = authenticationService.introspect(request);
 
+    String message = result.isValid()
+      ? SuccessMessage.TOKEN_VALIDATION_SUCCESS.getMessage()
+      : SuccessMessage.TOKEN_VALIDATION_FAILURE.getMessage();
+
     return new ApiResponse<>(
       HttpStatus.OK.value(),
-      SuccessMessage.TOKEN_VALIDATION_SUCCESS.getMessage(),
+      message,
       result
     );
   }

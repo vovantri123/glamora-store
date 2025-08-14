@@ -9,6 +9,7 @@ import com.glamora_store.enums.SuccessMessage;
 import com.glamora_store.service.UserService;
 import jakarta.validation.Valid;
 import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -20,6 +21,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/users")
+@Slf4j
 public class UserController {
 
   private final UserService userService;

@@ -9,7 +9,8 @@ public enum SuccessMessage {
   DELETE_LIST_USER_SUCCESS("Soft delete list user successfully"),
   ACTIVATE_USER_SUCCESS("Activate user successfully"),
   LOGIN_SUCCESS("Login successfully"),
-  TOKEN_VALIDATION_SUCCESS("Token validation successfully"),
+  TOKEN_VALIDATION_SUCCESS("Token validation success"),
+  TOKEN_VALIDATION_FAILURE("Token validation failure"),
   ;
 
   private final String message;
