@@ -2,6 +2,7 @@ package com.glamora_store.enums;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.http.HttpStatus;
 
 @Getter
 public enum ErrorCode {
@@ -13,7 +14,6 @@ public enum ErrorCode {
   INVALID_MESSAGE_KEY(1001, "Invalid message key"),
   CONSTRAINT_VIOLATION(1001, "Constraint violation in database"),
   VALIDATION_FAILED(1001, "Validation failed"),
-  UNAUTHENTICATED(1001, "Unauthenticated"),
 
   PATIENT_NOT_FOUND(1001, "Patient not found"),
   LIST_PATIENT_ID_NOT_FOUND(1001, "Some patient IDs were not found"),
@@ -23,7 +23,9 @@ public enum ErrorCode {
   CANNOT_CREATE_TOKEN(1001, "Cannot create token"),
   INVALID_TOKEN_FORMAT(1001, "Invalid token format"),
   ROLE_NOT_FOUND(1001, "Role not found"),
-  ACCESS_DENIED(1001, "Access denied"),
+  UNAUTHENTICATED(1001, "Unauthenticated"),
+  ACCESS_DENIED(1001, "You do not have permission"),
+   
 
   // Cẩn thận xóa nhầm - Start (Chủ yếu lấy message detail, còn code với default message thì lấy của
   // VALIDATION_FAILED
