@@ -6,7 +6,10 @@ import com.glamora_store.dto.response.PageResponse;
 import com.glamora_store.dto.response.UserResponse;
 import com.glamora_store.entity.User;
 import com.glamora_store.enums.ErrorCode;
+import com.glamora_store.entity.Role;
+import com.glamora_store.enums.RoleName;
 import com.glamora_store.mapper.UserMapper;
+import com.glamora_store.repository.RoleRepository;
 import com.glamora_store.repository.UserRepository;
 import com.glamora_store.service.UserService;
 import com.glamora_store.util.ExceptionUtil;
@@ -17,27 +20,36 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
   private final UserRepository userRepository;
+  private final RoleRepository roleRepository;
+
   private final UserMapper userMapper;
+
+  private final PasswordEncoder passwordEncoder;
 
   @Override
   public UserResponse createUser(UserCreationRequest request) {
-    PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
 
     User user = userMapper.toUser(request);
     user.setIsDeleted(false);
     user.setPassword(passwordEncoder.encode(request.getPassword()));
+
+    Role userRole = roleRepository.findByNameAndIsDeletedFalse(RoleName.USER.name())
+      .orElseThrow(() -> ExceptionUtil.notFound(ErrorCode.ROLE_NOT_FOUND));
+
+    user.setRoles(Set.of(userRole));
 
     return userMapper.toUserResponse(userRepository.save(user));
   }
@@ -50,6 +62,9 @@ public class UserServiceImpl implements UserService {
         .orElseThrow(() -> ExceptionUtil.notFound(ErrorCode.USER_NOT_FOUND));
 
     userMapper.toUser(user, request);
+
+    user.setPassword(passwordEncoder.encode(request.getPassword()));
+
     return userMapper.toUserResponse(userRepository.save(user));
   }
 
@@ -103,6 +118,17 @@ public class UserServiceImpl implements UserService {
     user.setIsDeleted(false);
 
     userRepository.save(user);
+
+    return userMapper.toUserResponse(user);
+  }
+
+  @Override
+  public UserResponse getMyInfo() {
+    SecurityContext context = SecurityContextHolder.getContext();
+    String subClaim = context.getAuthentication().getName();
+
+    User user = userRepository.findByEmailAndIsDeletedFalse(subClaim)
+      .orElseThrow(() -> ExceptionUtil.notFound(ErrorCode.USER_NOT_FOUND));
 
     return userMapper.toUserResponse(user);
   }

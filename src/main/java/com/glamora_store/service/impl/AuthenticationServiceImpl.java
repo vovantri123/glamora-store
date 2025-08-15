@@ -17,15 +17,16 @@ import com.nimbusds.jwt.SignedJWT;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.text.ParseException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
+import java.util.StringJoiner;
 
 @Service
 @RequiredArgsConstructor
@@ -39,7 +40,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
   public AuthenticationResponse authenticate(AuthenticationRequest request)
     throws JOSEException {
     PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
-    User user = userRepository.findByEmail(request.getEmail())
+    User user = userRepository.findByEmailAndIsDeletedFalse(request.getEmail())
       .orElseThrow(() -> ExceptionUtil.badRequest(ErrorCode.USER_NOT_EXISTED));
 
     boolean authenticated = passwordEncoder.matches(request.getPassword(), user.getPassword());
@@ -47,7 +48,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
       throw ExceptionUtil.badRequest(ErrorCode.UNAUTHENTICATED);
     }
 
-    String token = generateToken(request.getEmail());
+    String token = generateToken(user);
 
     return AuthenticationResponse.builder()
       .token(token)
@@ -55,16 +56,17 @@ public class AuthenticationServiceImpl implements AuthenticationService {
       .build();
   }
 
-  private String generateToken(String email) throws JOSEException {
+  private String generateToken(User user) throws JOSEException {
     JWSHeader header = new JWSHeader(JWSAlgorithm.HS512);
 
     JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
-      .subject(email) // subject mà token đại diện.
+      .subject(user.getEmail()) // subject mà token đại diện.
       .issuer("https://glamora-store.com")
       .issueTime(new Date())
       .expirationTime(new Date(
         Instant.now().plus(30, ChronoUnit.MINUTES).toEpochMilli()
       ))
+      .claim("scope", buildScope(user))
       .claim("Custom_key", "Custom_value")
       .build();
 
@@ -74,6 +76,15 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     jwsObject.sign(new MACSigner(SECRET_KEY.getBytes()));
     return jwsObject.serialize();
+  }
+
+  private String buildScope(User user) {
+    StringJoiner stringJoiner = new StringJoiner(" ");
+    if (!CollectionUtils.isEmpty(user.getRoles()))
+      user.getRoles().forEach(role ->
+        stringJoiner.add(role.getName()));
+
+    return stringJoiner.toString();
   }
 
   public IntrospectResponse introspect(IntrospectRequest request)

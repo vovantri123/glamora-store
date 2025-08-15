@@ -8,6 +8,8 @@ import lombok.experimental.SuperBuilder;
 import org.hibernate.envers.Audited;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -54,6 +56,16 @@ public class User extends BaseEntity {
 
   @Column(name = "image", columnDefinition = "TEXT")
   private String image;
+
+  @ManyToMany(fetch = FetchType.LAZY)
+  @JoinTable(
+    name = "user_roles",
+    joinColumns = @JoinColumn(name = "user_id"),
+    inverseJoinColumns = @JoinColumn(name = "role_id")
+  )
+  @Enumerated(EnumType.STRING)
+  private Set<Role> roles = new HashSet<>();
+
 
   //  @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   //  private Set<Order> orders;

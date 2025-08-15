@@ -10,6 +10,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -154,6 +155,13 @@ public class GlobalExceptionHandler {
   public ApiResponse<Void> handleParseException(ParseException ex) {
     ErrorCode errorCode = ErrorCode.INVALID_TOKEN_FORMAT;
     return new ApiResponse<>(errorCode.getCode(), errorCode.getMessage() + ": " + ex.getMessage());
+  }
+
+  @ExceptionHandler(AuthorizationDeniedException.class)
+  @ResponseStatus(HttpStatus.FORBIDDEN)
+  public ApiResponse<Void> handleAuthorizationDeniedException(AuthorizationDeniedException ex) {
+    ErrorCode errorCode = ErrorCode.ACCESS_DENIED;
+    return new ApiResponse<>(errorCode.getCode(), errorCode.getMessage());
   }
 
   // Handle all other uncaught exceptions (fallback)

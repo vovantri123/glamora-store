@@ -1,10 +1,12 @@
 package com.glamora_store.dto.response;
 
 import com.glamora_store.enums.Gender;
+import com.glamora_store.entity.Role;
 import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -20,6 +22,7 @@ public class UserResponse {
   private String phoneNumber;
   private String address;
   private String image;
+  private Set<RoleResponse> roles;
 
   private LocalDateTime createdAt;
   private String createBy;
