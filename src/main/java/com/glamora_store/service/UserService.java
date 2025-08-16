@@ -20,8 +20,9 @@ public interface UserService {
 
   public UserResponse activeUser(Long userid);
 
-  @PreAuthorize("hasRole('ADMIN')")
-  PageResponse<UserResponse> searchUsers(
+  @PreAuthorize("hasAuthority('USER_READ')")
+  PageResponse
+    <UserResponse> searchUsers(
     String fullname, LocalDate dob, int page, int size, String sortBy, String sortDir);
 
   // authentication.name là sub claim
