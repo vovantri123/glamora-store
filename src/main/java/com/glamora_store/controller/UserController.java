@@ -13,7 +13,6 @@ import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -91,12 +90,12 @@ public class UserController {
   }
 
   @PutMapping("/{id}/roles")
-  public ApiResponse<UserResponse> updateUserRoles(@PathVariable Long id,
-                                                   @RequestBody UserRoleUpdateRequest request) {
+  public ApiResponse<UserResponse> updateRolesForUser(@PathVariable Long id,
+                                                      @RequestBody UserRoleUpdateRequest request) {
     return new ApiResponse<>(
       HttpStatus.OK.value(),
       SuccessMessage.UPDATE_ROLE_OF_USER_SUCCESS.getMessage(),
-      userService.updateUserRoles(id, request)
+      userService.updateRolesForUser(id, request)
     );
   }
 }

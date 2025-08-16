@@ -29,7 +29,7 @@ public interface UserService {
   UserResponse getUserById(Long userId);
 
   @PreAuthorize("hasRole('ADMIN')")
-  UserResponse updateUserRoles(Long userId, UserRoleUpdateRequest request);
+  UserResponse updateRolesForUser(Long userId, UserRoleUpdateRequest request);
 
   UserResponse getMyInfo();
 }
