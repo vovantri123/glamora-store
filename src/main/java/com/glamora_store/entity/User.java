@@ -61,10 +61,9 @@ public class User extends BaseEntity {
   @JoinTable(
     name = "user_roles",
     joinColumns = @JoinColumn(name = "user_id"),
-    inverseJoinColumns = @JoinColumn(name = "role_id")
+    inverseJoinColumns = @JoinColumn(name = "role_name")
   )
-  @Enumerated(EnumType.STRING)
-  private Set<Role> roles = new HashSet<>();
+  private Set<Role> roles;
 
 
   //  @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)

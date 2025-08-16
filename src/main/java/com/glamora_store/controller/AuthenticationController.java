@@ -31,7 +31,7 @@ public class AuthenticationController {
   private final RestClient.Builder builder;
 
   @PostMapping("/token")
-  ApiResponse<AuthenticationResponse> authenticate(@Valid @RequestBody AuthenticationRequest request)
+  public ApiResponse<AuthenticationResponse> authenticate(@Valid @RequestBody AuthenticationRequest request)
     throws JOSEException {
     AuthenticationResponse response = authenticationService.authenticate(request);
 
@@ -43,7 +43,7 @@ public class AuthenticationController {
   }
 
   @PostMapping("/introspect")
-  ApiResponse<IntrospectResponse> introspect(@RequestBody IntrospectRequest request)
+  public ApiResponse<IntrospectResponse> introspect(@RequestBody IntrospectRequest request)
     throws ParseException, JOSEException {
     IntrospectResponse result = authenticationService.introspect(request);
 

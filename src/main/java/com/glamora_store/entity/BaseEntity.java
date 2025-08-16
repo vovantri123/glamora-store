@@ -22,7 +22,7 @@ import java.time.LocalDateTime;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-@Audited
+//@Audited
 public abstract class BaseEntity {
   @Column(name = "created_at", updatable = false)
   @CreatedDate

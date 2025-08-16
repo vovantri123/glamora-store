@@ -30,11 +30,6 @@ CREATE TABLE users
 CREATE TABLE users_aud
 (
     rev          INTEGER NOT NULL,
-    created_at   TIMESTAMP WITHOUT TIME ZONE,
-    create_by    VARCHAR(255),
-    update_at    TIMESTAMP WITHOUT TIME ZONE,
-    update_by    VARCHAR(255),
-    is_deleted   BOOLEAN,
     revtype      SMALLINT,
     user_id      BIGINT  NOT NULL,
     full_name    VARCHAR(255),

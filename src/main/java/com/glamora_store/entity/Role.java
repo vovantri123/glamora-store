@@ -9,6 +9,8 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.envers.Audited;
 
+import java.util.Set;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -19,9 +21,14 @@ import org.hibernate.envers.Audited;
 @Table(name = "role")
 public class Role extends BaseEntity {
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long roleId;
-
-  @Column(unique = true, nullable = false, length = 50)
   private String name;
+  private String description;
+
+  @ManyToMany
+  @JoinTable(
+    name = "role_permissions",
+    joinColumns = @JoinColumn(name = "role_name"),
+    inverseJoinColumns = @JoinColumn(name = "permission_name")
+  )
+  private Set<Permission> permissions;
 }
