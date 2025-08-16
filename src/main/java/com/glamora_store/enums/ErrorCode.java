@@ -23,9 +23,12 @@ public enum ErrorCode {
   CANNOT_CREATE_TOKEN(1001, "Cannot create token"),
   INVALID_TOKEN_FORMAT(1001, "Invalid token format"),
   ROLE_NOT_FOUND(1001, "Role not found"),
+  ROLES_NOT_FOUND(1001, "Roles not found"),
   UNAUTHENTICATED(1001, "Unauthenticated"),
   ACCESS_DENIED(1001, "You do not have permission"),
   PERMISSION_NOT_FOUND(1001, "Permission not found"),
+  PERMISSIONS_NOT_FOUND(1001, "Permissions not found"),
+  LIST_ROLE_NAMES_EMPTY(1001, "List roleNames cannot be empty"),
 
 
   // Cẩn thận xóa nhầm - Start (Chủ yếu lấy message detail, còn code với default message thì lấy của

@@ -12,11 +12,13 @@ import com.glamora_store.service.RoleService;
 import com.glamora_store.util.ExceptionUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -27,15 +29,27 @@ public class RoleServiceImpl implements RoleService {
   private final RoleMapper roleMapper;
 
   @Override
-  public RoleResponse create(RoleCreateRequest request) {
+  public RoleResponse createRole(RoleCreateRequest request) {
     Role role = roleMapper.toRole(request);
 
     // Lấy danh sách quyền từ DB
-    List<Permission> permissions = permissionRepository.findAllById(request.getPermissions());
+    Set<String> requestedPermission = request.getPermissions();
+    List<Permission> permissions = permissionRepository.findAllById(requestedPermission);
 
-    // Nếu thiếu permission => quăng exception
-    if (permissions.size() != request.getPermissions().size()) {
-      throw ExceptionUtil.notFound(ErrorCode.PERMISSION_NOT_FOUND);
+    Set<String> foundPermissions = permissions.stream()
+      .map(Permission::getName)
+      .collect(Collectors.toSet());
+
+    Set<String> notFoundPermissions = requestedPermission.stream()
+      .filter(r -> !foundPermissions.contains(r))
+      .collect(Collectors.toSet());
+
+    if (!notFoundPermissions.isEmpty()) {
+      throw ExceptionUtil.with(
+        HttpStatus.NOT_FOUND,
+        ErrorCode.PERMISSIONS_NOT_FOUND,
+        String.join(", ", notFoundPermissions)
+      );
     }
 
     role.setPermissions(new HashSet<>(permissions));
@@ -46,7 +60,7 @@ public class RoleServiceImpl implements RoleService {
   }
 
   @Override
-  public List<RoleResponse> getAll() {
+  public List<RoleResponse> getAllRoles() {
     return roleRepository.findAll()
       .stream()
       .map(roleMapper::toRoleResponse)
@@ -54,7 +68,7 @@ public class RoleServiceImpl implements RoleService {
   }
 
   @Override
-  public void delete(String role) {
+  public void deleteRole(String role) {
     roleRepository.deleteById(role);
   }
 }

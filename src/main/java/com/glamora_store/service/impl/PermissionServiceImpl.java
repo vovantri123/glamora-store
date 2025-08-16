@@ -21,13 +21,13 @@ public class PermissionServiceImpl implements PermissionService {
   private final PermissionMapper permissionMapper;
 
   @Override
-  public PermissionResponse create(PermissionCreateRequest request) {
+  public PermissionResponse createPermission(PermissionCreateRequest request) {
     Permission permission = permissionMapper.toPermission(request);
     return permissionMapper.toPermissionResponse(permissionRepository.save(permission));
   }
 
   @Override
-  public List<PermissionResponse> getAll() {
+  public List<PermissionResponse> getAllPermissions() {
     List<Permission> permissions = permissionRepository.findAll();
     return permissions.stream()
       .map(permissionMapper::toPermissionResponse)
@@ -35,7 +35,7 @@ public class PermissionServiceImpl implements PermissionService {
   }
 
   @Override
-  public void delete(String permission) {
+  public void deletePermission(String permission) {
     permissionRepository.deleteById(permission);
   }
 }

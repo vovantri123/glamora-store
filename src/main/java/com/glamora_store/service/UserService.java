@@ -1,6 +1,7 @@
 package com.glamora_store.service;
 
 import com.glamora_store.dto.request.UserCreateRequest;
+import com.glamora_store.dto.request.UserRoleUpdateRequest;
 import com.glamora_store.dto.request.UserUpdateRequest;
 import com.glamora_store.dto.response.PageResponse;
 import com.glamora_store.dto.response.UserResponse;
@@ -26,6 +27,9 @@ public interface UserService {
   // authentication.name là sub claim
   @PostAuthorize("returnObject.email == authentication.name")
   UserResponse getUserById(Long userId);
+
+  @PreAuthorize("hasRole('ADMIN')")
+  UserResponse updateUserRoles(Long userId, UserRoleUpdateRequest request);
 
   UserResponse getMyInfo();
 }

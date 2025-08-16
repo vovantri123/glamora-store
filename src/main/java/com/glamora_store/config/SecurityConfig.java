@@ -54,7 +54,7 @@ public class SecurityConfig {
   @Bean
   JwtAuthenticationConverter jwtAuthenticationConverter() {
     JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
-    jwtGrantedAuthoritiesConverter.setAuthorityPrefix("ROLE_");
+    jwtGrantedAuthoritiesConverter.setAuthorityPrefix(""); //  Xóa prefix mặc định "SCOPE_" khi Spring Security convert claim trong JWT thành GrantedAuthority (giữ nguyên ROLE_ADMIN thay vì SCOPE_ROLE_ADMIN). Lúc Spring Security đọc JWT
 
     JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
     jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(jwtGrantedAuthoritiesConverter);
