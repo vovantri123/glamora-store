@@ -18,6 +18,7 @@ public enum SuccessMessage {
   CREATE_ROLE_SUCCESS("Create role successfully"),
   DELETE_ROLE_SUCCESS("Delete role successfully"),
   GET_ALL_ROLE_SUCCESS("Get all role successfully"),
+  UPDATE_ROLE_OF_USER_SUCCESS("Update role of user successfully"),
   ;
 
   private final String message;

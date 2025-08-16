@@ -24,22 +24,22 @@ public class PermissionController {
     return new ApiResponse<>(
       HttpStatus.CREATED.value(),
       SuccessMessage.CREATE_PERMISSION_SUCCESS.getMessage(),
-      permissionService.create(request)
+      permissionService.createPermission(request)
     );
   }
 
   @GetMapping
-  ApiResponse<List<PermissionResponse>> getAllPermission() {
+  ApiResponse<List<PermissionResponse>> getAllPermissions() {
     return new ApiResponse<>(
       HttpStatus.OK.value(),
       SuccessMessage.GET_ALL_PERMISSION_SUCCESS.getMessage(),
-      permissionService.getAll()
+      permissionService.getAllPermissions()
     );
   }
 
   @DeleteMapping("/{permission}")
   ApiResponse<Void> deletePermission(@PathVariable String permission) {
-    permissionService.delete(permission);
+    permissionService.deletePermission(permission);
     return new ApiResponse<>(
       HttpStatus.OK.value(),
       SuccessMessage.DELETE_PERMISSION_SUCCESS.getMessage()

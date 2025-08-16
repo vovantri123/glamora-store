@@ -1,6 +1,7 @@
 package com.glamora_store.service.impl;
 
 import com.glamora_store.dto.request.UserCreateRequest;
+import com.glamora_store.dto.request.UserRoleUpdateRequest;
 import com.glamora_store.dto.request.UserUpdateRequest;
 import com.glamora_store.dto.response.PageResponse;
 import com.glamora_store.dto.response.UserResponse;
@@ -20,13 +21,17 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -109,10 +114,10 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public UserResponse activeUser(Long userId) {
+  public UserResponse activeUser(Long id) {
     User user =
       userRepository
-        .findById(userId)
+        .findById(id)
         .orElseThrow(() -> ExceptionUtil.notFound(ErrorCode.USER_NOT_FOUND));
 
     user.setIsDeleted(false);
@@ -132,4 +137,36 @@ public class UserServiceImpl implements UserService {
 
     return userMapper.toUserResponse(user);
   }
+
+  @Override
+  public UserResponse updateUserRoles(Long userId, UserRoleUpdateRequest request) {
+    User user = userRepository
+      .findById(userId)
+      .orElseThrow(() -> ExceptionUtil.notFound(ErrorCode.USER_NOT_FOUND));
+
+    Set<String> requestedRoleNames = request.getRoleNames();
+    List<Role> roles = roleRepository.findAllById(requestedRoleNames);
+
+    // Lấy ra danh sách role không tồn tại
+    Set<String> foundRoleNames = roles.stream()
+      .map(Role::getName)
+      .collect(Collectors.toSet());
+
+    Set<String> notFoundRoles = requestedRoleNames.stream()
+      .filter(r -> !foundRoleNames.contains(r))
+      .collect(Collectors.toSet());
+
+    if (!notFoundRoles.isEmpty()) {
+      throw ExceptionUtil.with(
+        HttpStatus.NOT_FOUND,
+        ErrorCode.ROLES_NOT_FOUND,
+        String.join(", ", notFoundRoles)
+      );
+    }
+
+    user.setRoles(new HashSet<>(roles));
+
+    return userMapper.toUserResponse(userRepository.save(user));
+  }
+
 }

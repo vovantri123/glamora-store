@@ -1,6 +1,7 @@
 package com.glamora_store.controller;
 
 import com.glamora_store.dto.request.UserCreateRequest;
+import com.glamora_store.dto.request.UserRoleUpdateRequest;
 import com.glamora_store.dto.request.UserUpdateRequest;
 import com.glamora_store.dto.response.ApiResponse;
 import com.glamora_store.dto.response.PageResponse;
@@ -12,6 +13,7 @@ import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -85,6 +87,16 @@ public class UserController {
       HttpStatus.OK.value(),
       SuccessMessage.THIS_IS_MY_INFO.getMessage(),
       userService.getMyInfo()
+    );
+  }
+
+  @PutMapping("/{id}/roles")
+  public ApiResponse<UserResponse> updateUserRoles(@PathVariable Long id,
+                                                   @RequestBody UserRoleUpdateRequest request) {
+    return new ApiResponse<>(
+      HttpStatus.OK.value(),
+      SuccessMessage.UPDATE_ROLE_OF_USER_SUCCESS.getMessage(),
+      userService.updateUserRoles(id, request)
     );
   }
 }

@@ -24,22 +24,22 @@ public class RoleController {
     return new ApiResponse<>(
       HttpStatus.CREATED.value(),
       SuccessMessage.CREATE_ROLE_SUCCESS.getMessage(),
-      roleService.create(request)
+      roleService.createRole(request)
     );
   }
 
   @GetMapping
-  public ApiResponse<List<RoleResponse>> getAllRole() {
+  public ApiResponse<List<RoleResponse>> getAllRoles() {
     return new ApiResponse<>(
       HttpStatus.OK.value(),
       SuccessMessage.GET_ALL_ROLE_SUCCESS.getMessage(),
-      roleService.getAll()
+      roleService.getAllRoles()
     );
   }
 
   @DeleteMapping("/{role}")
   ApiResponse<Void> deleteRole(@PathVariable String role) {
-    roleService.delete(role);
+    roleService.deleteRole(role);
     return new ApiResponse<>(
       HttpStatus.OK.value(),
       SuccessMessage.DELETE_ROLE_SUCCESS.getMessage()
