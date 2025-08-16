@@ -14,6 +14,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Builder
 public class RoleResponse {
-  private Long roleId;
   private String name;
+  private String description;
+  private Set<PermissionResponse> permissions;
 }

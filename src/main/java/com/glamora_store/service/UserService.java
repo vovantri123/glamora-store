@@ -1,19 +1,17 @@
 package com.glamora_store.service;
 
-import com.glamora_store.dto.request.UserCreationRequest;
+import com.glamora_store.dto.request.UserCreateRequest;
 import com.glamora_store.dto.request.UserUpdateRequest;
 import com.glamora_store.dto.response.PageResponse;
 import com.glamora_store.dto.response.UserResponse;
-import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 import java.time.LocalDate;
-import java.util.List;
 
 public interface UserService {
 
-  UserResponse createUser(UserCreationRequest request);
+  UserResponse createUser(UserCreateRequest request);
 
   UserResponse updateUser(Long userId, UserUpdateRequest request);
 

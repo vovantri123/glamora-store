@@ -12,6 +12,12 @@ public enum SuccessMessage {
   TOKEN_VALIDATION_SUCCESS("Token validation success"),
   TOKEN_VALIDATION_FAILURE("Token validation failure"),
   THIS_IS_MY_INFO("This is my info"),
+  CREATE_PERMISSION_SUCCESS("Create permission successfully"),
+  DELETE_PERMISSION_SUCCESS("Delete permission successfully"),
+  GET_ALL_PERMISSION_SUCCESS("Get all permission successfully"),
+  CREATE_ROLE_SUCCESS("Create role successfully"),
+  DELETE_ROLE_SUCCESS("Delete role successfully"),
+  GET_ALL_ROLE_SUCCESS("Get all role successfully"),
   ;
 
   private final String message;

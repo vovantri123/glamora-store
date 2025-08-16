@@ -1,6 +1,6 @@
 package com.glamora_store.controller;
 
-import com.glamora_store.dto.request.UserCreationRequest;
+import com.glamora_store.dto.request.UserCreateRequest;
 import com.glamora_store.dto.request.UserUpdateRequest;
 import com.glamora_store.dto.response.ApiResponse;
 import com.glamora_store.dto.response.PageResponse;
@@ -10,13 +10,11 @@ import com.glamora_store.service.UserService;
 import jakarta.validation.Valid;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,7 +26,7 @@ public class UserController {
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  public ApiResponse<UserResponse> createUser(@Valid @RequestBody UserCreationRequest request) {
+  public ApiResponse<UserResponse> createUser(@Valid @RequestBody UserCreateRequest request) {
     return new ApiResponse<>(
       HttpStatus.CREATED.value(),
       SuccessMessage.CREATE_USER_SUCCESS.getMessage(),

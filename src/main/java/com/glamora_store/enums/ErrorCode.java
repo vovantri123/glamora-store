@@ -25,7 +25,8 @@ public enum ErrorCode {
   ROLE_NOT_FOUND(1001, "Role not found"),
   UNAUTHENTICATED(1001, "Unauthenticated"),
   ACCESS_DENIED(1001, "You do not have permission"),
-   
+  PERMISSION_NOT_FOUND(1001, "Permission not found"),
+
 
   // Cẩn thận xóa nhầm - Start (Chủ yếu lấy message detail, còn code với default message thì lấy của
   // VALIDATION_FAILED

@@ -1,9 +1,6 @@
 package com.glamora_store.dto.request;
 
 import com.glamora_store.enums.Gender;
-import jakarta.persistence.Column;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
@@ -14,7 +11,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserCreationRequest {
+public class UserCreateRequest {
 
   @NotBlank(message = "FULL_NAME_REQUIRED")
   @Size(min = 1, max = 100, message = "FULL_NAME_INVALID")

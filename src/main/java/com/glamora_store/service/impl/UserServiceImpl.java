@@ -1,6 +1,6 @@
 package com.glamora_store.service.impl;
 
-import com.glamora_store.dto.request.UserCreationRequest;
+import com.glamora_store.dto.request.UserCreateRequest;
 import com.glamora_store.dto.request.UserUpdateRequest;
 import com.glamora_store.dto.response.PageResponse;
 import com.glamora_store.dto.response.UserResponse;
@@ -40,7 +40,7 @@ public class UserServiceImpl implements UserService {
   private final PasswordEncoder passwordEncoder;
 
   @Override
-  public UserResponse createUser(UserCreationRequest request) {
+  public UserResponse createUser(UserCreateRequest request) {
 
     User user = userMapper.toUser(request);
     user.setIsDeleted(false);
