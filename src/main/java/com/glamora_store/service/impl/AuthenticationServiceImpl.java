@@ -25,8 +25,7 @@ import org.springframework.util.CollectionUtils;
 import java.text.ParseException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.Date;
-import java.util.StringJoiner;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -80,17 +79,23 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
   private String buildScope(User user) {
     // Lúc trả ra JWT sau khi người dùng authenticate
-    StringJoiner stringJoiner = new StringJoiner(" ");
+    // Dùng Set để loại bỏ trùng Permission, LinkedHashSet để đảm bảo Role đứng trước Permission
+    Set<String> scopes = new LinkedHashSet<>();
 
-    if (!CollectionUtils.isEmpty(user.getRoles()))
+    if (!CollectionUtils.isEmpty(user.getRoles())) {
       user.getRoles().forEach(role -> {
-        stringJoiner.add("ROLE_" + role.getName());
-        if (!CollectionUtils.isEmpty(role.getPermissions()))
-          role.getPermissions()
-            .forEach(permission -> stringJoiner.add(permission.getName()));
-      });
+        // Role trước
+        scopes.add("ROLE_" + role.getName());
 
-    return stringJoiner.toString();
+        // Permission sau
+        if (!CollectionUtils.isEmpty(role.getPermissions())) {
+          role.getPermissions()
+            .forEach(permission -> scopes.add(permission.getName()));
+        }
+      });
+    }
+
+    return String.join(" ", scopes);
   }
 
   public IntrospectResponse introspect(IntrospectRequest request)

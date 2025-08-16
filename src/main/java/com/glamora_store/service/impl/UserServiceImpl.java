@@ -139,7 +139,7 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public UserResponse updateUserRoles(Long userId, UserRoleUpdateRequest request) {
+  public UserResponse updateRolesForUser(Long userId, UserRoleUpdateRequest request) {
     User user = userRepository
       .findById(userId)
       .orElseThrow(() -> ExceptionUtil.notFound(ErrorCode.USER_NOT_FOUND));
