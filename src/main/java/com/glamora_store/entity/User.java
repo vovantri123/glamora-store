@@ -35,7 +35,7 @@ public class User extends BaseEntity {
   private Gender gender;
 
   @Column(name = "dob")
-  @DobConstraint(min = 16, message = "DOB_INVALID")
+  @DobConstraint(min = 18, message = "DOB_INVALID")
   private LocalDate dob;
 
   @Column(name = "email", unique = true, nullable = false)

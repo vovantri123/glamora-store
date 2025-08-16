@@ -20,7 +20,7 @@ public class UserUpdateRequest {
 
   private Gender gender;
 
-  @DobConstraint(min = 16, message = "DOB_INVALID")
+  @DobConstraint(min = 18, message = "DOB_INVALID")
   private LocalDate dob;
 
   @NotBlank(message = "EMAIL_REQUIRED")
