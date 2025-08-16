@@ -1,6 +1,7 @@
 package com.glamora_store.dto.request;
 
 import com.glamora_store.enums.Gender;
+import com.glamora_store.validator.DobConstraint;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
@@ -19,7 +20,7 @@ public class UserUpdateRequest {
 
   private Gender gender;
 
-  @PastOrPresent(message = "DOB_INVALID")
+  @DobConstraint(min = 16, message = "DOB_INVALID")
   private LocalDate dob;
 
   @NotBlank(message = "EMAIL_REQUIRED")

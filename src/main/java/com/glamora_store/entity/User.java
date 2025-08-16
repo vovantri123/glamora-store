@@ -1,6 +1,7 @@
 package com.glamora_store.entity;
 
 import com.glamora_store.enums.Gender;
+import com.glamora_store.validator.DobConstraint;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
@@ -34,7 +35,7 @@ public class User extends BaseEntity {
   private Gender gender;
 
   @Column(name = "dob")
-  @PastOrPresent(message = "DOB_INVALID")
+  @DobConstraint(min = 16, message = "DOB_INVALID")
   private LocalDate dob;
 
   @Column(name = "email", unique = true, nullable = false)

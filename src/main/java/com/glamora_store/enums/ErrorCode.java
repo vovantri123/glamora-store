@@ -34,7 +34,7 @@ public enum ErrorCode {
   // Cẩn thận xóa nhầm - Start (Chủ yếu lấy message detail, còn code với default message thì lấy của
   // VALIDATION_FAILED
   FULL_NAME_REQUIRED(1001, "Full name is required"),
-  DOB_INVALID(1001, "Date of birth must be in the past"),
+  DOB_INVALID(1001, "Your age must be at least 18"),
   PHONE_NUMBER_INVALID(1001, "Invalid phone number (must be in format 0xxxxxxxxx or +84xxxxxxxxx)"),
   CCCD_INVALID(1001, "CCCD must include exactly 12 digits"),
   DUPLICATE_CCCD(1001, "CCCD already exists in the system"),
