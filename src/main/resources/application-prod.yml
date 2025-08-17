@@ -3,6 +3,7 @@
 # 2. Nếu chạy bằng terminal:
 # mvn spring-boot:run -D spring-boot.run.profiles=prod
 # hoặc java -jar app.jar --spring.profiles.active=prod
+# 3. Docker thì đã có SPRING_PROFILES_ACTIVE: prod trong docker-compose.yml
 
 server:
   port: 8080
@@ -16,6 +17,8 @@ server:
 spring:
   application:
     name: glamora_store
+  config:
+    import: "optional:file:.env.prod[.properties]"
   datasource:
     url: ${POSTGRES_URL}
     username: ${USERNAME_DB}

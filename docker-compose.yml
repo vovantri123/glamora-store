@@ -1,0 +1,38 @@
+services:
+  postgresql:
+    container_name: postgres_db
+    image: postgres:17.5
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234567890
+      POSTGRES_DB: glamora_store      # database được tạo tự động khi container chạy lần đầu
+      PGDATA: /data/postgres
+    volumes:
+      - postgres_data:/data/postgres
+    ports:
+      - "5435:5432"
+    networks:
+      - glamora-network
+    restart: unless-stopped
+
+  glamora-store:
+    build: # để compose tự build image từ Dockerfile nếu chưa có
+      context: .
+      dockerfile: Dockerfile
+    container_name: glamora_store
+    image: glamora-store:0.1 # Tên image + tag sẽ tạo ra sau khi build
+    ports:
+      - "8080:8080"
+    environment:
+      # Khi các container trong cùng network nói chuyện với nhau thì phải là 5432
+      POSTGRES_URL: "jdbc:postgresql://postgres_db:5432/glamora_store"
+      SPRING_PROFILES_ACTIVE: prod
+    networks:
+      - glamora-network
+
+volumes:
+  postgres_data:
+
+networks:
+  glamora-network:
+    driver: bridge
