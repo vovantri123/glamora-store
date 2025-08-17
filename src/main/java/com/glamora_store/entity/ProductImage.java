@@ -1,9 +1,8 @@
 package com.glamora_store.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
 
-import java.util.Set;
+import lombok.*;
 
 // @Getter
 // @Setter
@@ -12,16 +11,16 @@ import java.util.Set;
 // @Builder
 // @Entity
 public class ProductImage {
-  //    @Id
-  //    @GeneratedValue(strategy = GenerationType.IDENTITY)
-  //    private Long id;
-  //
-  //    @Column(columnDefinition = "TEXT")
-  //    private String image;
-  //
-  //    private Boolean thumbnail;
-  //
-  //    @ManyToOne
-  //    @JoinColumn(name="product_id")
-  //    private Product product;
+    //    @Id
+    //    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //    private Long id;
+    //
+    //    @Column(columnDefinition = "TEXT")
+    //    private String image;
+    //
+    //    private Boolean thumbnail;
+    //
+    //    @ManyToOne
+    //    @JoinColumn(name="product_id")
+    //    private Product product;
 }
