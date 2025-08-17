@@ -54,4 +54,11 @@ init_db.bat
 ### Run your application in devteria-network
 
 `docker run --name identity-service --network devteria-network -p 8080:8080 -e DBMS_CONNECTION=jdbc:mysql://mysql:3306/identity_service identity-service:0.9.0`
- 
+
+### Build docker image (Thêm cái account là vovantri123 vào chỗ image: vovantri123/glamora-store:0.1 trong docker-compose.yml cũng được)
+
+`docker build -t <account>/glamora-store:0.1 .`
+
+### Push docker image to Docker Hub
+
+`docker image push <account>/glamora-store:0.1`

@@ -20,7 +20,7 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: glamora_store
-    image: glamora-store:0.1 # Tên image + tag sẽ tạo ra sau khi build
+    image: vovantri123/glamora-store:0.1 # Tên account + image + tag sẽ tạo ra sau khi build
     ports:
       - "8080:8080"
     environment:
