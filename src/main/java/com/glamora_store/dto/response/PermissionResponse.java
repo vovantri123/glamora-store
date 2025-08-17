@@ -1,6 +1,5 @@
 package com.glamora_store.dto.response;
 
-
 import lombok.*;
 
 @Data
@@ -8,6 +7,6 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class PermissionResponse {
-  private String name;
-  private String description;
+    private String name;
+    private String description;
 }
