@@ -1,0 +1,54 @@
+# 1. Nếu bạn chạy bằng IntelliJ, thì cần Add VM options là
+# -Dspring.profiles.active=prod
+# 2. Nếu chạy bằng terminal:
+# mvn spring-boot:run -D spring-boot.run.profiles=prod
+# hoặc java -jar app.jar --spring.profiles.active=prod
+
+server:
+  port: 8080
+  servlet:
+    context-path: /
+    session:
+      cookie:
+        same-site: strict
+        http-only: true
+
+spring:
+  application:
+    name: glamora_store
+  datasource:
+    url: ${POSTGRES_URL}
+    username: ${USERNAME_DB}
+    password: ${PASSWORD_DB}
+  jpa:
+    hibernate:
+      ddl-auto: none #update
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        envers:
+          audit_table_suffix: _aud
+          store_data_at_delete: true
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+  main:
+    allow-bean-definition-overriding: true
+
+  mail:
+    host: ${MAIL_HOST}
+    port: ${MAIL_PORT}
+    username: ${USERNAME_MAIL}
+    password: ${PASSWORD_MAIL}
+
+jwt:
+  secretKey: ${JWT_SECRETKEY}
+
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui
