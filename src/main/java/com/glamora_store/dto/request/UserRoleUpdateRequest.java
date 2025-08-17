@@ -1,10 +1,10 @@
 package com.glamora_store.dto.request;
 
-import java.util.Set;
-
 import jakarta.validation.constraints.NotEmpty;
-
 import lombok.*;
+
+import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -12,6 +12,6 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class UserRoleUpdateRequest {
-    @NotEmpty(message = "List roleNames cannot be empty")
-    private Set<String> roleNames;
+  @NotEmpty(message = "List roleNames cannot be empty")
+  private Set<String> roleNames;
 }

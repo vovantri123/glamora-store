@@ -1,15 +1,15 @@
 package com.glamora_store.service;
 
-import java.util.List;
-
 import com.glamora_store.dto.request.RoleCreateRequest;
 import com.glamora_store.dto.response.RoleResponse;
 
+import java.util.List;
+
 public interface RoleService {
 
-    RoleResponse createRole(RoleCreateRequest request);
+  RoleResponse createRole(RoleCreateRequest request);
 
-    List<RoleResponse> getAllRoles();
+  List<RoleResponse> getAllRoles();
 
-    void deleteRole(String role);
+  void deleteRole(String role);
 }

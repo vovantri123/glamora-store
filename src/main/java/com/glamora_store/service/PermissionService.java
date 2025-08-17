@@ -1,15 +1,15 @@
 package com.glamora_store.service;
 
-import java.util.List;
-
 import com.glamora_store.dto.request.PermissionCreateRequest;
 import com.glamora_store.dto.response.PermissionResponse;
 
+import java.util.List;
+
 public interface PermissionService {
 
-    PermissionResponse createPermission(PermissionCreateRequest request);
+  PermissionResponse createPermission(PermissionCreateRequest request);
 
-    List<PermissionResponse> getAllPermissions();
+  List<PermissionResponse> getAllPermissions();
 
-    void deletePermission(String permission);
+  void deletePermission(String permission);
 }

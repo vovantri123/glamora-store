@@ -1,7 +1,6 @@
 package com.glamora_store.entity;
 
 import jakarta.persistence.*;
-
 import lombok.*;
 
 // @Getter
@@ -11,17 +10,17 @@ import lombok.*;
 // @Builder
 // @Entity
 public class OrderDetail {
-    //    @Id
-    //    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    //    private Long id;
-    //
-    //    private Integer quantity;
-    //
-    //    @ManyToOne
-    //    @JoinColumn(name = "order_id")
-    //    private Order order;
-    //
-    //    @ManyToOne
-    //    @JoinColumn(name = "product_id")
-    //    private Product product;
+  //    @Id
+  //    @GeneratedValue(strategy = GenerationType.IDENTITY)
+  //    private Long id;
+  //
+  //    private Integer quantity;
+  //
+  //    @ManyToOne
+  //    @JoinColumn(name = "order_id")
+  //    private Order order;
+  //
+  //    @ManyToOne
+  //    @JoinColumn(name = "product_id")
+  //    private Product product;
 }
