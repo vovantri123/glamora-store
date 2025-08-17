@@ -1,12 +1,8 @@
 package com.glamora_store.dto.response;
 
-import com.glamora_store.entity.Role;
-import com.glamora_store.enums.Gender;
-import lombok.*;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Set;
+
+import lombok.*;
 
 @Getter
 @Setter
@@ -14,7 +10,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Builder
 public class RoleResponse {
-  private String name;
-  private String description;
-  private Set<PermissionResponse> permissions;
+    private String name;
+    private String description;
+    private Set<PermissionResponse> permissions;
 }

@@ -1,10 +1,5 @@
 package com.glamora_store.mapper;
 
-import com.glamora_store.dto.request.UserCreateRequest;
-import com.glamora_store.dto.request.UserUpdateRequest;
-import com.glamora_store.dto.response.UserResponse;
-import com.glamora_store.entity.User;
-
 import java.util.List;
 
 import org.mapstruct.BeanMapping;
@@ -12,14 +7,19 @@ import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
+import com.glamora_store.dto.request.UserCreateRequest;
+import com.glamora_store.dto.request.UserUpdateRequest;
+import com.glamora_store.dto.response.UserResponse;
+import com.glamora_store.entity.User;
+
 @Mapper(componentModel = "spring")
 public interface UserMapper {
-  User toUser(UserCreateRequest request);
+    User toUser(UserCreateRequest request);
 
-  UserResponse toUserResponse(User user);
+    UserResponse toUserResponse(User user);
 
-  List<UserResponse> toListUserResponse(List<User> users);
+    List<UserResponse> toListUserResponse(List<User> users);
 
-  @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-  void toUser(@MappingTarget User user, UserUpdateRequest request);
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    void toUser(@MappingTarget User user, UserUpdateRequest request);
 }
