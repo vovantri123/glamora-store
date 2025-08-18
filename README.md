@@ -39,26 +39,34 @@ init_db.bat
 
 ## Build application
 
+### With test
+
 `mvn clean package`
+
+### Without test
+
+`mvn clean package -DskipTests`
 
 ## Docker guideline
 
-### Create network:
+### Build docker image
 
-`docker network create glamora-network`
+#### Thủ công
 
-### Start PostgreSQL in glamora-network
+`docker build -t <account>/glamora-store:<tag> .`
 
-`docker run --network glamora-network --name postgres -p 3306:3306 -e MYSQL_ROOT_PASSWORD=root -d mysql:8.0.36-debian`
+#### Dùng docker-compose.yml (Bằng cách thêm cái account là vovantri123 vào chỗ image: vovantri123/glamora-store:0.1)
 
-### Run your application in devteria-network
-
-`docker run --name identity-service --network devteria-network -p 8080:8080 -e DBMS_CONNECTION=jdbc:mysql://mysql:3306/identity_service identity-service:0.9.0`
-
-### Build docker image (Thêm cái account là vovantri123 vào chỗ image: vovantri123/glamora-store:0.1 trong docker-compose.yml cũng được)
-
-`docker build -t <account>/glamora-store:0.1 .`
+`docker compose up -d --build`
 
 ### Push docker image to Docker Hub
 
-`docker image push <account>/glamora-store:0.1`
+`docker image push vovantri123/glamora-store:0.1`
+
+### Pull docker image from Docker Hub
+
+`docker pull vovantri123/glamora-store:0.1`
+
+### Run docker image by file docker-compose.yml (Cả tự build hoặc pull từ Docker Hub về)
+
+`docker compose up -d`
