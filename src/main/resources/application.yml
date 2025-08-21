@@ -13,9 +13,9 @@ spring:
   config:
     import: "optional:file:.env[.properties]"
   datasource:
-    url: ${POSTGRES_URL:jdbc:postgresql://localhost:5432/glamora_store}
-    username: ${USERNAME_DB:postgres}
-    password: ${PASSWORD_DB:1234567890}
+    url: ${POSTGRES_URL}
+    username: ${USERNAME_DB}
+    password: ${PASSWORD_DB}
   jpa:
     hibernate:
       ddl-auto: none #update
@@ -23,9 +23,9 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
-        envers:
-          audit_table_suffix: _aud
-          store_data_at_delete: true
+  #        envers:
+  #          audit_table_suffix: _aud
+  #          store_data_at_delete: true
 
   flyway:
     enabled: true
@@ -36,13 +36,24 @@ spring:
     allow-bean-definition-overriding: true
 
   mail:
-    host: ${MAIL_HOST:sandbox.smtp.mailtrap.io}
-    port: ${MAIL_PORT:587}
-    username: ${USERNAME_MAIL:nhap@gmail.com}
-    password: ${PASSWORD_MAIL:nhap}
+    host: ${MAIL_HOST}
+    port: ${MAIL_PORT}
+    username: ${USERNAME_MAIL}
+    password: ${PASSWORD_MAIL}
+    protocol: smtp
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
 
 jwt:
-  secretKey: "nYWEYvaGHUfhmCyygqLwaeLPYDXbv9ZX7sbRmhEuhthrQnz5WLuEyO4Gh5e9nbjT"
+  secretKey: ${JWT_SECRETKEY}
 
 springdoc:
   api-docs:

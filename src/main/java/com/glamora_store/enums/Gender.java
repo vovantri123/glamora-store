@@ -29,7 +29,7 @@ public enum Gender {
         return Arrays.stream(Gender.values())
                 .filter(g -> g.name().equalsIgnoreCase(value) || g.displayName.equalsIgnoreCase(value))
                 .findFirst()
-                .orElseThrow(() -> ExceptionUtil.with(HttpStatus.BAD_REQUEST, ErrorCode.GENDER_INVALID, value));
+                .orElseThrow(() -> ExceptionUtil.with(HttpStatus.BAD_REQUEST, ErrorMessage.GENDER_INVALID, value));
     }
 
     //  When serialize (From Java object to JSON)

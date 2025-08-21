@@ -25,10 +25,14 @@ public class SecurityConfig {
 
     // spotless:off
     private final String[] PUBLIC_ENDPOINTS = {
-            "/users",
-            "/auth/token",
+            "/auth/login",
             "/auth/introspect",
+            "/auth/register",
+            "/auth/verify-register-otp/**",
+            "/auth/forgot-password",
+            "/auth/reset-password",
             "/api-docs",
+            "/api/users/"
     };
     // spotless:on
 

@@ -16,7 +16,7 @@ import com.glamora_store.dto.request.IntrospectRequest;
 import com.glamora_store.dto.response.AuthenticationResponse;
 import com.glamora_store.dto.response.IntrospectResponse;
 import com.glamora_store.entity.User;
-import com.glamora_store.enums.ErrorCode;
+import com.glamora_store.enums.ErrorMessage;
 import com.glamora_store.repository.UserRepository;
 import com.glamora_store.service.AuthenticationService;
 import com.glamora_store.util.ExceptionUtil;
@@ -38,15 +38,15 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Value("${jwt.secretKey}")
     protected String SECRET_KEY;
 
-    public AuthenticationResponse authenticate(AuthenticationRequest request) throws JOSEException {
+    public AuthenticationResponse authenticate(AuthenticationRequest request) {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
         User user = userRepository
                 .findByEmailAndIsDeletedFalse(request.getEmail())
-                .orElseThrow(() -> ExceptionUtil.badRequest(ErrorCode.USER_NOT_EXISTED));
+                .orElseThrow(() -> ExceptionUtil.badRequest(ErrorMessage.USER_NOT_EXISTED));
 
         boolean authenticated = passwordEncoder.matches(request.getPassword(), user.getPassword());
         if (!authenticated) {
-            throw ExceptionUtil.badRequest(ErrorCode.UNAUTHENTICATED);
+            throw ExceptionUtil.badRequest(ErrorMessage.UNAUTHENTICATED);
         }
 
         String token = generateToken(user);
@@ -54,25 +54,31 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return AuthenticationResponse.builder().token(token).authenticated(true).build();
     }
 
-    private String generateToken(User user) throws JOSEException {
-        JWSHeader header = new JWSHeader(JWSAlgorithm.HS512);
+    private String generateToken(User user) {
+        try {
+            JWSHeader header = new JWSHeader(JWSAlgorithm.HS512);
 
-        JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
-                .subject(user.getEmail()) // subject mà token đại diện.
-                .issuer("https://glamora-store.com")
-                .issueTime(new Date())
-                .expirationTime(
-                        new Date(Instant.now().plus(30, ChronoUnit.MINUTES).toEpochMilli()))
-                .claim("scope", buildScope(user))
-                .claim("Custom_key", "Custom_value")
-                .build();
+            JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
+                    .subject(user.getEmail()) // subject mà token đại diện.
+                    .issuer("https://glamora-store.com")
+                    .issueTime(new Date())
+                    .expirationTime(
+                            new Date(Instant.now().plus(30, ChronoUnit.MINUTES).toEpochMilli()))
+                    .claim("scope", buildScope(user))
+                    .claim("userId", user.getUserId())
+                    .claim("Custom_key", "Custom_value")
+                    .build();
 
-        Payload payload = new Payload(jwtClaimsSet.toJSONObject());
+            Payload payload = new Payload(jwtClaimsSet.toJSONObject());
 
-        JWSObject jwsObject = new JWSObject(header, payload);
+            JWSObject jwsObject = new JWSObject(header, payload);
 
-        jwsObject.sign(new MACSigner(SECRET_KEY.getBytes()));
-        return jwsObject.serialize();
+            jwsObject.sign(new MACSigner(SECRET_KEY.getBytes()));
+            return jwsObject.serialize();
+        } catch (JOSEException e) {
+            log.error(e.getMessage(), e);
+            throw new RuntimeException(e.getMessage());
+        }
     }
 
     private String buildScope(User user) {

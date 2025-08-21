@@ -5,32 +5,45 @@ import java.time.LocalDate;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 
-import com.glamora_store.dto.request.UserCreateRequest;
-import com.glamora_store.dto.request.UserRoleUpdateRequest;
-import com.glamora_store.dto.request.UserUpdateRequest;
+import com.glamora_store.dto.request.*;
 import com.glamora_store.dto.response.PageResponse;
+import com.glamora_store.dto.response.UserProfileResponse;
 import com.glamora_store.dto.response.UserResponse;
 
 public interface UserService {
+    void registerUser(UserCreateRequest request);
 
+    void resetPassword(String email, String newPassword);
+
+    @PreAuthorize("hasRole('ADMIN')")
     UserResponse createUser(UserCreateRequest request);
 
+    @PreAuthorize("hasRole('ADMIN')")
     UserResponse updateUser(Long userId, UserUpdateRequest request);
 
+    // authentication.name là sub claim
+    @PreAuthorize("#email == authentication.name")
+    UserProfileResponse updateMyProfile(String email, UserProfileUpdateRequest request);
+
+    @PreAuthorize("hasRole('ADMIN') or #email == authentication.name")
+    void updatePassword(String email, PasswordUpdateRequest request);
+
+    @PreAuthorize("hasRole('ADMIN')")
     void softDeleteUser(Long userId);
 
-    public UserResponse activeUser(Long userid);
+    @PreAuthorize("hasRole('ADMIN')")
+    UserResponse activeUser(Long userid);
 
-    @PreAuthorize("hasAuthority('USER_READ')")
+    @PreAuthorize("hasRole('ADMIN')")
     PageResponse<UserResponse> searchUsers(
             String fullname, LocalDate dob, int page, int size, String sortBy, String sortDir);
-
-    // authentication.name là sub claim
-    @PostAuthorize("returnObject.email == authentication.name")
-    UserResponse getUserById(Long userId);
 
     @PreAuthorize("hasRole('ADMIN')")
     UserResponse updateRolesForUser(Long userId, UserRoleUpdateRequest request);
 
-    UserResponse getMyInfo();
+    @PostAuthorize("returnObject.email == authentication.name")
+    UserProfileResponse getUserById(Long userId);
+
+    @PreAuthorize("hasAuthority('USER_READ')")
+    UserProfileResponse getMyInfo();
 }

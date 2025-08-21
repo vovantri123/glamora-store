@@ -5,14 +5,12 @@ import java.time.LocalDate;
 import jakarta.validation.Valid;
 
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import com.glamora_store.dto.request.UserCreateRequest;
-import com.glamora_store.dto.request.UserRoleUpdateRequest;
-import com.glamora_store.dto.request.UserUpdateRequest;
+import com.glamora_store.dto.request.*;
 import com.glamora_store.dto.response.ApiResponse;
 import com.glamora_store.dto.response.PageResponse;
+import com.glamora_store.dto.response.UserProfileResponse;
 import com.glamora_store.dto.response.UserResponse;
 import com.glamora_store.enums.SuccessMessage;
 import com.glamora_store.service.UserService;
@@ -29,35 +27,33 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
     public ApiResponse<UserResponse> createUser(@Valid @RequestBody UserCreateRequest request) {
-        return new ApiResponse<>(
-                HttpStatus.CREATED.value(),
-                SuccessMessage.CREATE_USER_SUCCESS.getMessage(),
-                userService.createUser(request));
+        return new ApiResponse<>(SuccessMessage.CREATE_USER_SUCCESS.getMessage(), userService.createUser(request));
     }
 
     @PutMapping("/{userId}")
     public ApiResponse<UserResponse> updateUser(
             @PathVariable Long userId, @Valid @RequestBody UserUpdateRequest request) {
         return new ApiResponse<>(
-                HttpStatus.OK.value(),
-                SuccessMessage.UPDATE_USER_SUCCESS.getMessage(),
-                userService.updateUser(userId, request));
+                SuccessMessage.UPDATE_USER_SUCCESS.getMessage(), userService.updateUser(userId, request));
+    }
+
+    @PutMapping("/my-profile/{email}")
+    public ApiResponse<UserProfileResponse> updateUser(
+            @PathVariable String email, @Valid @RequestBody UserProfileUpdateRequest request) {
+        return new ApiResponse<>(
+                SuccessMessage.UPDATE_USER_SUCCESS.getMessage(), userService.updateMyProfile(email, request));
     }
 
     @DeleteMapping("/{userId}")
     public ApiResponse<String> deleteUser(@PathVariable Long userId) {
         userService.softDeleteUser(userId);
-        return new ApiResponse<>(HttpStatus.OK.value(), SuccessMessage.DELETE_USER_SUCCESS.getMessage());
+        return new ApiResponse<>(SuccessMessage.DELETE_USER_SUCCESS.getMessage());
     }
 
     @PutMapping("/active/{userId}")
     public ApiResponse<UserResponse> activateUser(@PathVariable Long userId) {
-        return new ApiResponse<>(
-                HttpStatus.OK.value(),
-                SuccessMessage.ACTIVATE_USER_SUCCESS.getMessage(),
-                userService.activeUser(userId));
+        return new ApiResponse<>(SuccessMessage.ACTIVATE_USER_SUCCESS.getMessage(), userService.activeUser(userId));
     }
 
     @GetMapping
@@ -68,30 +64,37 @@ public class UserController {
             @RequestParam(defaultValue = "4") int size,
             @RequestParam(defaultValue = "userId") String sortBy,
             @RequestParam(defaultValue = "desc") String sortDir) {
-        return new ApiResponse<>(
-                HttpStatus.OK.value(),
-                SuccessMessage.SEARCH_USER_SUCCESS.getMessage(),
-                userService.searchUsers(fullname, dob, page, size, sortBy, sortDir));
+
+        PageResponse<UserResponse> result = userService.searchUsers(fullname, dob, page, size, sortBy, sortDir);
+
+        String message = (result.getContent().isEmpty())
+                ? SuccessMessage.NO_DATA_FOUND.getMessage()
+                : SuccessMessage.SEARCH_USER_SUCCESS.getMessage();
+
+        return new ApiResponse<>(message, result);
     }
 
     @GetMapping("/{userId}")
-    public ApiResponse<UserResponse> getUser(@PathVariable Long userId) {
-        return new ApiResponse<>(
-                HttpStatus.OK.value(), SuccessMessage.GET_USER_SUCCESS.getMessage(), userService.getUserById(userId));
+    public ApiResponse<UserProfileResponse> getUser(@PathVariable Long userId) {
+        return new ApiResponse<>(SuccessMessage.GET_USER_SUCCESS.getMessage(), userService.getUserById(userId));
     }
 
     @GetMapping("/myInfo")
-    public ApiResponse<UserResponse> getMyInfo() {
-        return new ApiResponse<>(
-                HttpStatus.OK.value(), SuccessMessage.THIS_IS_MY_INFO.getMessage(), userService.getMyInfo());
+    public ApiResponse<UserProfileResponse> getMyInfo() {
+        return new ApiResponse<>(SuccessMessage.THIS_IS_YOUR_INFO.getMessage(), userService.getMyInfo());
     }
 
-    @PutMapping("/{id}/roles")
+    @PutMapping("/roles/{userId}")
     public ApiResponse<UserResponse> updateRolesForUser(
-            @PathVariable Long id, @RequestBody UserRoleUpdateRequest request) {
+            @PathVariable Long userId, @RequestBody UserRoleUpdateRequest request) {
         return new ApiResponse<>(
-                HttpStatus.OK.value(),
-                SuccessMessage.UPDATE_ROLE_OF_USER_SUCCESS.getMessage(),
-                userService.updateRolesForUser(id, request));
+                SuccessMessage.UPDATE_ROLE_OF_USER_SUCCESS.getMessage(), userService.updateRolesForUser(userId, request));
+    }
+
+    @PutMapping("/updatePassword/{email}")
+    public ApiResponse<UserResponse> updatePassword(
+            @PathVariable String email, @RequestBody PasswordUpdateRequest request) {
+        userService.updatePassword(email, request);
+        return new ApiResponse<>(SuccessMessage.UPDATE_PASSWORD_SUCCESS.getMessage());
     }
 }

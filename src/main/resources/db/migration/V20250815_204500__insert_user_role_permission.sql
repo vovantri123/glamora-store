@@ -1,28 +1,28 @@
 -- Insert roles
-INSERT INTO role (name, created_at, create_by, update_at, update_by, is_deleted, description)
-VALUES ('ADMIN', NOW(), 'System', NOW(), 'System', false, 'Administrator role with full permissions'),
-       ('USER', NOW(), 'System', NOW(), 'System', false, 'Standard user role with limited permissions');
+INSERT INTO role (name, description)
+VALUES ('ADMIN', 'Administrator role with full permissions'),
+       ('USER', 'Standard user role with limited permissions');
 
 -- Insert permissions
 INSERT INTO permission (name, description)
 VALUES ('USER_READ', 'Permission to view user information'),
        ('USER_CREATE', 'Permission to create new users'),
+       ('USER_REGISTER', 'Permission to register new account'),
        ('USER_UPDATE', 'Permission to update existing users'),
-       ('USER_DELETE', 'Permission to delete users'),
-       ('VIEW_DASHBOARD', 'Permission to view dashboard');
+       ('USER_DELETE', 'Permission to delete users');
 
 -- Link permissions to ADMIN role
 INSERT INTO role_permissions (permission_name, role_name)
 VALUES ('USER_READ', 'ADMIN'),
        ('USER_CREATE', 'ADMIN'),
+       ('USER_REGISTER', 'ADMIN'),
        ('USER_UPDATE', 'ADMIN'),
-       ('USER_DELETE', 'ADMIN'),
-       ('VIEW_DASHBOARD', 'ADMIN');
+       ('USER_DELETE', 'ADMIN');
 
 -- Link permissions to USER role
 INSERT INTO role_permissions (permission_name, role_name)
 VALUES ('USER_READ', 'USER'),
-       ('VIEW_DASHBOARD', 'USER');
+       ('USER_REGISTER', 'USER');
 
 ---------------------------------------------------------------------------------
 

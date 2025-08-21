@@ -9,5 +9,5 @@ import com.glamora_store.entity.Role;
 
 @Repository
 public interface RoleRepository extends JpaRepository<Role, String> {
-    Optional<Role> findByNameAndIsDeletedFalse(String name);
+    Optional<Role> findByName(String name);
 }

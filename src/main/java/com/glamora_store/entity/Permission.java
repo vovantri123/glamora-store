@@ -3,8 +3,6 @@ package com.glamora_store.entity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
-import org.hibernate.envers.Audited;
-
 import lombok.*;
 
 @Getter
@@ -12,7 +10,6 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Audited
 @Entity
 public class Permission {
     @Id

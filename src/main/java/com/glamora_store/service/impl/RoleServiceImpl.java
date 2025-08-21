@@ -12,7 +12,7 @@ import com.glamora_store.dto.request.RoleCreateRequest;
 import com.glamora_store.dto.response.RoleResponse;
 import com.glamora_store.entity.Permission;
 import com.glamora_store.entity.Role;
-import com.glamora_store.enums.ErrorCode;
+import com.glamora_store.enums.ErrorMessage;
 import com.glamora_store.mapper.RoleMapper;
 import com.glamora_store.repository.PermissionRepository;
 import com.glamora_store.repository.RoleRepository;
@@ -47,11 +47,10 @@ public class RoleServiceImpl implements RoleService {
 
         if (!notFoundPermissions.isEmpty()) {
             throw ExceptionUtil.with(
-                    HttpStatus.NOT_FOUND, ErrorCode.PERMISSIONS_NOT_FOUND, String.join(", ", notFoundPermissions));
+                    HttpStatus.NOT_FOUND, ErrorMessage.PERMISSIONS_NOT_FOUND, String.join(", ", notFoundPermissions));
         }
 
         role.setPermissions(new HashSet<>(permissions));
-        role.setIsDeleted(false);
 
         role = roleRepository.save(role);
         return roleMapper.toRoleResponse(role);

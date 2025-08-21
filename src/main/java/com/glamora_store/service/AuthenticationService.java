@@ -9,7 +9,7 @@ import com.glamora_store.dto.response.IntrospectResponse;
 import com.nimbusds.jose.JOSEException;
 
 public interface AuthenticationService {
-    AuthenticationResponse authenticate(AuthenticationRequest request) throws JOSEException;
+    AuthenticationResponse authenticate(AuthenticationRequest request);
 
     IntrospectResponse introspect(IntrospectRequest request) throws JOSEException, ParseException;
 }

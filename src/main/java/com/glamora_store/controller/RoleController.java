@@ -2,7 +2,6 @@ package com.glamora_store.controller;
 
 import java.util.List;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import com.glamora_store.dto.request.RoleCreateRequest;
@@ -23,21 +22,17 @@ public class RoleController {
 
     @PostMapping
     public ApiResponse<RoleResponse> createRole(@RequestBody RoleCreateRequest request) {
-        return new ApiResponse<>(
-                HttpStatus.CREATED.value(),
-                SuccessMessage.CREATE_ROLE_SUCCESS.getMessage(),
-                roleService.createRole(request));
+        return new ApiResponse<>(SuccessMessage.CREATE_ROLE_SUCCESS.getMessage(), roleService.createRole(request));
     }
 
     @GetMapping
     public ApiResponse<List<RoleResponse>> getAllRoles() {
-        return new ApiResponse<>(
-                HttpStatus.OK.value(), SuccessMessage.GET_ALL_ROLE_SUCCESS.getMessage(), roleService.getAllRoles());
+        return new ApiResponse<>(SuccessMessage.GET_ALL_ROLE_SUCCESS.getMessage(), roleService.getAllRoles());
     }
 
     @DeleteMapping("/{role}")
     ApiResponse<Void> deleteRole(@PathVariable String role) {
         roleService.deleteRole(role);
-        return new ApiResponse<>(HttpStatus.OK.value(), SuccessMessage.DELETE_ROLE_SUCCESS.getMessage());
+        return new ApiResponse<>(SuccessMessage.DELETE_ROLE_SUCCESS.getMessage());
     }
 }
