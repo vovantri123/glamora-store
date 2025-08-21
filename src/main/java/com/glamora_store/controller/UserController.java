@@ -7,11 +7,11 @@ import jakarta.validation.Valid;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
-import com.glamora_store.dto.request.*;
+import com.glamora_store.dto.request.iam.*;
 import com.glamora_store.dto.response.ApiResponse;
-import com.glamora_store.dto.response.PageResponse;
-import com.glamora_store.dto.response.UserProfileResponse;
-import com.glamora_store.dto.response.UserResponse;
+import com.glamora_store.dto.response.iam.PageResponse;
+import com.glamora_store.dto.response.iam.UserProfileResponse;
+import com.glamora_store.dto.response.iam.UserResponse;
 import com.glamora_store.enums.SuccessMessage;
 import com.glamora_store.service.UserService;
 
@@ -20,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/users")
+@RequestMapping("/users")
 @Slf4j
 public class UserController {
 
@@ -38,11 +38,11 @@ public class UserController {
                 SuccessMessage.UPDATE_USER_SUCCESS.getMessage(), userService.updateUser(userId, request));
     }
 
-    @PutMapping("/my-profile/{email}")
-    public ApiResponse<UserProfileResponse> updateUser(
-            @PathVariable String email, @Valid @RequestBody UserProfileUpdateRequest request) {
+    @PutMapping("/my-profile/{id}")
+    public ApiResponse<UserProfileResponse> updateMyProfile(
+            @PathVariable Long id, @Valid @RequestBody UserProfileUpdateRequest request) {
         return new ApiResponse<>(
-                SuccessMessage.UPDATE_USER_SUCCESS.getMessage(), userService.updateMyProfile(email, request));
+                SuccessMessage.UPDATE_USER_SUCCESS.getMessage(), userService.updateMyProfile(id, request));
     }
 
     @DeleteMapping("/{userId}")
@@ -75,7 +75,7 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
-    public ApiResponse<UserProfileResponse> getUser(@PathVariable Long userId) {
+    public ApiResponse<UserProfileResponse> getUserById(@PathVariable Long userId) {
         return new ApiResponse<>(SuccessMessage.GET_USER_SUCCESS.getMessage(), userService.getUserById(userId));
     }
 
@@ -86,15 +86,16 @@ public class UserController {
 
     @PutMapping("/roles/{userId}")
     public ApiResponse<UserResponse> updateRolesForUser(
-            @PathVariable Long userId, @RequestBody UserRoleUpdateRequest request) {
+            @PathVariable Long userId, @Valid @RequestBody UserRoleUpdateRequest request) {
         return new ApiResponse<>(
-                SuccessMessage.UPDATE_ROLE_OF_USER_SUCCESS.getMessage(), userService.updateRolesForUser(userId, request));
+                SuccessMessage.UPDATE_ROLE_OF_USER_SUCCESS.getMessage(),
+                userService.updateRolesForUser(userId, request));
     }
 
-    @PutMapping("/updatePassword/{email}")
+    @PutMapping("/updatePassword/{userId}")
     public ApiResponse<UserResponse> updatePassword(
-            @PathVariable String email, @RequestBody PasswordUpdateRequest request) {
-        userService.updatePassword(email, request);
+            @PathVariable Long userId, @Valid @RequestBody PasswordUpdateRequest request) {
+        userService.updatePassword(userId, request);
         return new ApiResponse<>(SuccessMessage.UPDATE_PASSWORD_SUCCESS.getMessage());
     }
 }

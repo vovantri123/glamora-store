@@ -2,11 +2,13 @@ package com.glamora_store.controller;
 
 import java.util.List;
 
+import jakarta.validation.Valid;
+
 import org.springframework.web.bind.annotation.*;
 
-import com.glamora_store.dto.request.RoleCreateRequest;
+import com.glamora_store.dto.request.iam.RoleCreateRequest;
 import com.glamora_store.dto.response.ApiResponse;
-import com.glamora_store.dto.response.RoleResponse;
+import com.glamora_store.dto.response.iam.RoleResponse;
 import com.glamora_store.enums.SuccessMessage;
 import com.glamora_store.service.RoleService;
 
@@ -21,7 +23,7 @@ public class RoleController {
     private final RoleService roleService;
 
     @PostMapping
-    public ApiResponse<RoleResponse> createRole(@RequestBody RoleCreateRequest request) {
+    public ApiResponse<RoleResponse> createRole(@Valid @RequestBody RoleCreateRequest request) {
         return new ApiResponse<>(SuccessMessage.CREATE_ROLE_SUCCESS.getMessage(), roleService.createRole(request));
     }
 

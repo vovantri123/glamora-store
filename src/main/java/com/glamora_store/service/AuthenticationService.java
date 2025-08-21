@@ -2,10 +2,10 @@ package com.glamora_store.service;
 
 import java.text.ParseException;
 
-import com.glamora_store.dto.request.AuthenticationRequest;
-import com.glamora_store.dto.request.IntrospectRequest;
-import com.glamora_store.dto.response.AuthenticationResponse;
-import com.glamora_store.dto.response.IntrospectResponse;
+import com.glamora_store.dto.request.iam.AuthenticationRequest;
+import com.glamora_store.dto.request.iam.IntrospectRequest;
+import com.glamora_store.dto.response.iam.AuthenticationResponse;
+import com.glamora_store.dto.response.iam.IntrospectResponse;
 import com.nimbusds.jose.JOSEException;
 
 public interface AuthenticationService {

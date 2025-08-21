@@ -4,8 +4,8 @@ import lombok.Getter;
 
 @Getter
 public enum ErrorMessage {
-    UNCATEGORIZED_EXCEPTION(
-            "Uncategorized error"), // để thông báo Exception này chưa phân loại (kiểu xử lý cái exception chung chung)
+    // Message chung chung
+    UNCATEGORIZED_EXCEPTION("Uncategorized error. Please check log for more detail"),
     INVALID_KEY("Invalid message key"), // Dùng khi message chứa ErrorCode bị sai chính tả (trong @Size)
     INVALID_PARAMETER_TYPE("Invalid value for parameter"),
     MALFORMED_JSON("The JSON in your request is invalid. Please check the syntax."),
@@ -14,9 +14,7 @@ public enum ErrorMessage {
     CONSTRAINT_VIOLATION("Constraint violation in database"),
     VALIDATION_FAILED("Validation failed"),
 
-    PATIENT_NOT_FOUND("Patient not found"),
-    LIST_PATIENT_ID_NOT_FOUND("Some patient IDs were not found"),
-    CANNOT_UPDATE_DELETED_PATIENT("Cannot update a deleted patient"),
+    // Message cụ thể
     GENDER_INVALID("Gender must be one of: MALE, FEMALE, OTHER (or male, female, other). Unknown"),
     USER_NOT_EXISTED("User not existed"),
     CANNOT_CREATE_TOKEN("Cannot create token"),
@@ -27,15 +25,13 @@ public enum ErrorMessage {
     ACCESS_DENIED("You do not have permission"),
     PERMISSION_NOT_FOUND("Permission not found"),
     PERMISSIONS_NOT_FOUND("Permissions not found"),
-    LIST_ROLE_NAMES_EMPTY("List roleNames cannot be empty"),
     USER_EXISTED("User already existed"),
     SEND_EMAIL_FAIL("Failed to send OTP email"),
     OLD_PASSWORD_INCORRECT("Old password is incorrect"),
 
-    // Cẩn thận xóa nhầm - Start (Chủ yếu lấy message detail, còn code với default message thì lấy của
-    // VALIDATION_FAILED
+    // Message in dto - Start
     FULL_NAME_REQUIRED("Full name is required"),
-    DOB_INVALID("Your age must be at least 18"),
+    DOB_INVALID("Your age must be at least 6"),
     PHONE_NUMBER_INVALID("Invalid phone number (must be in format 0xxxxxxxxx or +84xxxxxxxxx)"),
     CCCD_INVALID("CCCD must include exactly 12 digits"),
     DUPLICATE_CCCD("CCCD already exists in the system"),
@@ -47,7 +43,12 @@ public enum ErrorMessage {
     EMAIL_REQUIRED("Email is required"),
     EMAIL_INVALID("Invalid email address"),
     USER_NOT_FOUND("User not found"),
-// Cẩn thận xóa nhầm - End
+    ROLE_NAME_REQUIRED("Role name is required"),
+    PERMISSION_NAME_REQUIRED("Permission name is required"),
+    LIST_ROLE_NAMES_EMPTY("List roleNames cannot be empty"),
+    LIST_PERMISSION_NAMES_EMPTY("List permissionNames cannot be empty"),
+    TOKEN_REQUIRED("Token is required"),
+// Message in dto - End
 ;
 
     private final String message;

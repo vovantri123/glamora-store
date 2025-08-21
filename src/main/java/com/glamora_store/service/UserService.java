@@ -5,10 +5,10 @@ import java.time.LocalDate;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 
-import com.glamora_store.dto.request.*;
-import com.glamora_store.dto.response.PageResponse;
-import com.glamora_store.dto.response.UserProfileResponse;
-import com.glamora_store.dto.response.UserResponse;
+import com.glamora_store.dto.request.iam.*;
+import com.glamora_store.dto.response.iam.PageResponse;
+import com.glamora_store.dto.response.iam.UserProfileResponse;
+import com.glamora_store.dto.response.iam.UserResponse;
 
 public interface UserService {
     void registerUser(UserCreateRequest request);
@@ -21,12 +21,12 @@ public interface UserService {
     @PreAuthorize("hasRole('ADMIN')")
     UserResponse updateUser(Long userId, UserUpdateRequest request);
 
-    // authentication.name là sub claim
-    @PreAuthorize("#email == authentication.name")
-    UserProfileResponse updateMyProfile(String email, UserProfileUpdateRequest request);
+    // authentication.name là sub claim (email)
+    @PreAuthorize("#userId == authentication.token.claims['userId']")
+    UserProfileResponse updateMyProfile(Long userId, UserProfileUpdateRequest request);
 
-    @PreAuthorize("hasRole('ADMIN') or #email == authentication.name")
-    void updatePassword(String email, PasswordUpdateRequest request);
+    @PreAuthorize("hasRole('ADMIN') or #userId == authentication.token.claims['userId']")
+    void updatePassword(Long userId, PasswordUpdateRequest request);
 
     @PreAuthorize("hasRole('ADMIN')")
     void softDeleteUser(Long userId);

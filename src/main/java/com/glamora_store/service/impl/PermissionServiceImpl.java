@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.glamora_store.dto.request.PermissionCreateRequest;
-import com.glamora_store.dto.response.PermissionResponse;
+import com.glamora_store.dto.request.iam.PermissionCreateRequest;
+import com.glamora_store.dto.response.iam.PermissionResponse;
 import com.glamora_store.entity.Permission;
 import com.glamora_store.mapper.PermissionMapper;
 import com.glamora_store.repository.PermissionRepository;

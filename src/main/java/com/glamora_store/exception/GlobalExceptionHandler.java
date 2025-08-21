@@ -151,7 +151,6 @@ public class GlobalExceptionHandler {
     public ApiResponse<Void> handleRuntimeException(RuntimeException ex) {
         return new ApiResponse<>(ex.getMessage());
     }
-    
 
     // Handle all other uncaught exceptions (fallback) – including checked or unexpected errors
     @ExceptionHandler(Exception.class)

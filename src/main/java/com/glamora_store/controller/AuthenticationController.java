@@ -7,11 +7,11 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import com.glamora_store.dto.request.*;
+import com.glamora_store.dto.request.iam.*;
 import com.glamora_store.dto.response.ApiResponse;
-import com.glamora_store.dto.response.AuthenticationResponse;
-import com.glamora_store.dto.response.IntrospectResponse;
-import com.glamora_store.dto.response.UserResponse;
+import com.glamora_store.dto.response.iam.AuthenticationResponse;
+import com.glamora_store.dto.response.iam.IntrospectResponse;
+import com.glamora_store.dto.response.iam.UserResponse;
 import com.glamora_store.enums.OtpPurpose;
 import com.glamora_store.enums.SuccessMessage;
 import com.glamora_store.service.AuthenticationService;
@@ -40,7 +40,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/introspect")
-    public ApiResponse<IntrospectResponse> introspect(@RequestBody IntrospectRequest request)
+    public ApiResponse<IntrospectResponse> introspect(@Valid @RequestBody IntrospectRequest request)
             throws ParseException, JOSEException {
         IntrospectResponse result = authenticationService.introspect(request);
 
@@ -60,9 +60,9 @@ public class AuthenticationController {
         return new ApiResponse<>(SuccessMessage.CREATE_USER_SUCCESS.getMessage());
     }
 
-    @PostMapping("/verify-register-otp")
-    public ApiResponse<Void> verifyRegisterOtp(@RequestParam String email, @RequestParam String otp) {
-        boolean verified = otpEmailService.verifyOtp(email, otp, OtpPurpose.REGISTER);
+    @GetMapping("/verify-register-otp")
+    public ApiResponse<Void> verifyRegisterOtp(@Valid @RequestBody OtpRegisterVerifyRequest request) {
+        boolean verified = otpEmailService.verifyOtp(request.getEmail(), request.getOtp(), OtpPurpose.REGISTER);
 
         return new ApiResponse<>(
                 verified
@@ -72,13 +72,13 @@ public class AuthenticationController {
 
     // Forgot Password
     @PostMapping("/forgot-password")
-    public ApiResponse<Void> forgotPassword(@RequestBody ForgotPasswordRequest request) {
+    public ApiResponse<Void> forgotPassword(@Valid @RequestBody ForgotPasswordRequest request) {
         otpEmailService.sendOtp(request.getEmail(), OtpPurpose.FORGOT_PASSWORD);
         return new ApiResponse<>(SuccessMessage.OTP_SENT.getMessage());
     }
 
     @PostMapping("/reset-password")
-    public ApiResponse<Void> resetPassword(@RequestBody PasswordResetRequest request) {
+    public ApiResponse<Void> resetPassword(@Valid @RequestBody PasswordResetRequest request) {
         boolean valid = otpEmailService.verifyOtp(request.getEmail(), request.getOtp(), OtpPurpose.FORGOT_PASSWORD);
         if (!valid) {
             return new ApiResponse<>(SuccessMessage.OTP_INVALID_OR_EXPIRED.getMessage());

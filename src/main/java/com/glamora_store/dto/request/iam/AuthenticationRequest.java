@@ -1,4 +1,4 @@
-package com.glamora_store.dto.request;
+package com.glamora_store.dto.request.iam;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

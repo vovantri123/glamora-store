@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 
-import com.glamora_store.dto.request.RoleCreateRequest;
-import com.glamora_store.dto.response.RoleResponse;
+import com.glamora_store.dto.request.iam.RoleCreateRequest;
+import com.glamora_store.dto.response.iam.RoleResponse;
 
 public interface RoleService {
 

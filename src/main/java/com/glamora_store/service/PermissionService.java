@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 
-import com.glamora_store.dto.request.PermissionCreateRequest;
-import com.glamora_store.dto.response.PermissionResponse;
+import com.glamora_store.dto.request.iam.PermissionCreateRequest;
+import com.glamora_store.dto.response.iam.PermissionResponse;
 
 public interface PermissionService {
 

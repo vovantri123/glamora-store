@@ -1,4 +1,4 @@
-package com.glamora_store.dto.request;
+package com.glamora_store.dto.request.iam;
 
 import java.time.LocalDate;
 
@@ -16,22 +16,16 @@ import lombok.*;
 @Builder
 public class UserUpdateRequest {
 
-    @NotBlank(message = "FULL_NAME_REQUIRED")
-    @Size(min = 1, max = 100, message = "FULL_NAME_INVALID")
     private String fullName;
 
     private Gender gender;
 
-    @DobConstraint(min = 18, message = "DOB_INVALID")
+    @DobConstraint(min = 6, message = "DOB_INVALID")
     private LocalDate dob;
 
     @NotBlank(message = "EMAIL_REQUIRED")
     @Email(message = "EMAIL_INVALID")
     private String email;
-
-    @NotBlank(message = "PASSWORD_REQUIRED")
-    @Size(min = 6, max = 100, message = "PASSWORD_INVALID")
-    private String password;
 
     @Pattern(regexp = "^(0|\\+84)(3|5|7|8|9)[0-9]{8}$", message = "PHONE_NUMBER_INVALID")
     private String phoneNumber;

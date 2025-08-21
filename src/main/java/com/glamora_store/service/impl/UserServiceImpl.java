@@ -19,10 +19,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.glamora_store.dto.request.*;
-import com.glamora_store.dto.response.PageResponse;
-import com.glamora_store.dto.response.UserProfileResponse;
-import com.glamora_store.dto.response.UserResponse;
+import com.glamora_store.dto.request.iam.*;
+import com.glamora_store.dto.response.iam.PageResponse;
+import com.glamora_store.dto.response.iam.UserProfileResponse;
+import com.glamora_store.dto.response.iam.UserResponse;
 import com.glamora_store.entity.Role;
 import com.glamora_store.entity.User;
 import com.glamora_store.enums.ErrorMessage;
@@ -71,7 +71,7 @@ public class UserServiceImpl implements UserService {
         user.setIsDeleted(true);
 
         Role userRole = roleRepository
-                .findByName(RoleName.USER.name())
+                .findById(RoleName.USER.name())
                 .orElseThrow(() -> ExceptionUtil.notFound(ErrorMessage.ROLE_NOT_FOUND));
 
         user.setRoles(Set.of(userRole));
@@ -100,7 +100,7 @@ public class UserServiceImpl implements UserService {
         user.setIsDeleted(false);
 
         Role userRole = roleRepository
-                .findByName(RoleName.USER.name())
+                .findById(RoleName.USER.name())
                 .orElseThrow(() -> ExceptionUtil.notFound(ErrorMessage.ROLE_NOT_FOUND));
 
         user.setRoles(Set.of(userRole));
@@ -120,9 +120,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserProfileResponse updateMyProfile(String email, UserProfileUpdateRequest request) {
+    public UserProfileResponse updateMyProfile(Long userId, UserProfileUpdateRequest request) {
         User user = userRepository
-                .findByEmailAndIsDeletedFalse(email)
+                .findByUserIdAndIsDeletedFalse(userId)
                 .orElseThrow(() -> ExceptionUtil.notFound(ErrorMessage.USER_NOT_FOUND));
 
         userMapper.toUser(user, request);
@@ -131,9 +131,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updatePassword(String email, PasswordUpdateRequest request) {
+    public void updatePassword(Long userId, PasswordUpdateRequest request) {
         User user = userRepository
-                .findByEmailAndIsDeletedFalse(email)
+                .findByUserIdAndIsDeletedFalse(userId)
                 .orElseThrow(() -> ExceptionUtil.notFound(ErrorMessage.USER_NOT_FOUND));
 
         // Nếu là USER thường thì bắt buộc kiểm tra oldPassword
@@ -170,9 +170,9 @@ public class UserServiceImpl implements UserService {
                 .and(UserSpecification.hasFullNameLike(fullname))
                 .and(UserSpecification.hasDobEqual(dob));
 
-        Sort sort = sortDir.equalsIgnoreCase("asc")
-                ? Sort.by(sortBy).ascending()
-                : Sort.by(sortBy).descending();
+        Sort sort = sortDir.equalsIgnoreCase("desc")
+                ? Sort.by(sortBy).descending()
+                : Sort.by(sortBy).ascending();
 
         Pageable pageable = PageRequest.of(page, size, sort);
         Page<User> userPage = userRepository.findAll(spec, pageable);

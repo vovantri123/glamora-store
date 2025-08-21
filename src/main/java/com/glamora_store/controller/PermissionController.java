@@ -2,11 +2,13 @@ package com.glamora_store.controller;
 
 import java.util.List;
 
+import jakarta.validation.Valid;
+
 import org.springframework.web.bind.annotation.*;
 
-import com.glamora_store.dto.request.PermissionCreateRequest;
+import com.glamora_store.dto.request.iam.PermissionCreateRequest;
 import com.glamora_store.dto.response.ApiResponse;
-import com.glamora_store.dto.response.PermissionResponse;
+import com.glamora_store.dto.response.iam.PermissionResponse;
 import com.glamora_store.enums.SuccessMessage;
 import com.glamora_store.service.PermissionService;
 
@@ -21,7 +23,7 @@ public class PermissionController {
     private final PermissionService permissionService;
 
     @PostMapping
-    ApiResponse<PermissionResponse> createPermission(@RequestBody PermissionCreateRequest request) {
+    ApiResponse<PermissionResponse> createPermission(@Valid @RequestBody PermissionCreateRequest request) {
         return new ApiResponse<>(
                 SuccessMessage.CREATE_PERMISSION_SUCCESS.getMessage(), permissionService.createPermission(request));
     }

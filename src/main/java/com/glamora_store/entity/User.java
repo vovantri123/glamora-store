@@ -26,7 +26,6 @@ public class User extends BaseEntity {
 
     @Column(name = "full_name")
     @NotBlank(message = "FULL_NAME_REQUIRED")
-    @Size(min = 1, max = 100, message = "FULL_NAME_INVALID")
     private String fullName;
 
     @Column(name = "gender", length = 10)

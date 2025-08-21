@@ -8,8 +8,8 @@ import java.util.stream.Collectors;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import com.glamora_store.dto.request.RoleCreateRequest;
-import com.glamora_store.dto.response.RoleResponse;
+import com.glamora_store.dto.request.iam.RoleCreateRequest;
+import com.glamora_store.dto.response.iam.RoleResponse;
 import com.glamora_store.entity.Permission;
 import com.glamora_store.entity.Role;
 import com.glamora_store.enums.ErrorMessage;

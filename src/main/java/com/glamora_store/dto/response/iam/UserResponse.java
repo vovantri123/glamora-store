@@ -1,4 +1,4 @@
-package com.glamora_store.dto.response;
+package com.glamora_store.dto.response.iam;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

@@ -11,10 +11,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import com.glamora_store.dto.request.AuthenticationRequest;
-import com.glamora_store.dto.request.IntrospectRequest;
-import com.glamora_store.dto.response.AuthenticationResponse;
-import com.glamora_store.dto.response.IntrospectResponse;
+import com.glamora_store.dto.request.iam.AuthenticationRequest;
+import com.glamora_store.dto.request.iam.IntrospectRequest;
+import com.glamora_store.dto.response.iam.AuthenticationResponse;
+import com.glamora_store.dto.response.iam.IntrospectResponse;
 import com.glamora_store.entity.User;
 import com.glamora_store.enums.ErrorMessage;
 import com.glamora_store.repository.UserRepository;

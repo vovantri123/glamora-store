@@ -7,11 +7,11 @@ import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
-import com.glamora_store.dto.request.UserCreateRequest;
-import com.glamora_store.dto.request.UserProfileUpdateRequest;
-import com.glamora_store.dto.request.UserUpdateRequest;
-import com.glamora_store.dto.response.UserProfileResponse;
-import com.glamora_store.dto.response.UserResponse;
+import com.glamora_store.dto.request.iam.UserCreateRequest;
+import com.glamora_store.dto.request.iam.UserProfileUpdateRequest;
+import com.glamora_store.dto.request.iam.UserUpdateRequest;
+import com.glamora_store.dto.response.iam.UserProfileResponse;
+import com.glamora_store.dto.response.iam.UserResponse;
 import com.glamora_store.entity.User;
 
 @Mapper(componentModel = "spring")
