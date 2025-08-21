@@ -13,7 +13,7 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.glamora_store.dto.response.ApiResponse;
-import com.glamora_store.enums.ErrorCode;
+import com.glamora_store.enums.ErrorMessage;
 
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
@@ -24,15 +24,13 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
     public void commence(
             HttpServletRequest request, HttpServletResponse response, AuthenticationException authException)
             throws IOException, ServletException {
-        ErrorCode errorCode = ErrorCode.UNAUTHENTICATED;
+        ErrorMessage errorMessage = ErrorMessage.UNAUTHENTICATED;
 
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 
-        ApiResponse<?> apiResponse = ApiResponse.builder()
-                .code(errorCode.getCode())
-                .message(errorCode.getMessage())
-                .build();
+        ApiResponse<?> apiResponse =
+                ApiResponse.builder().message(errorMessage.getMessage()).build();
 
         ObjectMapper objectMapper = new ObjectMapper();
 

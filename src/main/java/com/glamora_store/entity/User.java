@@ -6,8 +6,6 @@ import java.util.Set;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 
-import org.hibernate.envers.Audited;
-
 import com.glamora_store.enums.Gender;
 import com.glamora_store.validator.DobConstraint;
 
@@ -20,7 +18,6 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @SuperBuilder
 @Entity
-@Audited
 @Table(name = "users")
 public class User extends BaseEntity {
     @Id

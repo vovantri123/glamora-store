@@ -3,6 +3,7 @@ package com.glamora_store.service.impl;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -12,23 +13,25 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.glamora_store.dto.request.UserCreateRequest;
-import com.glamora_store.dto.request.UserRoleUpdateRequest;
-import com.glamora_store.dto.request.UserUpdateRequest;
+import com.glamora_store.dto.request.*;
 import com.glamora_store.dto.response.PageResponse;
+import com.glamora_store.dto.response.UserProfileResponse;
 import com.glamora_store.dto.response.UserResponse;
 import com.glamora_store.entity.Role;
 import com.glamora_store.entity.User;
-import com.glamora_store.enums.ErrorCode;
+import com.glamora_store.enums.ErrorMessage;
+import com.glamora_store.enums.OtpPurpose;
 import com.glamora_store.enums.RoleName;
 import com.glamora_store.mapper.UserMapper;
 import com.glamora_store.repository.RoleRepository;
 import com.glamora_store.repository.UserRepository;
+import com.glamora_store.service.OtpEmailService;
 import com.glamora_store.service.UserService;
 import com.glamora_store.util.ExceptionUtil;
 import com.glamora_store.util.specification.UserSpecification;
@@ -46,16 +49,59 @@ public class UserServiceImpl implements UserService {
 
     private final PasswordEncoder passwordEncoder;
 
-    @Override
-    public UserResponse createUser(UserCreateRequest request) {
+    private final OtpEmailService otpEmailService;
 
+    @Override
+    public void registerUser(UserCreateRequest request) {
+        Optional<User> existingUserOpt = userRepository.findByEmail(request.getEmail());
+
+        if (existingUserOpt.isPresent()) {
+            User existingUser = existingUserOpt.get();
+            if (Boolean.FALSE.equals(existingUser.getIsDeleted())) {
+                throw ExceptionUtil.badRequest(ErrorMessage.USER_EXISTED);
+            }
+
+            // user chưa active → gửi OTP mới
+            otpEmailService.sendOtp(request.getEmail(), OtpPurpose.REGISTER);
+        }
+
+        // user chưa tồn tại → tạo mới
         User user = userMapper.toUser(request);
-        user.setIsDeleted(false);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setIsDeleted(true);
 
         Role userRole = roleRepository
-                .findByNameAndIsDeletedFalse(RoleName.USER.name())
-                .orElseThrow(() -> ExceptionUtil.notFound(ErrorCode.ROLE_NOT_FOUND));
+                .findByName(RoleName.USER.name())
+                .orElseThrow(() -> ExceptionUtil.notFound(ErrorMessage.ROLE_NOT_FOUND));
+
+        user.setRoles(Set.of(userRole));
+        userRepository.save(user);
+
+        // gửi OTP lần đầu
+        otpEmailService.sendOtp(request.getEmail(), OtpPurpose.REGISTER);
+    }
+
+    @Override
+    public UserResponse createUser(UserCreateRequest request) {
+        Optional<User> existingUserOpt = userRepository.findByEmail(request.getEmail());
+
+        if (existingUserOpt.isPresent()) {
+            User existingUser = existingUserOpt.get();
+            if (Boolean.FALSE.equals(existingUser.getIsDeleted())) {
+                throw ExceptionUtil.badRequest(ErrorMessage.USER_EXISTED);
+            }
+
+            activeUser(existingUser.getUserId());
+        }
+
+        // user chưa tồn tại → tạo mới
+        User user = userMapper.toUser(request);
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setIsDeleted(false);
+
+        Role userRole = roleRepository
+                .findByName(RoleName.USER.name())
+                .orElseThrow(() -> ExceptionUtil.notFound(ErrorMessage.ROLE_NOT_FOUND));
 
         user.setRoles(Set.of(userRole));
 
@@ -64,20 +110,53 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponse updateUser(Long id, UserUpdateRequest request) {
-        User user = userRepository.findById(id).orElseThrow(() -> ExceptionUtil.notFound(ErrorCode.USER_NOT_FOUND));
+        User user = userRepository
+                .findByUserIdAndIsDeletedFalse(id)
+                .orElseThrow(() -> ExceptionUtil.notFound(ErrorMessage.USER_NOT_FOUND));
 
         userMapper.toUser(user, request);
 
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
-
         return userMapper.toUserResponse(userRepository.save(user));
+    }
+
+    @Override
+    public UserProfileResponse updateMyProfile(String email, UserProfileUpdateRequest request) {
+        User user = userRepository
+                .findByEmailAndIsDeletedFalse(email)
+                .orElseThrow(() -> ExceptionUtil.notFound(ErrorMessage.USER_NOT_FOUND));
+
+        userMapper.toUser(user, request);
+
+        return userMapper.toUserProfileResponse(userRepository.save(user));
+    }
+
+    @Override
+    public void updatePassword(String email, PasswordUpdateRequest request) {
+        User user = userRepository
+                .findByEmailAndIsDeletedFalse(email)
+                .orElseThrow(() -> ExceptionUtil.notFound(ErrorMessage.USER_NOT_FOUND));
+
+        // Nếu là USER thường thì bắt buộc kiểm tra oldPassword
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        boolean isAdmin = auth.getAuthorities().stream()
+                .anyMatch(granted -> granted.getAuthority().equals(RoleName.ADMIN.name()));
+
+        if (!isAdmin) {
+            if (!passwordEncoder.matches(request.getOldPassword(), user.getPassword())) {
+                throw ExceptionUtil.badRequest(ErrorMessage.OLD_PASSWORD_INCORRECT);
+            }
+        }
+
+        // Cập nhật mật khẩu mới
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+        userRepository.save(user);
     }
 
     @Override
     public void softDeleteUser(Long id) {
         User user = userRepository
                 .findByUserIdAndIsDeletedFalse(id)
-                .orElseThrow(() -> ExceptionUtil.notFound(ErrorCode.USER_NOT_FOUND));
+                .orElseThrow(() -> ExceptionUtil.notFound(ErrorMessage.USER_NOT_FOUND));
 
         user.setIsDeleted(true);
 
@@ -102,16 +181,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponse getUserById(Long id) {
+    public UserProfileResponse getUserById(Long id) {
         User user = userRepository
                 .findByUserIdAndIsDeletedFalse(id)
-                .orElseThrow(() -> ExceptionUtil.notFound(ErrorCode.USER_NOT_FOUND));
-        return userMapper.toUserResponse(user);
+                .orElseThrow(() -> ExceptionUtil.notFound(ErrorMessage.USER_NOT_FOUND));
+        return userMapper.toUserProfileResponse(user);
     }
 
     @Override
     public UserResponse activeUser(Long id) {
-        User user = userRepository.findById(id).orElseThrow(() -> ExceptionUtil.notFound(ErrorCode.USER_NOT_FOUND));
+        User user = userRepository.findById(id).orElseThrow(() -> ExceptionUtil.notFound(ErrorMessage.USER_NOT_FOUND));
 
         user.setIsDeleted(false);
 
@@ -121,20 +200,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponse getMyInfo() {
+    public UserProfileResponse getMyInfo() {
         SecurityContext context = SecurityContextHolder.getContext();
         String subClaim = context.getAuthentication().getName();
 
         User user = userRepository
                 .findByEmailAndIsDeletedFalse(subClaim)
-                .orElseThrow(() -> ExceptionUtil.notFound(ErrorCode.USER_NOT_FOUND));
+                .orElseThrow(() -> ExceptionUtil.notFound(ErrorMessage.USER_NOT_FOUND));
 
-        return userMapper.toUserResponse(user);
+        return userMapper.toUserProfileResponse(user);
     }
 
     @Override
     public UserResponse updateRolesForUser(Long userId, UserRoleUpdateRequest request) {
-        User user = userRepository.findById(userId).orElseThrow(() -> ExceptionUtil.notFound(ErrorCode.USER_NOT_FOUND));
+        User user =
+                userRepository.findById(userId).orElseThrow(() -> ExceptionUtil.notFound(ErrorMessage.USER_NOT_FOUND));
 
         Set<String> requestedRoleNames = request.getRoleNames();
         List<Role> roles = roleRepository.findAllById(requestedRoleNames);
@@ -147,11 +227,21 @@ public class UserServiceImpl implements UserService {
                 .collect(Collectors.toSet());
 
         if (!notFoundRoles.isEmpty()) {
-            throw ExceptionUtil.with(HttpStatus.NOT_FOUND, ErrorCode.ROLES_NOT_FOUND, String.join(", ", notFoundRoles));
+            throw ExceptionUtil.with(
+                    HttpStatus.NOT_FOUND, ErrorMessage.ROLES_NOT_FOUND, String.join(", ", notFoundRoles));
         }
 
         user.setRoles(new HashSet<>(roles));
 
         return userMapper.toUserResponse(userRepository.save(user));
+    }
+
+    @Override
+    public void resetPassword(String email, String newPassword) {
+        User user = userRepository
+                .findByEmailAndIsDeletedFalse(email)
+                .orElseThrow(() -> ExceptionUtil.notFound(ErrorMessage.USER_NOT_FOUND));
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
     }
 }

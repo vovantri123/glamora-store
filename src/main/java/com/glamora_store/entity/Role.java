@@ -4,8 +4,6 @@ import java.util.Set;
 
 import jakarta.persistence.*;
 
-import org.hibernate.envers.Audited;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,9 +16,8 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @SuperBuilder
 @Entity
-@Audited
 @Table(name = "role")
-public class Role extends BaseEntity {
+public class Role {
     @Id
     private String name;
 

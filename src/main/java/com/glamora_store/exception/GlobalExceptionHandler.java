@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.validation.FieldError;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -22,7 +23,7 @@ import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import com.glamora_store.dto.response.ApiResponse;
-import com.glamora_store.enums.ErrorCode;
+import com.glamora_store.enums.ErrorMessage;
 import com.nimbusds.jose.JOSEException;
 
 import lombok.extern.slf4j.Slf4j;
@@ -30,26 +31,17 @@ import lombok.extern.slf4j.Slf4j;
 @RestControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler {
-    // Handle ResponseStatusException with "code|message" format
-    // Flexibly throw HTTP errors (400, 404, 403, 500...) in REST APIs without creating many custom
-    // exception classes
+    // Handle ResponseStatusException, flexibly throw HTTP errors (400, 404, 403, 500...) in REST APIs without
+    // creating many custom exception classes
+
     @ExceptionHandler(ResponseStatusException.class)
     public ResponseEntity<ApiResponse<Void>> handleResponseStatusException(ResponseStatusException ex) {
         String reason = ex.getReason();
-        int code = ErrorCode.UNCATEGORIZED_EXCEPTION.getCode();
-        String message = reason;
 
-        if (reason != null && reason.contains("|")) {
-            String[] parts = reason.split("\\|", 2);
-            try {
-                code = Integer.parseInt(parts[0]);
-                message = parts[1];
-            } catch (NumberFormatException e) {
-                log.warn("Invalid error code format: {}", reason);
-            }
-        }
+        // Nếu không có reason thì fallback về uncategorized
+        String message = (reason != null) ? reason : ErrorMessage.UNCATEGORIZED_EXCEPTION.getMessage();
 
-        return ResponseEntity.status(ex.getStatusCode()).body(new ApiResponse<>(code, message));
+        return ResponseEntity.status(ex.getStatusCode()).body(new ApiResponse<>(message));
     }
 
     /*
@@ -58,6 +50,7 @@ public class GlobalExceptionHandler {
     */
 
     @ExceptionHandler(MethodArgumentNotValidException.class) // @NotBlank, @NotEmpty, @Pattern, @Size,... in dto
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ApiResponse<String> handleValidationErrors(MethodArgumentNotValidException ex) {
         List<String> messages = new ArrayList<>();
 
@@ -65,20 +58,16 @@ public class GlobalExceptionHandler {
             String key = error.getDefaultMessage(); // expects enum name like "CCCD_INVALID", etc.
 
             try {
-                String message = ErrorCode.valueOf(key).getMessage();
+                String message = ErrorMessage.valueOf(key).getMessage();
                 messages.add(message);
             } catch (IllegalArgumentException e) {
-                return new ApiResponse<>(
-                        ErrorCode.INVALID_MESSAGE_KEY.getCode(),
-                        ErrorCode.INVALID_MESSAGE_KEY.getMessage() + ": " + key);
+                return new ApiResponse<>(ErrorMessage.INVALID_MESSAGE_KEY.getMessage() + ": " + key);
             }
         }
 
         String combinedMessage = String.join("; ", messages) + ";";
 
-        return new ApiResponse<>(
-                ErrorCode.VALIDATION_FAILED.getCode(),
-                ErrorCode.VALIDATION_FAILED.getMessage() + ": [" + combinedMessage + "]");
+        return new ApiResponse<>(ErrorMessage.VALIDATION_FAILED.getMessage() + ": [" + combinedMessage + "]");
     }
 
     @ExceptionHandler(ConstraintViolationException.class) // @NotBlank, @NotEmpty, @Pattern, @Size,... in Entity
@@ -90,20 +79,16 @@ public class GlobalExceptionHandler {
             String key = violation.getMessage(); // expected to be enum name like "PHONE_INVALID", "EMAIL_INVALID", etc.
 
             try {
-                String message = ErrorCode.valueOf(key).getMessage();
+                String message = ErrorMessage.valueOf(key).getMessage();
                 messages.add(message);
             } catch (IllegalArgumentException e) {
-                return new ApiResponse<>(
-                        ErrorCode.INVALID_MESSAGE_KEY.getCode(),
-                        ErrorCode.INVALID_MESSAGE_KEY.getMessage() + ": " + key);
+                return new ApiResponse<>(ErrorMessage.INVALID_MESSAGE_KEY.getMessage() + ": " + key);
             }
         }
 
         String combinedMessage = String.join("; ", messages) + ";";
 
-        return new ApiResponse<>(
-                ErrorCode.VALIDATION_FAILED.getCode(),
-                ErrorCode.VALIDATION_FAILED.getMessage() + ": [" + combinedMessage + "]");
+        return new ApiResponse<>(ErrorMessage.VALIDATION_FAILED.getMessage() + ": [" + combinedMessage + "]");
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
@@ -111,61 +96,68 @@ public class GlobalExceptionHandler {
     public ApiResponse<Void> handleUniqueConstraintViolation(DataIntegrityViolationException ex) {
         Throwable rootCause = ex.getRootCause();
         String message = rootCause != null ? rootCause.getMessage() : ex.getMessage();
-        ErrorCode errorCode = ErrorCode.CONSTRAINT_VIOLATION;
-        return new ApiResponse<>(errorCode.getCode(), errorCode.getMessage() + message);
+        return new ApiResponse<>(ErrorMessage.CONSTRAINT_VIOLATION.getMessage() + message);
     }
 
     // Handle type mismatch in @PathVariable or @RequestParam
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ApiResponse<Void> handleTypeMismatch(MethodArgumentTypeMismatchException ex) {
-        ErrorCode errorCode = ErrorCode.INVALID_PARAMETER_TYPE;
-        return new ApiResponse<>(errorCode.getCode(), errorCode.getMessage() + ": " + ex.getMessage());
+        return new ApiResponse<>(ErrorMessage.INVALID_PARAMETER_TYPE.getMessage() + ": " + ex.getMessage());
     }
 
     // Handle invalid or unreadable request body (e.g., malformed JSON)
     @ExceptionHandler(HttpMessageNotReadableException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ApiResponse<Void> jsonParseErrorHandler(HttpMessageNotReadableException ex) {
-        ErrorCode errorCode = ErrorCode.MALFORMED_JSON;
-        return new ApiResponse<>(errorCode.getCode(), errorCode.getMessage() + ex.getMessage());
+        return new ApiResponse<>(ErrorMessage.MALFORMED_JSON.getMessage() + ex.getMessage());
     }
 
     // Handle wrong URL paths that look like static resources (e.g., /api/v1/patients/8/234)
     @ExceptionHandler(NoResourceFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ApiResponse<Void> handleNoResourceFound(NoResourceFoundException ex) {
-        ErrorCode errorCode = ErrorCode.URL_NOT_FOUND;
-        return new ApiResponse<>(errorCode.getCode(), errorCode.getMessage() + ": " + ex.getMessage());
+        return new ApiResponse<>(ErrorMessage.URL_NOT_FOUND.getMessage() + ": " + ex.getMessage());
     }
 
     @ExceptionHandler(JOSEException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ApiResponse<Void> handleJoseException(JOSEException ex) {
-        ErrorCode errorCode = ErrorCode.CANNOT_CREATE_TOKEN;
-        return new ApiResponse<>(errorCode.getCode(), errorCode.getMessage() + ": " + ex.getMessage());
+        return new ApiResponse<>(ErrorMessage.CANNOT_CREATE_TOKEN.getMessage() + ": " + ex.getMessage());
     }
 
     @ExceptionHandler(ParseException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ApiResponse<Void> handleParseException(ParseException ex) {
-        ErrorCode errorCode = ErrorCode.INVALID_TOKEN_FORMAT;
-        return new ApiResponse<>(errorCode.getCode(), errorCode.getMessage() + ": " + ex.getMessage());
+        return new ApiResponse<>(ErrorMessage.INVALID_TOKEN_FORMAT.getMessage() + ": " + ex.getMessage());
     }
 
     @ExceptionHandler(AuthorizationDeniedException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
     public ApiResponse<Void> handleAuthorizationDeniedException(AuthorizationDeniedException ex) {
-        ErrorCode errorCode = ErrorCode.ACCESS_DENIED;
-        return new ApiResponse<>(errorCode.getCode(), errorCode.getMessage());
+        return new ApiResponse<>(ErrorMessage.ACCESS_DENIED.getMessage());
     }
 
-    // Handle all other uncaught exceptions (fallback)
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApiResponse<Void> handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException ex) {
+        return new ApiResponse<>(ex.getMessage());
+    }
+
+    // Handle unchecked exceptions (runtime errors that do not require `throws` declaration).
+    // Ex: Catch checked and throw unckeck in OtpEmailServiceImpl
+    @ExceptionHandler(RuntimeException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ApiResponse<Void> handleRuntimeException(RuntimeException ex) {
+        return new ApiResponse<>(ex.getMessage());
+    }
+    
+
+    // Handle all other uncaught exceptions (fallback) – including checked or unexpected errors
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ApiResponse<Void> genericExceptionHandler(Exception ex) {
-        log.error("Uncategorized Exception: ", ex);
-        ErrorCode errorCode = ErrorCode.UNCATEGORIZED_EXCEPTION;
-        return new ApiResponse<>(errorCode.getCode(), errorCode.getMessage());
+    public ApiResponse<Void> handleGenericException(Exception ex) {
+        log.error("Uncategorized Exception: ", ex); // log original error
+        return new ApiResponse<>(ErrorMessage.UNCATEGORIZED_EXCEPTION.getMessage());
     }
 }
