@@ -1,8 +1,8 @@
 package com.glamora_store.dto.response.iam;
 
-import java.util.Set;
-
 import lombok.*;
+
+import java.util.Set;
 
 @Getter
 @Setter
@@ -10,7 +10,7 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class RoleResponse {
-    private String name;
-    private String description;
-    private Set<PermissionResponse> permissions;
+  private String name;
+  private String description;
+  private Set<PermissionResponse> permissions;
 }

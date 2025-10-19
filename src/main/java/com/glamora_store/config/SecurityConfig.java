@@ -1,7 +1,5 @@
 package com.glamora_store.config;
 
-import javax.crypto.spec.SecretKeySpec;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,67 +16,74 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
 
+import javax.crypto.spec.SecretKeySpec;
+
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
 
-    // spotless:off
-    private final String[] PUBLIC_ENDPOINTS = {
-            "/auth/login",
-            "/auth/introspect",
-            "/auth/register",
-            "/auth/verify-register-otp/**",
-            "/auth/forgot-password",
-            "/auth/reset-password",
-            "/api-docs",
-            "/api/users/"
-    };
-    // spotless:on
+  // spotless:off
+  public static final String[] PUBLIC_ENDPOINTS = {
+    "/api-docs",
+    "/api-docs/**",
+    "/swagger-ui/**",
+    "/swagger-ui.html",
+    "/v3/api-docs/**",
 
-    @Value("${jwt.secretKey}")
-    protected String SECRET_KEY;
+    "/auth/login",
+    "/auth/introspect",
+    "/auth/register",
+    "/auth/verify-register-otp/**",
+    "/auth/forgot-password",
+    "/auth/reset-password",
+    "/api/users/",
+  };
+  // spotless:on
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.authorizeHttpRequests(request -> request.requestMatchers(PUBLIC_ENDPOINTS)
-                .permitAll()
-                .anyRequest()
-                .authenticated());
+  @Value("${jwt.secretKey}")
+  protected String SECRET_KEY;
 
-        httpSecurity.oauth2ResourceServer(oauth2 -> oauth2.jwt(jwtConfigurer ->
-                        jwtConfigurer.decoder(jwtDecoder()).jwtAuthenticationConverter(jwtAuthenticationConverter()))
-                .authenticationEntryPoint(new JwtAuthenticationEntryPoint()));
+  @Bean
+  public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
+    httpSecurity.authorizeHttpRequests(request -> request.requestMatchers(PUBLIC_ENDPOINTS)
+      .permitAll()
+      .anyRequest()
+      .authenticated());
 
-        httpSecurity.csrf(AbstractHttpConfigurer::disable);
+    httpSecurity.oauth2ResourceServer(oauth2 -> oauth2.jwt(jwtConfigurer ->
+        jwtConfigurer.decoder(jwtDecoder()).jwtAuthenticationConverter(jwtAuthenticationConverter()))
+      .authenticationEntryPoint(new JwtAuthenticationEntryPoint()));
 
-        return httpSecurity.build();
-    }
+    httpSecurity.csrf(AbstractHttpConfigurer::disable);
 
-    @Bean
-    JwtAuthenticationConverter jwtAuthenticationConverter() {
-        JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
-        jwtGrantedAuthoritiesConverter.setAuthorityPrefix("");
-        //  Xóa prefix mặc định "SCOPE_" khi Spring Security convert claim trong JWT thành GrantedAuthority
-        // (giữ nguyên ROLE_ADMIN thay vì SCOPE_ROLE_ADMIN). Lúc Spring Security đọc JWT
+    return httpSecurity.build();
+  }
 
-        JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
-        jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(jwtGrantedAuthoritiesConverter);
+  @Bean
+  JwtAuthenticationConverter jwtAuthenticationConverter() {
+    JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
+    jwtGrantedAuthoritiesConverter.setAuthorityPrefix("");
+    //  Xóa prefix mặc định "SCOPE_" khi Spring Security convert claim trong JWT thành GrantedAuthority
+    // (giữ nguyên ROLE_ADMIN thay vì SCOPE_ROLE_ADMIN). Lúc Spring Security đọc JWT
 
-        return jwtAuthenticationConverter;
-    }
+    JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
+    jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(jwtGrantedAuthoritiesConverter);
 
-    @Bean
-    JwtDecoder jwtDecoder() {
-        SecretKeySpec secretKeySpec = new SecretKeySpec(SECRET_KEY.getBytes(), "HS512");
+    return jwtAuthenticationConverter;
+  }
 
-        return NimbusJwtDecoder.withSecretKey(secretKeySpec)
-                .macAlgorithm(MacAlgorithm.HS512)
-                .build();
-    }
+  @Bean
+  JwtDecoder jwtDecoder() {
+    SecretKeySpec secretKeySpec = new SecretKeySpec(SECRET_KEY.getBytes(), "HS512");
 
-    @Bean
-    PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(10);
-    }
+    return NimbusJwtDecoder.withSecretKey(secretKeySpec)
+      .macAlgorithm(MacAlgorithm.HS512)
+      .build();
+  }
+
+  @Bean
+  PasswordEncoder passwordEncoder() {
+    return new BCryptPasswordEncoder(10);
+  }
 }

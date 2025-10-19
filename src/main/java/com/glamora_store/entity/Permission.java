@@ -2,7 +2,6 @@ package com.glamora_store.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-
 import lombok.*;
 
 @Getter
@@ -12,8 +11,8 @@ import lombok.*;
 @AllArgsConstructor
 @Entity
 public class Permission {
-    @Id
-    private String name;
+  @Id
+  private String name;
 
-    private String description;
+  private String description;
 }

@@ -1,14 +1,13 @@
 package com.glamora_store.entity;
 
-import java.util.Set;
-
 import jakarta.persistence.*;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+
+import java.util.Set;
 
 @Getter
 @Setter
@@ -18,15 +17,15 @@ import lombok.experimental.SuperBuilder;
 @Entity
 @Table(name = "role")
 public class Role {
-    @Id
-    private String name;
+  @Id
+  private String name;
 
-    private String description;
+  private String description;
 
-    @ManyToMany
-    @JoinTable(
-            name = "role_permissions",
-            joinColumns = @JoinColumn(name = "role_name"),
-            inverseJoinColumns = @JoinColumn(name = "permission_name"))
-    private Set<Permission> permissions;
+  @ManyToMany
+  @JoinTable(
+    name = "role_permissions",
+    joinColumns = @JoinColumn(name = "role_name"),
+    inverseJoinColumns = @JoinColumn(name = "permission_name"))
+  private Set<Permission> permissions;
 }

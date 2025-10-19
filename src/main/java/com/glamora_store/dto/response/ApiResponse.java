@@ -1,27 +1,29 @@
 package com.glamora_store.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @Builder
 public class ApiResponse<T> {
-    private String message;
+  private String message;
 
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    private T data;
+  @JsonInclude(JsonInclude.Include.NON_NULL)
+  private T data;
 
-    // DELETE, ERROR
-    public ApiResponse(String message) {
-        this.message = message;
-    }
+  // DELETE, ERROR
+  public ApiResponse(String message) {
+    this.message = message;
+  }
 
-    // GET, PUT, POST,
-    public ApiResponse(String message, T data) {
-        this.message = message;
-        this.data = data;
-    }
+  // GET, PUT, POST,
+  public ApiResponse(String message, T data) {
+    this.message = message;
+    this.data = data;
+  }
 }
