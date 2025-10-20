@@ -17,6 +17,11 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
+/**
+ * Base entity with audit fields (created/updated tracking)
+ * All entities extend this for consistent audit trail
+ * Add isDeleted field in child entity if soft delete is needed
+ */
 @Getter
 @Setter
 @MappedSuperclass
@@ -24,30 +29,26 @@ import java.time.LocalDateTime;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-// @Audited
-public abstract class BaseEntity {
-  @Column(name = "created_at", updatable = false)
-  @CreatedDate
-  private LocalDateTime createdAt;
+public abstract class AuditableEntity {
+    @Column(name = "created_at", updatable = false)
+    @CreatedDate
+    private LocalDateTime createdAt;
 
-  @Column(name = "create_by", updatable = false)
-  @CreatedBy
-  private String createBy;
+    @Column(name = "create_by", updatable = false)
+    @CreatedBy
+    private String createBy;
 
-  @Column(name = "update_at")
-  @LastModifiedDate
-  private LocalDateTime updateAt;
+    @Column(name = "update_at")
+    @LastModifiedDate
+    private LocalDateTime updateAt;
 
-  @Column(name = "update_by")
-  @LastModifiedBy
-  private String updateBy;
+    @Column(name = "update_by")
+    @LastModifiedBy
+    private String updateBy;
 
-  @Column(name = "is_deleted", nullable = false)
-  private Boolean isDeleted;
-
-  @PrePersist
-  public void prePersist() {
-    this.updateAt = null;
-    this.updateBy = null;
-  }
+    @PrePersist
+    public void prePersist() {
+        this.updateAt = null;
+        this.updateBy = null;
+    }
 }

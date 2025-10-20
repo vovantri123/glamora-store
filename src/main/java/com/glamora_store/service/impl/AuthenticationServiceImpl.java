@@ -41,8 +41,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
   public AuthenticationResponse authenticate(AuthenticationRequest request) {
     PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
     User user = userRepository
-      .findByEmailAndIsDeletedFalse(request.getEmail())
-      .orElseThrow(() -> ExceptionUtil.badRequest(ErrorMessage.USER_NOT_EXISTED));
+        .findByEmailAndIsDeletedFalse(request.getEmail())
+        .orElseThrow(() -> ExceptionUtil.badRequest(ErrorMessage.USER_NOT_EXISTED));
 
     boolean authenticated = passwordEncoder.matches(request.getPassword(), user.getPassword());
     if (!authenticated) {
@@ -52,8 +52,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     String accessToken = generateToken(user);
 
     return AuthenticationResponse.builder()
-      .accessToken(accessToken)
-      .build();
+        .accessToken(accessToken)
+        .build();
   }
 
   private String generateToken(User user) {
@@ -61,15 +61,15 @@ public class AuthenticationServiceImpl implements AuthenticationService {
       JWSHeader header = new JWSHeader(JWSAlgorithm.HS512);
 
       JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
-        .subject(user.getEmail()) // subject mà token đại diện.
-        .issuer("https://glamora-store.com")
-        .issueTime(new Date())
-        .expirationTime(
-          new Date(Instant.now().plus(30, ChronoUnit.MINUTES).toEpochMilli()))
-        .claim("scope", buildScope(user))
-        .claim("userId", user.getUserId())
-        .claim("Custom_key", "Custom_value")
-        .build();
+          .subject(user.getEmail()) // subject mà token đại diện.
+          .issuer("https://glamora-store.com")
+          .issueTime(new Date())
+          .expirationTime(
+              new Date(Instant.now().plus(30, ChronoUnit.MINUTES).toEpochMilli()))
+          .claim("scope", buildScope(user))
+          .claim("userId", user.getId())
+          .claim("Custom_key", "Custom_value")
+          .build();
 
       Payload payload = new Payload(jwtClaimsSet.toJSONObject());
 
@@ -85,7 +85,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
   private String buildScope(User user) {
     // Lúc trả ra JWT sau khi người dùng authenticate
-    // Dùng Set để loại bỏ trùng Permission, LinkedHashSet để đảm bảo Role đứng trước Permission
+    // Dùng Set để loại bỏ trùng Permission, LinkedHashSet để đảm bảo Role đứng
+    // trước Permission
     Set<String> scopes = new LinkedHashSet<>();
 
     if (!CollectionUtils.isEmpty(user.getRoles())) {
@@ -115,7 +116,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     boolean verified = signedJWT.verify(verifier);
 
     return IntrospectResponse.builder()
-      .valid(verified && expiryTime.after(new Date()))
-      .build();
+        .valid(verified && expiryTime.after(new Date()))
+        .build();
   }
 }

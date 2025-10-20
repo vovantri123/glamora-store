@@ -1,22 +1,43 @@
 package com.glamora_store.entity;
 
-// @Getter
-// @Setter
-// @NoArgsConstructor
-// @AllArgsConstructor
-// @Builder
-// @Entity
-public class ProductImage {
-  //    @Id
-  //    @GeneratedValue(strategy = GenerationType.IDENTITY)
-  //    private Long id;
-  //
-  //    @Column(columnDefinition = "TEXT")
-  //    private String image;
-  //
-  //    private Boolean thumbnail;
-  //
-  //    @ManyToOne
-  //    @JoinColumn(name="product_id")
-  //    private Product product;
+import jakarta.persistence.*;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
+
+@Entity
+@Table(name = "product_images")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@SuperBuilder
+public class ProductImage extends AuditableEntity {
+
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
+
+  @Column(name = "image_url", nullable = false, columnDefinition = "TEXT")
+  private String imageUrl;
+
+  @Column(name = "alt_text")
+  private String altText; // Mô tả ảnh cho SEO và accessibility
+
+  @Column(name = "is_thumbnail")
+  @Builder.Default
+  private Boolean isThumbnail = false;
+
+  @Column(name = "display_order")
+  @Builder.Default
+  private Integer displayOrder = 0;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "product_id", nullable = false)
+  private Product product; // Ảnh thuộc về product nào
+
+  // Ảnh riêng cho từng variant (ví dụ: áo đỏ vs áo xanh có ảnh khác nhau)
+  // Có thể bỏ nếu không dùng ảnh riêng cho variant
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "variant_id")
+  private ProductVariant variant;
 }

@@ -1,18 +1,22 @@
 package com.glamora_store.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Permission {
+@Table(name = "permissions")
+public class Permission  {
+
   @Id
+  @Column(length = 100)
   private String name;
 
+  @Column(columnDefinition = "TEXT")
   private String description;
 }

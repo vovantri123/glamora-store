@@ -13,8 +13,6 @@ CREATE TABLE users
     dob          date,
     email        VARCHAR(255) NOT NULL,
     password     VARCHAR(100) NOT NULL,
-    phone_number VARCHAR(15),
-    address      TEXT,
     image        TEXT,
     CONSTRAINT pk_users PRIMARY KEY (user_id)
 );

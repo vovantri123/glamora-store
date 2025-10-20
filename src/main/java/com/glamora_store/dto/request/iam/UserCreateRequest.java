@@ -4,7 +4,6 @@ import com.glamora_store.enums.Gender;
 import com.glamora_store.validator.DobConstraint;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
@@ -32,11 +31,6 @@ public class UserCreateRequest {
   @NotBlank(message = "PASSWORD_REQUIRED")
   @Size(min = 8, max = 100, message = "PASSWORD_INVALID")
   private String password;
-
-  @Pattern(regexp = "^(0|\\+84)(3|5|7|8|9)[0-9]{8}$", message = "PHONE_NUMBER_INVALID")
-  private String phoneNumber;
-
-  private String address;
 
   private String image;
 }

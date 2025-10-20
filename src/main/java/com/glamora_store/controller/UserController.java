@@ -11,6 +11,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -23,11 +25,13 @@ public class UserController {
 
   private final UserService userService;
 
+  @PreAuthorize("hasRole('ADMIN')")
   @PostMapping
   public ApiResponse<UserResponse> createUser(@Valid @RequestBody UserCreateRequest request) {
     return new ApiResponse<>(SuccessMessage.CREATE_USER_SUCCESS.getMessage(), userService.createUser(request));
   }
 
+  @PreAuthorize("hasRole('ADMIN')")
   @PutMapping("/{userId}")
   public ApiResponse<UserResponse> updateUser(
     @PathVariable Long userId, @Valid @RequestBody UserUpdateRequest request) {
@@ -35,6 +39,7 @@ public class UserController {
       SuccessMessage.UPDATE_USER_SUCCESS.getMessage(), userService.updateUser(userId, request));
   }
 
+  @PreAuthorize("#id == authentication.token.claims['userId']")
   @PutMapping("/my-profile/{id}")
   public ApiResponse<UserProfileResponse> updateMyProfile(
     @PathVariable Long id, @Valid @RequestBody UserProfileUpdateRequest request) {
@@ -42,17 +47,20 @@ public class UserController {
       SuccessMessage.UPDATE_USER_SUCCESS.getMessage(), userService.updateMyProfile(id, request));
   }
 
+  @PreAuthorize("hasRole('ADMIN')")
   @DeleteMapping("/{userId}")
   public ApiResponse<String> deleteUser(@PathVariable Long userId) {
     userService.softDeleteUser(userId);
     return new ApiResponse<>(SuccessMessage.DELETE_USER_SUCCESS.getMessage());
   }
 
+  @PreAuthorize("hasRole('ADMIN')")
   @PutMapping("/active/{userId}")
   public ApiResponse<UserResponse> activateUser(@PathVariable Long userId) {
     return new ApiResponse<>(SuccessMessage.ACTIVATE_USER_SUCCESS.getMessage(), userService.activeUser(userId));
   }
 
+  @PreAuthorize("hasRole('ADMIN')")
   @GetMapping
   public ApiResponse<PageResponse<UserResponse>> searchUsers(
     @RequestParam(required = false) String fullname,
@@ -71,11 +79,14 @@ public class UserController {
     return new ApiResponse<>(message, result);
   }
 
+  // authentication.name là sub claim (email)
+  @PostAuthorize("hasRole('ADMIN') or returnObject.data.email == authentication.name")
   @GetMapping("/{userId}")
   public ApiResponse<UserProfileResponse> getUserById(@PathVariable Long userId) {
     return new ApiResponse<>(SuccessMessage.GET_USER_SUCCESS.getMessage(), userService.getUserById(userId));
   }
 
+  @PreAuthorize("hasRole('ADMIN')")
   @PutMapping("/roles/{userId}")
   public ApiResponse<UserResponse> updateRolesForUser(
     @PathVariable Long userId, @Valid @RequestBody UserRoleUpdateRequest request) {
@@ -84,6 +95,7 @@ public class UserController {
       userService.updateRolesForUser(userId, request));
   }
 
+  @PreAuthorize("hasRole('ADMIN') or #userId == authentication.token.claims['userId']")
   @PutMapping("/updatePassword/{userId}")
   public ApiResponse<UserResponse> updatePassword(
     @PathVariable Long userId, @Valid @RequestBody PasswordUpdateRequest request) {

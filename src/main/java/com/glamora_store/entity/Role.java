@@ -1,12 +1,10 @@
 package com.glamora_store.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Getter
@@ -15,17 +13,18 @@ import java.util.Set;
 @AllArgsConstructor
 @SuperBuilder
 @Entity
-@Table(name = "role")
+@Table(name = "roles")
 public class Role {
+
   @Id
+  @Column(length = 50)
   private String name;
 
+  @Column(columnDefinition = "TEXT")
   private String description;
 
   @ManyToMany
-  @JoinTable(
-    name = "role_permissions",
-    joinColumns = @JoinColumn(name = "role_name"),
-    inverseJoinColumns = @JoinColumn(name = "permission_name"))
-  private Set<Permission> permissions;
+  @JoinTable(name = "role_permissions", joinColumns = @JoinColumn(name = "role_name"), inverseJoinColumns = @JoinColumn(name = "permission_name"))
+  @Builder.Default
+  private Set<Permission> permissions = new HashSet<>();
 }

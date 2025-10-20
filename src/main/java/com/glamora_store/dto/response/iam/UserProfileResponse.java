@@ -11,12 +11,10 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Builder
 public class UserProfileResponse {
-  private Long userId;
+  private Long id;
   private String fullName;
   private Gender gender;
   private LocalDate dob;
   private String email;
-  private String phoneNumber;
-  private String address;
   private String image;
 }
