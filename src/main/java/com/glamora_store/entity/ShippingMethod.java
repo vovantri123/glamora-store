@@ -38,7 +38,7 @@ public class ShippingMethod extends AuditableEntity {
   @Column(name = "estimated_days")
   private Integer estimatedDays;
 
-  @Column(name = "logo_url")
+  @Column(name = "logo_url", columnDefinition = "TEXT")
   private String logoUrl;
 
   @Column(name = "is_active")

@@ -1,9 +1,9 @@
 package com.glamora_store.service.impl;
 
-import com.glamora_store.dto.request.iam.AuthenticationRequest;
-import com.glamora_store.dto.request.iam.IntrospectRequest;
-import com.glamora_store.dto.response.iam.AuthenticationResponse;
-import com.glamora_store.dto.response.iam.IntrospectResponse;
+import com.glamora_store.dto.request.common.iam.AuthenticationRequest;
+import com.glamora_store.dto.request.common.iam.IntrospectRequest;
+import com.glamora_store.dto.response.common.iam.AuthenticationResponse;
+import com.glamora_store.dto.response.common.iam.IntrospectResponse;
 import com.glamora_store.entity.User;
 import com.glamora_store.enums.ErrorMessage;
 import com.glamora_store.repository.UserRepository;
@@ -41,8 +41,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
   public AuthenticationResponse authenticate(AuthenticationRequest request) {
     PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
     User user = userRepository
-        .findByEmailAndIsDeletedFalse(request.getEmail())
-        .orElseThrow(() -> ExceptionUtil.badRequest(ErrorMessage.USER_NOT_EXISTED));
+      .findByEmailAndIsDeletedFalse(request.getEmail())
+      .orElseThrow(() -> ExceptionUtil.badRequest(ErrorMessage.USER_NOT_EXISTED));
 
     boolean authenticated = passwordEncoder.matches(request.getPassword(), user.getPassword());
     if (!authenticated) {
@@ -52,8 +52,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     String accessToken = generateToken(user);
 
     return AuthenticationResponse.builder()
-        .accessToken(accessToken)
-        .build();
+      .accessToken(accessToken)
+      .build();
   }
 
   private String generateToken(User user) {
@@ -61,15 +61,15 @@ public class AuthenticationServiceImpl implements AuthenticationService {
       JWSHeader header = new JWSHeader(JWSAlgorithm.HS512);
 
       JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
-          .subject(user.getEmail()) // subject mà token đại diện.
-          .issuer("https://glamora-store.com")
-          .issueTime(new Date())
-          .expirationTime(
-              new Date(Instant.now().plus(30, ChronoUnit.MINUTES).toEpochMilli()))
-          .claim("scope", buildScope(user))
-          .claim("userId", user.getId())
-          .claim("Custom_key", "Custom_value")
-          .build();
+        .subject(user.getEmail()) // subject mà token đại diện.
+        .issuer("https://glamora-store.com")
+        .issueTime(new Date())
+        .expirationTime(
+          new Date(Instant.now().plus(7, ChronoUnit.DAYS).toEpochMilli()))
+        .claim("scope", buildScope(user))
+        .claim("userId", user.getId())
+        .claim("Custom_key", "Custom_value")
+        .build();
 
       Payload payload = new Payload(jwtClaimsSet.toJSONObject());
 
@@ -116,7 +116,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     boolean verified = signedJWT.verify(verifier);
 
     return IntrospectResponse.builder()
-        .valid(verified && expiryTime.after(new Date()))
-        .build();
+      .valid(verified && expiryTime.after(new Date()))
+      .build();
   }
 }

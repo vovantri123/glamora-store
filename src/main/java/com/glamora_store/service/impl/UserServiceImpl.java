@@ -1,9 +1,13 @@
 package com.glamora_store.service.impl;
 
-import com.glamora_store.dto.request.iam.*;
-import com.glamora_store.dto.response.iam.PageResponse;
-import com.glamora_store.dto.response.iam.UserProfileResponse;
-import com.glamora_store.dto.response.iam.UserResponse;
+import com.glamora_store.dto.request.admin.iam.UserCreateRequest;
+import com.glamora_store.dto.request.admin.iam.UserRoleUpdateRequest;
+import com.glamora_store.dto.request.admin.iam.UserUpdateRequest;
+import com.glamora_store.dto.request.common.iam.PasswordUpdateRequest;
+import com.glamora_store.dto.request.user.iam.UserProfileUpdateRequest;
+import com.glamora_store.dto.response.admin.iam.UserResponse;
+import com.glamora_store.dto.response.common.PageResponse;
+import com.glamora_store.dto.response.user.iam.UserProfileResponse;
 import com.glamora_store.entity.Role;
 import com.glamora_store.entity.User;
 import com.glamora_store.enums.ErrorMessage;
@@ -24,7 +28,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -69,8 +72,8 @@ public class UserServiceImpl implements UserService {
     user.setIsDeleted(true);
 
     Role userRole = roleRepository
-        .findById(RoleName.USER.name())
-        .orElseThrow(() -> ExceptionUtil.notFound(ErrorMessage.ROLE_NOT_FOUND));
+      .findById(RoleName.USER.name())
+      .orElseThrow(() -> ExceptionUtil.notFound(ErrorMessage.ROLE_NOT_FOUND));
 
     user.setRoles(Set.of(userRole));
     userRepository.save(user);
@@ -98,8 +101,8 @@ public class UserServiceImpl implements UserService {
     user.setIsDeleted(false);
 
     Role userRole = roleRepository
-        .findById(RoleName.USER.name())
-        .orElseThrow(() -> ExceptionUtil.notFound(ErrorMessage.ROLE_NOT_FOUND));
+      .findById(RoleName.USER.name())
+      .orElseThrow(() -> ExceptionUtil.notFound(ErrorMessage.ROLE_NOT_FOUND));
 
     user.setRoles(Set.of(userRole));
 
@@ -109,8 +112,8 @@ public class UserServiceImpl implements UserService {
   @Override
   public UserResponse updateUser(Long id, UserUpdateRequest request) {
     User user = userRepository
-        .findByIdAndIsDeletedFalse(id)
-        .orElseThrow(() -> ExceptionUtil.notFound(ErrorMessage.USER_NOT_FOUND));
+      .findByIdAndIsDeletedFalse(id)
+      .orElseThrow(() -> ExceptionUtil.notFound(ErrorMessage.USER_NOT_FOUND));
 
     userMapper.toUser(user, request);
 
@@ -120,8 +123,8 @@ public class UserServiceImpl implements UserService {
   @Override
   public UserProfileResponse updateMyProfile(Long userId, UserProfileUpdateRequest request) {
     User user = userRepository
-        .findByIdAndIsDeletedFalse(userId)
-        .orElseThrow(() -> ExceptionUtil.notFound(ErrorMessage.USER_NOT_FOUND));
+      .findByIdAndIsDeletedFalse(userId)
+      .orElseThrow(() -> ExceptionUtil.notFound(ErrorMessage.USER_NOT_FOUND));
 
     userMapper.toUser(user, request);
 
@@ -131,13 +134,13 @@ public class UserServiceImpl implements UserService {
   @Override
   public void updatePassword(Long userId, PasswordUpdateRequest request) {
     User user = userRepository
-        .findByIdAndIsDeletedFalse(userId)
-        .orElseThrow(() -> ExceptionUtil.notFound(ErrorMessage.USER_NOT_FOUND));
+      .findByIdAndIsDeletedFalse(userId)
+      .orElseThrow(() -> ExceptionUtil.notFound(ErrorMessage.USER_NOT_FOUND));
 
     // Nếu là USER thường thì bắt buộc kiểm tra oldPassword
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     boolean isAdmin = auth.getAuthorities().stream()
-        .anyMatch(granted -> granted.getAuthority().equals(RoleName.ADMIN.name()));
+      .anyMatch(granted -> granted.getAuthority().equals(RoleName.ADMIN.name()));
 
     if (!isAdmin) {
       if (!passwordEncoder.matches(request.getOldPassword(), user.getPassword())) {
@@ -153,8 +156,8 @@ public class UserServiceImpl implements UserService {
   @Override
   public void softDeleteUser(Long id) {
     User user = userRepository
-        .findByIdAndIsDeletedFalse(id)
-        .orElseThrow(() -> ExceptionUtil.notFound(ErrorMessage.USER_NOT_FOUND));
+      .findByIdAndIsDeletedFalse(id)
+      .orElseThrow(() -> ExceptionUtil.notFound(ErrorMessage.USER_NOT_FOUND));
 
     user.setIsDeleted(true);
 
@@ -163,14 +166,14 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public PageResponse<UserResponse> searchUsers(
-      String fullname, LocalDate dob, int page, int size, String sortBy, String sortDir) {
+    String fullname, LocalDate dob, int page, int size, String sortBy, String sortDir) {
     Specification<User> spec = UserSpecification.isNotDeleted()
-        .and(UserSpecification.hasFullNameLike(fullname))
-        .and(UserSpecification.hasDobEqual(dob));
+      .and(UserSpecification.hasFullNameLike(fullname))
+      .and(UserSpecification.hasDobEqual(dob));
 
     Sort sort = sortDir.equalsIgnoreCase("desc")
-        ? Sort.by(sortBy).descending()
-        : Sort.by(sortBy).ascending();
+      ? Sort.by(sortBy).descending()
+      : Sort.by(sortBy).ascending();
 
     Pageable pageable = PageRequest.of(page, size, sort);
     Page<User> userPage = userRepository.findAll(spec, pageable);
@@ -181,8 +184,8 @@ public class UserServiceImpl implements UserService {
   @Override
   public UserProfileResponse getUserById(Long id) {
     User user = userRepository
-        .findByIdAndIsDeletedFalse(id)
-        .orElseThrow(() -> ExceptionUtil.notFound(ErrorMessage.USER_NOT_FOUND));
+      .findByIdAndIsDeletedFalse(id)
+      .orElseThrow(() -> ExceptionUtil.notFound(ErrorMessage.USER_NOT_FOUND));
     return userMapper.toUserProfileResponse(user);
   }
 
@@ -198,18 +201,6 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public UserProfileResponse getMyInfo() {
-    SecurityContext context = SecurityContextHolder.getContext();
-    String subClaim = context.getAuthentication().getName();
-
-    User user = userRepository
-        .findByEmailAndIsDeletedFalse(subClaim)
-        .orElseThrow(() -> ExceptionUtil.notFound(ErrorMessage.USER_NOT_FOUND));
-
-    return userMapper.toUserProfileResponse(user);
-  }
-
-  @Override
   public UserResponse updateRolesForUser(Long userId, UserRoleUpdateRequest request) {
     User user = userRepository.findById(userId).orElseThrow(() -> ExceptionUtil.notFound(ErrorMessage.USER_NOT_FOUND));
 
@@ -220,12 +211,12 @@ public class UserServiceImpl implements UserService {
     Set<String> foundRoleNames = roles.stream().map(Role::getName).collect(Collectors.toSet());
 
     Set<String> notFoundRoles = requestedRoleNames.stream()
-        .filter(r -> !foundRoleNames.contains(r))
-        .collect(Collectors.toSet());
+      .filter(r -> !foundRoleNames.contains(r))
+      .collect(Collectors.toSet());
 
     if (!notFoundRoles.isEmpty()) {
       throw ExceptionUtil.with(
-          HttpStatus.NOT_FOUND, ErrorMessage.ROLES_NOT_FOUND, String.join(", ", notFoundRoles));
+        HttpStatus.NOT_FOUND, ErrorMessage.ROLES_NOT_FOUND, String.join(", ", notFoundRoles));
     }
 
     user.setRoles(new HashSet<>(roles));
@@ -236,8 +227,8 @@ public class UserServiceImpl implements UserService {
   @Override
   public void resetPassword(String email, String newPassword) {
     User user = userRepository
-        .findByEmailAndIsDeletedFalse(email)
-        .orElseThrow(() -> ExceptionUtil.notFound(ErrorMessage.USER_NOT_FOUND));
+      .findByEmailAndIsDeletedFalse(email)
+      .orElseThrow(() -> ExceptionUtil.notFound(ErrorMessage.USER_NOT_FOUND));
     user.setPassword(passwordEncoder.encode(newPassword));
     userRepository.save(user);
   }

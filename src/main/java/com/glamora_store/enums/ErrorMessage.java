@@ -13,6 +13,7 @@ public enum ErrorMessage {
   INVALID_MESSAGE_KEY("Invalid message key"),
   CONSTRAINT_VIOLATION("Constraint violation in database"),
   VALIDATION_FAILED("Validation failed"),
+  UTILITY_CLASS_SHOULD_NOT_BE_INSTANTIATED("Utility class should not be instantiated"),
 
   // Message cụ thể
   GENDER_INVALID("Gender must be one of: MALE, FEMALE, OTHER (or male, female, other). Unknown"),
@@ -28,6 +29,9 @@ public enum ErrorMessage {
   USER_EXISTED("User already existed"),
   SEND_EMAIL_FAIL("Failed to send OTP email"),
   OLD_PASSWORD_INCORRECT("Old password is incorrect"),
+  ADDRESS_NOT_FOUND("Address not found"),
+  DEFAULT_ADDRESS_NOT_FOUND("Default address not found"),
+  USER_DELETED("User has been deleted"),
 
   // Message in dto - Start
   FULL_NAME_REQUIRED("Full name is required"),
@@ -48,7 +52,13 @@ public enum ErrorMessage {
   LIST_ROLE_NAMES_EMPTY("List roleNames cannot be empty"),
   LIST_PERMISSION_NAMES_EMPTY("List permissionNames cannot be empty"),
   TOKEN_REQUIRED("Token is required"),
-// Message in dto - End
+  RECEIVER_NAME_REQUIRED("Receiver name is required"),
+  RECEIVER_PHONE_REQUIRED("Receiver phone is required"),
+  PROVINCE_REQUIRED("Province is required"),
+  DISTRICT_REQUIRED("District is required"),
+  WARD_REQUIRED("Ward is required"),
+  STREET_DETAIL_REQUIRED("Street detail is required"),
+  // Message in dto - End
   ;
 
   private final String message;

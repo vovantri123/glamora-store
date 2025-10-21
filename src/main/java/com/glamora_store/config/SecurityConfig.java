@@ -31,13 +31,15 @@ public class SecurityConfig {
     "/swagger-ui.html",
     "/v3/api-docs/**",
 
-    "/auth/login",
-    "/auth/introspect",
-    "/auth/register",
-    "/auth/verify-register-otp/**",
-    "/auth/forgot-password",
-    "/auth/reset-password",
-    "/api/users/",
+    "/public/**"
+  };
+
+  public static final String[] USER_ENDPOINTS = {
+    "/user/**"
+  };
+
+  public static final String[] ADMIN_ENDPOINTS = {
+    "/admin/**"
   };
   // spotless:on
 
@@ -46,13 +48,14 @@ public class SecurityConfig {
 
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-    httpSecurity.authorizeHttpRequests(request -> request.requestMatchers(PUBLIC_ENDPOINTS)
-      .permitAll()
-      .anyRequest()
-      .authenticated());
+    httpSecurity.authorizeHttpRequests(request -> request
+      .requestMatchers(PUBLIC_ENDPOINTS).permitAll()
+      .requestMatchers(USER_ENDPOINTS).hasAnyRole("USER", "ADMIN")
+      .requestMatchers(ADMIN_ENDPOINTS).hasRole("ADMIN")
+      .anyRequest().authenticated());
 
-    httpSecurity.oauth2ResourceServer(oauth2 -> oauth2.jwt(jwtConfigurer ->
-        jwtConfigurer.decoder(jwtDecoder()).jwtAuthenticationConverter(jwtAuthenticationConverter()))
+    httpSecurity.oauth2ResourceServer(oauth2 -> oauth2.jwt(
+        jwtConfigurer -> jwtConfigurer.decoder(jwtDecoder()).jwtAuthenticationConverter(jwtAuthenticationConverter()))
       .authenticationEntryPoint(new JwtAuthenticationEntryPoint()));
 
     httpSecurity.csrf(AbstractHttpConfigurer::disable);
@@ -64,7 +67,8 @@ public class SecurityConfig {
   JwtAuthenticationConverter jwtAuthenticationConverter() {
     JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
     jwtGrantedAuthoritiesConverter.setAuthorityPrefix("");
-    //  Xóa prefix mặc định "SCOPE_" khi Spring Security convert claim trong JWT thành GrantedAuthority
+    // Xóa prefix mặc định "SCOPE_" khi Spring Security convert claim trong JWT
+    // thành GrantedAuthority
     // (giữ nguyên ROLE_ADMIN thay vì SCOPE_ROLE_ADMIN). Lúc Spring Security đọc JWT
 
     JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();

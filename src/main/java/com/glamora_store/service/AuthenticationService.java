@@ -1,9 +1,9 @@
 package com.glamora_store.service;
 
-import com.glamora_store.dto.request.iam.AuthenticationRequest;
-import com.glamora_store.dto.request.iam.IntrospectRequest;
-import com.glamora_store.dto.response.iam.AuthenticationResponse;
-import com.glamora_store.dto.response.iam.IntrospectResponse;
+import com.glamora_store.dto.request.common.iam.AuthenticationRequest;
+import com.glamora_store.dto.request.common.iam.IntrospectRequest;
+import com.glamora_store.dto.response.common.iam.AuthenticationResponse;
+import com.glamora_store.dto.response.common.iam.IntrospectResponse;
 import com.nimbusds.jose.JOSEException;
 
 import java.text.ParseException;

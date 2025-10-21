@@ -20,9 +20,6 @@ public class PaymentMethod extends AuditableEntity {
   @Column(nullable = false, unique = true, length = 100)
   private String name; // VNPay, COD, Momo,...
 
-  @Column(nullable = false, length = 50)
-  private String type; // ONLINE / OFFLINE
-
   @Column(columnDefinition = "TEXT")
   private String description;
 

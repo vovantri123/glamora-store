@@ -46,7 +46,7 @@ public class Address extends AuditableEntity {
   private Double longitude;
 
   @Column(name = "is_default")
-  private boolean isDefault;
+  private Boolean isDefault;
 
   // Soft delete field
   @Column(name = "is_deleted", nullable = false)

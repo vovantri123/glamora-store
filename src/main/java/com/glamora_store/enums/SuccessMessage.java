@@ -24,7 +24,13 @@ public enum SuccessMessage {
   OTP_INVALID_OR_EXPIRED("OTP is invalid or has expired"),
   OTP_SENT("OTP has been sent to your email"),
   UPDATE_PASSWORD_SUCCESS("Update password successfully"),
-  PASSWORD_RESET_SUCCESS("Password has been reset successfully");
+  PASSWORD_RESET_SUCCESS("Password has been reset successfully"),
+  CREATE_ADDRESS_SUCCESS("Create address successfully"),
+  UPDATE_ADDRESS_SUCCESS("Update address successfully"),
+  DELETE_ADDRESS_SUCCESS("Delete address successfully"),
+  GET_ADDRESS_SUCCESS("Get address successfully"),
+  GET_ALL_ADDRESS_SUCCESS("Get all addresses successfully"),
+  SET_DEFAULT_ADDRESS_SUCCESS("Set default address successfully");
 
   private final String message;
 

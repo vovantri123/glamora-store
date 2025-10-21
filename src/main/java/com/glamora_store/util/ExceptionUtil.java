@@ -9,7 +9,7 @@ import java.util.List;
 public class ExceptionUtil {
 
   private ExceptionUtil() {
-    throw new UnsupportedOperationException("Utility class should not be instantiated");
+    throw new UnsupportedOperationException(ErrorMessage.UTILITY_CLASS_SHOULD_NOT_BE_INSTANTIATED.getMessage());
   }
 
   public static ResponseStatusException badRequest(ErrorMessage errorMessage) {
@@ -26,7 +26,7 @@ public class ExceptionUtil {
 
   public static ResponseStatusException with(HttpStatus status, ErrorMessage errorMessage, List<String> details) {
     return new ResponseStatusException(
-      status, errorMessage.getMessage() + ": [" + String.join(", ", details) + "]");
+        status, errorMessage.getMessage() + ": [" + String.join(", ", details) + "]");
   }
 
   public static ResponseStatusException with(HttpStatus status, ErrorMessage errorMessage, String details) {

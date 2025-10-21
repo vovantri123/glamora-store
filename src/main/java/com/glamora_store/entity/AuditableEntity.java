@@ -34,21 +34,21 @@ public abstract class AuditableEntity {
     @CreatedDate
     private LocalDateTime createdAt;
 
-    @Column(name = "create_by", updatable = false)
+    @Column(name = "created_by", updatable = false)
     @CreatedBy
-    private String createBy;
+    private String createdBy;
 
-    @Column(name = "update_at")
+    @Column(name = "updated_at")
     @LastModifiedDate
-    private LocalDateTime updateAt;
+    private LocalDateTime updatedAt;
 
-    @Column(name = "update_by")
+    @Column(name = "updated_by")
     @LastModifiedBy
-    private String updateBy;
+    private String updatedBy;
 
     @PrePersist
     public void prePersist() {
-        this.updateAt = null;
-        this.updateBy = null;
+        this.updatedAt = null;
+        this.updatedBy = null;
     }
 }

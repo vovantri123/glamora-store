@@ -1,7 +1,7 @@
 package com.glamora_store.mapper;
 
-import com.glamora_store.dto.request.iam.RoleCreateRequest;
-import com.glamora_store.dto.response.iam.RoleResponse;
+import com.glamora_store.dto.request.admin.iam.RoleCreateRequest;
+import com.glamora_store.dto.response.admin.iam.RoleResponse;
 import com.glamora_store.entity.Role;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
