@@ -68,6 +68,7 @@ public class UserServiceImpl implements UserService {
 
     // user chưa tồn tại → tạo mới
     User user = userMapper.toUser(request);
+    user.setAvatar("https://img.freepik.com/premium-vector/profile-picture-placeholder-avatar-silhouette-gray-tones-icon-colored-shapes-gradient_1076610-40164.jpg?w=360");
     user.setPassword(passwordEncoder.encode(request.getPassword()));
     user.setIsDeleted(true);
 

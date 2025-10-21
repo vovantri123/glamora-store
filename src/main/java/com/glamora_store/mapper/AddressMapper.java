@@ -8,30 +8,16 @@ import org.mapstruct.*;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface AddressMapper {
 
-  @Mapping(target = "id", ignore = true)
-  @Mapping(target = "user", ignore = true)
-  @Mapping(target = "isDeleted", ignore = true)
-  @Mapping(target = "createdAt", ignore = true)
-  @Mapping(target = "createdBy", ignore = true)
-  @Mapping(target = "updatedAt", ignore = true)
-  @Mapping(target = "updatedBy", ignore = true)
+  @Mapping(target = "isDefault", source = "default")
   Address toAddress(AddressCreateRequest request);
 
-  @Mapping(target = "updatedAt", source = "updatedAt")
+  @Mapping(target = "isDefault", source = "default")
+  void toAddress(@MappingTarget Address address, AddressUpdateRequest request);
+
   AddressResponse toAddressResponse(Address address);
 
   List<AddressResponse> toAddressResponseList(List<Address> addresses);
-
-  @Mapping(target = "id", ignore = true)
-  @Mapping(target = "user", ignore = true)
-  @Mapping(target = "isDeleted", ignore = true)
-  @Mapping(target = "createdAt", ignore = true)
-  @Mapping(target = "createdBy", ignore = true)
-  @Mapping(target = "updatedAt", ignore = true)
-  @Mapping(target = "updatedBy", ignore = true)
-  @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-  void updateAddress(@MappingTarget Address address, AddressUpdateRequest request);
 }

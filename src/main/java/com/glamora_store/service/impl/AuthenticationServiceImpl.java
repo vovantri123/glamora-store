@@ -3,7 +3,6 @@ package com.glamora_store.service.impl;
 import com.glamora_store.dto.request.common.iam.AuthenticationRequest;
 import com.glamora_store.dto.request.common.iam.IntrospectRequest;
 import com.glamora_store.dto.response.common.iam.AuthenticationResponse;
-import com.glamora_store.dto.response.common.iam.IntrospectResponse;
 import com.glamora_store.entity.User;
 import com.glamora_store.enums.ErrorMessage;
 import com.glamora_store.repository.UserRepository;
@@ -104,7 +103,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     return String.join(" ", scopes);
   }
 
-  public IntrospectResponse introspect(IntrospectRequest request) throws JOSEException, ParseException {
+  public Boolean introspect(IntrospectRequest request) throws JOSEException, ParseException {
     String token = request.getToken();
 
     JWSVerifier verifier = new MACVerifier(SECRET_KEY.getBytes());
@@ -115,8 +114,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     boolean verified = signedJWT.verify(verifier);
 
-    return IntrospectResponse.builder()
-      .valid(verified && expiryTime.after(new Date()))
-      .build();
+    return verified && expiryTime.after(new Date());
   }
 }

@@ -5,7 +5,6 @@ import com.glamora_store.dto.request.common.iam.*;
 import com.glamora_store.dto.response.ApiResponse;
 import com.glamora_store.dto.response.admin.iam.UserResponse;
 import com.glamora_store.dto.response.common.iam.AuthenticationResponse;
-import com.glamora_store.dto.response.common.iam.IntrospectResponse;
 import com.glamora_store.enums.OtpPurpose;
 import com.glamora_store.enums.SuccessMessage;
 import com.glamora_store.service.AuthenticationService;
@@ -36,22 +35,21 @@ public class AuthenticationController {
   }
 
   @PostMapping("/introspect")
-  public ApiResponse<IntrospectResponse> introspect(@Valid @RequestBody IntrospectRequest request)
+  public ApiResponse<Void> introspect(@Valid @RequestBody IntrospectRequest request)
     throws ParseException, JOSEException {
-    IntrospectResponse result = authenticationService.introspect(request);
+    Boolean result = authenticationService.introspect(request);
 
-    String message = result.isValid()
+    String message = Boolean.TRUE.equals(result)
       ? SuccessMessage.TOKEN_VALIDATION_SUCCESS.getMessage()
       : SuccessMessage.TOKEN_VALIDATION_FAILURE.getMessage();
 
-    return new ApiResponse<>(message, result);
+    return new ApiResponse<>(message);
   }
 
   @PostMapping("/register")
   @ResponseStatus(HttpStatus.CREATED)
   public ApiResponse<UserResponse> register(@Valid @RequestBody UserCreateRequest request) {
     userService.registerUser(request);
-
     return new ApiResponse<>(SuccessMessage.CREATE_USER_SUCCESS.getMessage());
   }
 

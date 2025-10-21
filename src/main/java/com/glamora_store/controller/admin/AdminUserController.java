@@ -94,6 +94,7 @@ public class AdminUserController {
   public ApiResponse<UserResponse> updatePasswordForUser(
     @PathVariable Long userId,
     @Valid @RequestBody PasswordUpdateRequest request) {
+    // Cái Service dùng chung User là k ổn, Admin k cần nhập mật khẩu cũ
     userService.updatePassword(userId, request);
     return new ApiResponse<>(SuccessMessage.UPDATE_PASSWORD_SUCCESS.getMessage());
   }

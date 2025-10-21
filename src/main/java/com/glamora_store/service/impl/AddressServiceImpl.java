@@ -35,8 +35,8 @@ public class AddressServiceImpl implements AddressService {
   private void ensureSingleDefaultAddress(Long userId, Long excludeAddressId) {
     List<Address> existingAddresses = addressRepository.findByUser_IdAndIsDeletedFalse(userId);
     existingAddresses.stream()
-      .filter(addr -> !addr.getId().equals(excludeAddressId))
-      .forEach(addr -> addr.setIsDefault(false));
+        .filter(addr -> !addr.getId().equals(excludeAddressId))
+        .forEach(addr -> addr.setIsDefault(false));
     addressRepository.saveAll(existingAddresses);
   }
 
@@ -44,7 +44,7 @@ public class AddressServiceImpl implements AddressService {
   @Transactional
   public AddressResponse createAddress(Long userId, AddressCreateRequest request) {
     User user = userRepository.findById(userId)
-      .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessage.USER_NOT_FOUND.getMessage()));
+        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessage.USER_NOT_FOUND.getMessage()));
 
     if (Boolean.TRUE.equals(user.getIsDeleted())) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ErrorMessage.USER_DELETED.getMessage());
@@ -53,7 +53,8 @@ public class AddressServiceImpl implements AddressService {
     Address address = addressMapper.toAddress(request);
     address.setUser(user);
 
-    // Nếu đây là địa chỉ đầu tiên hoặc được set là default, cập nhật các địa chỉ khác
+    // Nếu đây là địa chỉ đầu tiên hoặc được set là default, cập nhật các địa chỉ
+    // khác
     if (request.isDefault() || addressRepository.countByUser_IdAndIsDeletedFalse(userId) == 0) {
       ensureSingleDefaultAddress(userId, null);
       address.setIsDefault(true);
@@ -67,9 +68,10 @@ public class AddressServiceImpl implements AddressService {
   @Transactional
   public AddressResponse updateAddress(Long userId, Long addressId, AddressUpdateRequest request) {
     Address address = addressRepository.findByIdAndUserId(addressId, userId)
-      .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessage.ADDRESS_NOT_FOUND.getMessage()));
+        .orElseThrow(
+            () -> new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessage.ADDRESS_NOT_FOUND.getMessage()));
 
-    addressMapper.updateAddress(address, request);
+    addressMapper.toAddress(address, request);
 
     // Nếu set làm địa chỉ mặc định, cập nhật các địa chỉ khác
     if (request.isDefault()) {
@@ -84,7 +86,8 @@ public class AddressServiceImpl implements AddressService {
   @Transactional
   public void deleteAddress(Long userId, Long addressId) {
     Address address = addressRepository.findByIdAndUserId(addressId, userId)
-      .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessage.ADDRESS_NOT_FOUND.getMessage()));
+        .orElseThrow(
+            () -> new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessage.ADDRESS_NOT_FOUND.getMessage()));
 
     boolean wasDefault = address.getIsDefault();
     address.setIsDeleted(true);
@@ -106,7 +109,7 @@ public class AddressServiceImpl implements AddressService {
   @Transactional(readOnly = true)
   public List<AddressResponse> getAllAddressesByUserId(Long userId) {
     User user = userRepository.findById(userId)
-      .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessage.USER_NOT_FOUND.getMessage()));
+        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessage.USER_NOT_FOUND.getMessage()));
 
     if (Boolean.TRUE.equals(user.getIsDeleted())) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ErrorMessage.USER_DELETED.getMessage());
@@ -120,7 +123,8 @@ public class AddressServiceImpl implements AddressService {
   @Transactional(readOnly = true)
   public AddressResponse getAddressById(Long userId, Long addressId) {
     Address address = addressRepository.findByIdAndUserId(addressId, userId)
-      .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessage.ADDRESS_NOT_FOUND.getMessage()));
+        .orElseThrow(
+            () -> new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessage.ADDRESS_NOT_FOUND.getMessage()));
 
     return addressMapper.toAddressResponse(address);
   }
@@ -129,7 +133,8 @@ public class AddressServiceImpl implements AddressService {
   @Transactional(readOnly = true)
   public AddressResponse getDefaultAddress(Long userId) {
     Address address = addressRepository.findByUser_IdAndIsDefaultTrueAndIsDeletedFalse(userId)
-      .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessage.DEFAULT_ADDRESS_NOT_FOUND.getMessage()));
+        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+            ErrorMessage.DEFAULT_ADDRESS_NOT_FOUND.getMessage()));
 
     return addressMapper.toAddressResponse(address);
   }
@@ -138,7 +143,8 @@ public class AddressServiceImpl implements AddressService {
   @Transactional
   public AddressResponse setIsDefaultAddress(Long userId, Long addressId) {
     Address address = addressRepository.findByIdAndUserId(addressId, userId)
-      .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessage.ADDRESS_NOT_FOUND.getMessage()));
+        .orElseThrow(
+            () -> new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessage.ADDRESS_NOT_FOUND.getMessage()));
 
     // Set tất cả địa chỉ khác thành không default
     ensureSingleDefaultAddress(userId, addressId);

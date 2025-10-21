@@ -1,5 +1,7 @@
 package com.glamora_store.dto.request.common.address;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.*;
@@ -34,6 +36,7 @@ public class AddressCreateRequest {
 
   private Double longitude;
 
+  @JsonProperty("default")
   @Builder.Default
   private boolean isDefault = false;
 }
