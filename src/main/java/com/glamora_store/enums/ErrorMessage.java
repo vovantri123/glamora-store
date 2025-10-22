@@ -32,6 +32,8 @@ public enum ErrorMessage {
   ADDRESS_NOT_FOUND("Address not found"),
   DEFAULT_ADDRESS_NOT_FOUND("Default address not found"),
   USER_DELETED("User has been deleted"),
+  CATEGORY_NOT_FOUND("Category not found"),
+  PRODUCT_NOT_FOUND("Product not found"),
 
   // Message in dto - Start
   FULL_NAME_REQUIRED("Full name is required"),

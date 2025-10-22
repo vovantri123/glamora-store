@@ -30,7 +30,12 @@ public enum SuccessMessage {
   DELETE_ADDRESS_SUCCESS("Delete address successfully"),
   GET_ADDRESS_SUCCESS("Get address successfully"),
   GET_ALL_ADDRESS_SUCCESS("Get all addresses successfully"),
-  SET_DEFAULT_ADDRESS_SUCCESS("Set default address successfully");
+  SET_DEFAULT_ADDRESS_SUCCESS("Set default address successfully"),
+  GET_ALL_CATEGORY_SUCCESS("Get all categories successfully"),
+  GET_CATEGORY_SUCCESS("Get category successfully"),
+  GET_ALL_PRODUCT_SUCCESS("Get all products successfully"),
+  GET_PRODUCT_SUCCESS("Get product successfully"),
+  SEARCH_PRODUCT_SUCCESS("Search products successfully");
 
   private final String message;
 
