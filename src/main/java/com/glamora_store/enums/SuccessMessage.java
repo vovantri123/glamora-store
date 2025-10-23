@@ -35,7 +35,20 @@ public enum SuccessMessage {
   GET_CATEGORY_SUCCESS("Get category successfully"),
   GET_ALL_PRODUCT_SUCCESS("Get all products successfully"),
   GET_PRODUCT_SUCCESS("Get product successfully"),
-  SEARCH_PRODUCT_SUCCESS("Search products successfully");
+  SEARCH_PRODUCT_SUCCESS("Search products successfully"),
+  ADD_TO_CART_SUCCESS("Add to cart successfully"),
+  UPDATE_CART_ITEM_SUCCESS("Update cart item successfully"),
+  REMOVE_CART_ITEM_SUCCESS("Remove cart item successfully"),
+  CLEAR_CART_SUCCESS("Clear cart successfully"),
+  GET_CART_SUCCESS("Get cart successfully"),
+  CREATE_VOUCHER_SUCCESS("Create voucher successfully"),
+  UPDATE_VOUCHER_SUCCESS("Update voucher successfully"),
+  DELETE_VOUCHER_SUCCESS("Delete voucher successfully"),
+  GET_VOUCHER_SUCCESS("Get voucher successfully"),
+  GET_ALL_VOUCHER_SUCCESS("Get all vouchers successfully"),
+  COLLECT_VOUCHER_SUCCESS("Collect voucher successfully"),
+  REVOKE_VOUCHER_SUCCESS("Revoke voucher successfully"),
+  CALCULATE_VOUCHER_DISCOUNT_SUCCESS("Calculate voucher discount successfully");
 
   private final String message;
 

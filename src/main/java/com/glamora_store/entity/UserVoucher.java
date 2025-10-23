@@ -29,11 +29,4 @@ public class UserVoucher extends AuditableEntity {
   @Column(name = "is_deleted", nullable = false)
   @Builder.Default
   private Boolean isDeleted = false;
-
-  /**
-   * Check if this user voucher is active (not revoked)
-   */
-  public boolean isActive() {
-    return !Boolean.TRUE.equals(isDeleted);
-  }
 }
