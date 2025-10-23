@@ -47,17 +47,17 @@ public class VoucherServiceImpl implements VoucherService {
       throw new IllegalArgumentException(ErrorMessage.END_DATE_INVALID.getMessage());
     }
 
-    Voucher voucher = voucherMapper.toEntity(request);
+    Voucher voucher = voucherMapper.toVoucher(request);
     Voucher savedVoucher = voucherRepository.save(voucher);
 
-    return voucherMapper.toResponse(savedVoucher);
+    return voucherMapper.toVoucherResponse(savedVoucher);
   }
 
   @Override
   @Transactional
   public VoucherResponse updateVoucher(Long voucherId, VoucherUpdateRequest request) {
     Voucher voucher = voucherRepository.findByIdAndIsDeletedFalse(voucherId)
-        .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.VOUCHER_NOT_FOUND.getMessage()));
+      .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.VOUCHER_NOT_FOUND.getMessage()));
 
     // Validate ngày nếu có cập nhật
     LocalDateTime startDate = request.getStartDate() != null ? request.getStartDate() : voucher.getStartDate();
@@ -66,17 +66,17 @@ public class VoucherServiceImpl implements VoucherService {
       throw new IllegalArgumentException(ErrorMessage.END_DATE_INVALID.getMessage());
     }
 
-    voucherMapper.updateEntity(voucher, request);
+    voucherMapper.toVoucher(voucher, request);
     Voucher savedVoucher = voucherRepository.save(voucher);
 
-    return voucherMapper.toResponse(savedVoucher);
+    return voucherMapper.toVoucherResponse(savedVoucher);
   }
 
   @Override
   @Transactional
   public void deleteVoucher(Long voucherId) {
     Voucher voucher = voucherRepository.findByIdAndIsDeletedFalse(voucherId)
-        .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.VOUCHER_NOT_FOUND.getMessage()));
+      .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.VOUCHER_NOT_FOUND.getMessage()));
 
     voucher.setIsDeleted(true);
     voucherRepository.save(voucher);
@@ -86,16 +86,16 @@ public class VoucherServiceImpl implements VoucherService {
   @Transactional(readOnly = true)
   public Page<VoucherResponse> getAllVouchers(Pageable pageable) {
     Page<Voucher> vouchers = voucherRepository.findAllByIsDeletedFalse(pageable);
-    return vouchers.map(voucherMapper::toResponse);
+    return vouchers.map(voucherMapper::toVoucherResponse);
   }
 
   @Override
   @Transactional(readOnly = true)
   public VoucherResponse getVoucherById(Long voucherId) {
     Voucher voucher = voucherRepository.findByIdAndIsDeletedFalse(voucherId)
-        .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.VOUCHER_NOT_FOUND.getMessage()));
+      .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.VOUCHER_NOT_FOUND.getMessage()));
 
-    return voucherMapper.toResponse(voucher);
+    return voucherMapper.toVoucherResponse(voucher);
   }
 
   @Override
@@ -105,8 +105,8 @@ public class VoucherServiceImpl implements VoucherService {
     List<Voucher> vouchers = voucherRepository.findActiveVouchers(now);
 
     return vouchers.stream()
-        .map(voucherMapper::toResponse)
-        .collect(Collectors.toList());
+      .map(voucherMapper::toVoucherResponse)
+      .collect(Collectors.toList());
   }
 
   @Override
@@ -116,10 +116,10 @@ public class VoucherServiceImpl implements VoucherService {
     List<UserVoucher> userVouchers = userVoucherRepository.findAllByUserIdAndIsDeletedFalse(userId);
 
     return userVouchers.stream()
-        .map(UserVoucher::getVoucher)
-        .filter(v -> !Boolean.TRUE.equals(v.getIsDeleted()))
-        .map(voucherMapper::toResponse)
-        .collect(Collectors.toList());
+      .map(UserVoucher::getVoucher)
+      .filter(v -> !Boolean.TRUE.equals(v.getIsDeleted()))
+      .map(voucherMapper::toVoucherResponse)
+      .collect(Collectors.toList());
   }
 
   @Override
@@ -129,7 +129,7 @@ public class VoucherServiceImpl implements VoucherService {
 
     // Tìm voucher
     Voucher voucher = voucherRepository.findByCodeAndIsDeletedFalse(voucherCode)
-        .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.VOUCHER_NOT_FOUND.getMessage()));
+      .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.VOUCHER_NOT_FOUND.getMessage()));
 
     // Kiểm tra voucher có hiệu lực không
     validateVoucherAvailability(voucher);
@@ -141,18 +141,18 @@ public class VoucherServiceImpl implements VoucherService {
 
     // Tìm user
     User user = userRepository.findById(userId)
-        .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.USER_NOT_FOUND.getMessage()));
+      .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.USER_NOT_FOUND.getMessage()));
 
     // Tạo UserVoucher
     UserVoucher userVoucher = UserVoucher.builder()
-        .user(user)
-        .voucher(voucher)
-        .isDeleted(false)
-        .build();
+      .user(user)
+      .voucher(voucher)
+      .isDeleted(false)
+      .build();
 
     userVoucherRepository.save(userVoucher);
 
-    return voucherMapper.toResponse(voucher);
+    return voucherMapper.toVoucherResponse(voucher);
   }
 
   @Override
@@ -162,14 +162,14 @@ public class VoucherServiceImpl implements VoucherService {
 
     // Tìm voucher
     Voucher voucher = voucherRepository.findByCodeAndIsDeletedFalse(voucherCode)
-        .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.VOUCHER_NOT_FOUND.getMessage()));
+      .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.VOUCHER_NOT_FOUND.getMessage()));
 
     // Kiểm tra voucher có hiệu lực không
     validateVoucherAvailability(voucher);
 
     // Kiểm tra user có voucher này không
     userVoucherRepository.findByUserIdAndVoucherIdAndIsDeletedFalse(userId, voucher.getId())
-        .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.USER_VOUCHER_NOT_FOUND.getMessage()));
+      .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.USER_VOUCHER_NOT_FOUND.getMessage()));
 
     // Kiểm tra user đã dùng voucher này bao nhiêu lần
     int usageCount = userVoucherRepository.countByUserIdAndVoucherIdAndIsDeletedFalse(userId, voucher.getId());
@@ -187,18 +187,18 @@ public class VoucherServiceImpl implements VoucherService {
     BigDecimal finalAmount = orderAmount.subtract(discountAmount);
 
     return VoucherDiscountResponse.builder()
-        .voucherCode(voucherCode)
-        .discountAmount(discountAmount)
-        .originalAmount(orderAmount)
-        .finalAmount(finalAmount)
-        .build();
+      .voucherCode(voucherCode)
+      .discountAmount(discountAmount)
+      .originalAmount(orderAmount)
+      .finalAmount(finalAmount)
+      .build();
   }
 
   @Override
   @Transactional
   public void revokeUserVoucher(Long userId, Long voucherId) {
     UserVoucher userVoucher = userVoucherRepository.findByUserIdAndVoucherIdAndIsDeletedFalse(userId, voucherId)
-        .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.USER_VOUCHER_NOT_FOUND.getMessage()));
+      .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.USER_VOUCHER_NOT_FOUND.getMessage()));
 
     userVoucher.setIsDeleted(true);
     userVoucherRepository.save(userVoucher);

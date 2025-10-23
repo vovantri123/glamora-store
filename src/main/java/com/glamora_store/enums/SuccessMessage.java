@@ -48,7 +48,25 @@ public enum SuccessMessage {
   GET_ALL_VOUCHER_SUCCESS("Get all vouchers successfully"),
   COLLECT_VOUCHER_SUCCESS("Collect voucher successfully"),
   REVOKE_VOUCHER_SUCCESS("Revoke voucher successfully"),
-  CALCULATE_VOUCHER_DISCOUNT_SUCCESS("Calculate voucher discount successfully");
+  CALCULATE_VOUCHER_DISCOUNT_SUCCESS("Calculate voucher discount successfully"),
+  // Shipping method messages
+  CREATE_SHIPPING_METHOD_SUCCESS("Create shipping method successfully"),
+  UPDATE_SHIPPING_METHOD_SUCCESS("Update shipping method successfully"),
+  DELETE_SHIPPING_METHOD_SUCCESS("Delete shipping method successfully"),
+  GET_SHIPPING_METHOD_SUCCESS("Get shipping method successfully"),
+  GET_ALL_SHIPPING_METHOD_SUCCESS("Get all shipping methods successfully"),
+  // Order messages
+  CREATE_ORDER_SUCCESS("Create order successfully"),
+  UPDATE_ORDER_SUCCESS("Update order successfully"),
+  DELETE_ORDER_SUCCESS("Delete order successfully"),
+  CANCEL_ORDER_SUCCESS("Cancel order successfully"),
+  GET_ORDER_SUCCESS("Get order successfully"), 
+  SEARCH_ORDER_SUCCESS("Search orders successfully"),
+  // Generic messages
+  OPERATION_SUCCESSFUL("Operation successful"),
+  CREATED_SUCCESSFULLY("Created successfully"),
+  UPDATED_SUCCESSFULLY("Updated successfully"),
+  DELETED_SUCCESSFULLY("Deleted successfully");
 
   private final String message;
 

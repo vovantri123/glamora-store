@@ -9,7 +9,6 @@ CREATE TABLE product_reviews (
     is_deleted BOOLEAN NOT NULL,
     is_verified_purchase BOOLEAN,
     rating INTEGER NOT NULL,
-    review_date TIMESTAMP(6),
     order_id BIGINT,
     product_id BIGINT NOT NULL,
     user_id BIGINT NOT NULL,

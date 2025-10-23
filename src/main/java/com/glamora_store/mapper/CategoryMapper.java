@@ -6,13 +6,12 @@ import org.mapstruct.*;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface CategoryMapper {
 
     @Mapping(target = "parentId", source = "parent.id")
     @Mapping(target = "parentName", source = "parent.name")
     @Mapping(target = "productCount", expression = "java(category.getProducts().size())")
-    @Mapping(target = "children", ignore = true)
     CategoryResponse toCategoryResponse(Category category);
 
     List<CategoryResponse> toCategoryResponseList(List<Category> categories);

@@ -6,12 +6,9 @@ import com.glamora_store.dto.request.user.iam.UserProfileUpdateRequest;
 import com.glamora_store.dto.response.admin.iam.UserResponse;
 import com.glamora_store.dto.response.user.iam.UserProfileResponse;
 import com.glamora_store.entity.User;
-import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
-
-import java.util.List;
 
 @Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface UserMapper {
@@ -22,8 +19,6 @@ public interface UserMapper {
   void toUser(@MappingTarget User user, UserProfileUpdateRequest request);
 
   UserProfileResponse toUserProfileResponse(User user);
-
-  List<UserResponse> toListUserResponse(List<User> users);
 
   void toUser(@MappingTarget User user, UserUpdateRequest request);
 }

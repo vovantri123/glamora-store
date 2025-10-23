@@ -9,15 +9,16 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface VoucherMapper {
 
-  @Mapping(target = "isDeleted", constant = "false") // constant luôn set giá trị cố định, không phụ thuộc vào source
-  @Mapping(target = "usedCount", constant = "0") 
+  @Mapping(target = "isDeleted", constant = "false")
+  // constant luôn set giá trị cố định, không phụ thuộc vào source
+  @Mapping(target = "usedCount", constant = "0")
   @Mapping(target = "isActive", expression = "java(request.getIsActive() != null ? request.getIsActive() : true)")
   @Mapping(target = "usagePerUser", expression = "java(request.getUsagePerUser() != null ? request.getUsagePerUser() : 1)")
-  Voucher toEntity(VoucherCreateRequest request);
+  Voucher toVoucher(VoucherCreateRequest request);
 
   @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-  void updateEntity(@MappingTarget Voucher voucher, VoucherUpdateRequest request);
+  void toVoucher(@MappingTarget Voucher voucher, VoucherUpdateRequest request);
 
   @Mapping(target = "isValid", expression = "java(voucher.isValid())")
-  VoucherResponse toResponse(Voucher voucher);
+  VoucherResponse toVoucherResponse(Voucher voucher);
 }

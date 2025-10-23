@@ -32,12 +32,15 @@ public enum ErrorMessage {
   ADDRESS_NOT_FOUND("Address not found"),
   DEFAULT_ADDRESS_NOT_FOUND("Default address not found"),
   USER_DELETED("User has been deleted"),
+
   CATEGORY_NOT_FOUND("Category not found"),
   PRODUCT_NOT_FOUND("Product not found"),
+
   CART_NOT_FOUND("Cart not found"),
   CART_ITEM_NOT_FOUND("Cart item not found"),
   PRODUCT_VARIANT_NOT_FOUND("Product variant not found"),
   INSUFFICIENT_STOCK("Insufficient stock available"),
+
   VOUCHER_NOT_FOUND("Voucher not found"),
   VOUCHER_CODE_ALREADY_EXISTS("Voucher code already exists"),
   VOUCHER_EXPIRED("Voucher has expired"),
@@ -49,6 +52,19 @@ public enum ErrorMessage {
   VOUCHER_MIN_ORDER_NOT_MET("Order amount does not meet minimum requirement for this voucher"),
   USER_VOUCHER_NOT_FOUND("User voucher not found"),
   END_DATE_INVALID("End date must be after start date"),
+
+  SHIPPING_METHOD_NOT_FOUND("Shipping method not found"),
+  SHIPPING_METHOD_NAME_EXISTS("Shipping method name already exists"),
+  SHIPPING_METHOD_CODE_EXISTS("Shipping method code already exists"),
+  SHIPPING_METHOD_INACTIVE("Shipping method is not active"),
+
+  ORDER_NOT_FOUND("Order not found"),
+  ORDER_ACCESS_DENIED("You do not have permission to access this order"),
+  ORDER_CANNOT_CANCEL("Order can only be canceled when in PENDING or PAID status"),
+  ORDER_CANNOT_DELETE("Order can only be deleted when in CANCELED status"),
+  ORDER_INVALID_STATUS_TRANSITION("Invalid order status transition"),
+  ORDER_STATUS_CANNOT_CHANGE_COMPLETED("Cannot change status of completed orders"),
+  ORDER_STATUS_CANNOT_CHANGE_CANCELED("Cannot change status of canceled orders"),
 
   // Message in dto - Start
   FULL_NAME_REQUIRED("Full name is required"),
@@ -93,6 +109,23 @@ public enum ErrorMessage {
   VARIANT_ID_REQUIRED("Variant ID is required"),
   QUANTITY_REQUIRED("Quantity is required"),
   QUANTITY_INVALID("Quantity must be greater than 0"),
+
+  SHIPPING_METHOD_NAME_REQUIRED("Shipping method name is required"),
+  SHIPPING_METHOD_NAME_TOO_LONG("Shipping method name must not exceed 100 characters"),
+  SHIPPING_METHOD_CODE_REQUIRED("Shipping method code is required"),
+  SHIPPING_METHOD_CODE_TOO_LONG("Shipping method code must not exceed 50 characters"),
+  SHIPPING_METHOD_BASE_FEE_REQUIRED("Base fee is required"),
+  SHIPPING_METHOD_BASE_FEE_INVALID("Base fee must be greater than or equal to 0"),
+  SHIPPING_METHOD_FEE_PER_KM_INVALID("Fee per km must be greater than or equal to 0"),
+  SHIPPING_METHOD_ESTIMATED_DAYS_INVALID("Estimated days must be at least 1"),
+
+  ORDER_ADDRESS_ID_REQUIRED("Shipping address ID is required"),
+  ORDER_SHIPPING_METHOD_REQUIRED("Shipping method ID is required"),
+  ORDER_NOTE_TOO_LONG("Note must not exceed 500 characters"),
+  ORDER_ITEMS_REQUIRED("Order must have at least 1 item"),
+  ORDER_CANCEL_REASON_REQUIRED("Cancel reason is required"),
+  ORDER_CANCEL_REASON_INVALID("Cancel reason must be between 10 and 500 characters"),
+  ORDER_STATUS_REQUIRED("Order status is required"),
   // Message in dto - End
   ;
 

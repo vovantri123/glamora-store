@@ -5,8 +5,6 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @Setter
@@ -46,17 +44,13 @@ public class ProductReview extends AuditableEntity {
 
   @Column(columnDefinition = "TEXT")
   private String comment;
-
   // @ElementCollection
   // @CollectionTable(name = "review_images", joinColumns = @JoinColumn(name =
   // "review_id"))
   // @Column(name = "image_url", columnDefinition = "TEXT")
   // @Builder.Default
   // private List<String> imageUrls = new ArrayList<>(); // Ảnh đính kèm trong
-  // review
-
-  @Column(name = "review_date")
-  private LocalDateTime reviewDate;
+  // review (sẽ làm sau)
 
   @Column(name = "is_verified_purchase")
   @Builder.Default
@@ -67,10 +61,4 @@ public class ProductReview extends AuditableEntity {
   @Builder.Default
   private Boolean isDeleted = false;
 
-  @PrePersist
-  protected void onCreate() {
-    if (reviewDate == null) {
-      reviewDate = LocalDateTime.now();
-    }
-  }
 }
