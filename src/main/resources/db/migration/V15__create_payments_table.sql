@@ -11,7 +11,7 @@ CREATE TABLE payments (
     status VARCHAR(30) NOT NULL CHECK (status IN ('PENDING', 'SUCCESS', 'FAILED', 'CANCELLED', 'EXPIRED')),
     transaction_id VARCHAR(255) UNIQUE,
     pay_url TEXT,
-    order_id BIGINT NOT NULL UNIQUE,
+    order_id BIGINT NOT NULL,
     payment_method_id BIGINT NOT NULL,
     FOREIGN KEY (order_id) REFERENCES orders(id),
     FOREIGN KEY (payment_method_id) REFERENCES payment_methods(id)

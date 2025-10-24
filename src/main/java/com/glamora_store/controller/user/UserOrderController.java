@@ -15,13 +15,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/user/orders")
 @RequiredArgsConstructor
-@PreAuthorize("hasRole('USER')")
 @Tag(name = "Orders - User", description = "User endpoints for managing their orders")
 public class UserOrderController {
 
@@ -68,12 +66,20 @@ public class UserOrderController {
     }
 
     @PutMapping("/{orderId}/cancel")
-    @Operation(summary = "Cancel my order", description = "Cancel an order (only PENDING or PAID orders can be canceled)")
+    @Operation(summary = "Cancel my order", description = "Cancel an order (only PENDING orders can be canceled)")
     public ApiResponse<OrderResponse> cancelMyOrder(
             @PathVariable Long orderId,
             @Valid @RequestBody CancelOrderRequest request) {
         return new ApiResponse<>(
                 SuccessMessage.CANCEL_ORDER_SUCCESS.getMessage(),
                 orderService.cancelMyOrder(orderId, request));
+    }
+
+    @PutMapping("/{orderId}/confirm-received")
+    @Operation(summary = "Confirm order received", description = "Confirm that the order has been received (only SHIPPING orders can be confirmed)")
+    public ApiResponse<OrderResponse> confirmOrderReceived(@PathVariable Long orderId) {
+        return new ApiResponse<>(
+                SuccessMessage.CONFIRM_ORDER_RECEIVED_SUCCESS.getMessage(),
+                orderService.confirmOrderReceived(orderId));
     }
 }

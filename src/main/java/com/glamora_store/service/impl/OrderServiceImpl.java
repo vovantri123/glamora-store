@@ -38,6 +38,7 @@ public class OrderServiceImpl implements OrderService {
   private final ShippingMethodRepository shippingMethodRepository;
   private final VoucherRepository voucherRepository;
   private final ProductVariantRepository productVariantRepository;
+  private final PaymentRepository paymentRepository;
   private final OrderMapper orderMapper;
 
   @Override
@@ -199,10 +200,22 @@ public class OrderServiceImpl implements OrderService {
       throw new ResponseStatusException(HttpStatus.FORBIDDEN, ErrorMessage.ORDER_ACCESS_DENIED.getMessage());
     }
 
-    // Can only cancel PENDING or PAID orders
-    if (order.getStatus() != OrderStatus.PENDING && order.getStatus() != OrderStatus.PAID) {
+    // Can only cancel PENDING orders (not PAID, because no refund logic
+    // implemented)
+    if (order.getStatus() != OrderStatus.PENDING) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ErrorMessage.ORDER_CANNOT_CANCEL.getMessage());
-    } // Restore stock
+    }
+
+    // Cancel payment if exists and still PENDING
+    paymentRepository.findFirstByOrderIdOrderByCreatedAtDesc(orderId).ifPresent(payment -> {
+      if (payment.getStatus() == com.glamora_store.enums.PaymentStatus.PENDING) {
+        payment.setStatus(com.glamora_store.enums.PaymentStatus.CANCELLED);
+        payment.setFailedReason("Order cancelled by user");
+        paymentRepository.save(payment);
+      }
+    });
+
+    // Restore stock
     for (OrderItem item : order.getOrderItems()) {
       ProductVariant variant = item.getVariant();
       variant.setStock(variant.getStock() + item.getQuantity());
@@ -218,6 +231,32 @@ public class OrderServiceImpl implements OrderService {
 
     order.setStatus(OrderStatus.CANCELED);
     order.setCanceledReason(request.getCanceledReason());
+    Order updated = orderRepository.save(order);
+
+    return orderMapper.toOrderResponse(updated);
+  }
+
+  @Override
+  @Transactional
+  public OrderResponse confirmOrderReceived(Long orderId) {
+    Long userId = SecurityUtil.getCurrentUserId();
+    Order order = orderRepository.findById(orderId)
+        .orElseThrow(
+            () -> new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessage.ORDER_NOT_FOUND.getMessage()));
+
+    // Validate order belongs to current user
+    if (!order.getUser().getId().equals(userId)) {
+      throw new ResponseStatusException(HttpStatus.FORBIDDEN, ErrorMessage.ORDER_ACCESS_DENIED.getMessage());
+    }
+
+    // Can only confirm SHIPPING orders
+    if (order.getStatus() != OrderStatus.SHIPPING) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+          ErrorMessage.ORDER_CANNOT_CONFIRM_RECEIVED.getMessage() + ". Current status: " + order.getStatus());
+    }
+
+    // Update to COMPLETED
+    order.setStatus(OrderStatus.COMPLETED);
     Order updated = orderRepository.save(order);
 
     return orderMapper.toOrderResponse(updated);
@@ -341,11 +380,10 @@ public class OrderServiceImpl implements OrderService {
         }
         break;
       case SHIPPING:
-        if (to != OrderStatus.COMPLETED) {
-          throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-              ErrorMessage.ORDER_INVALID_STATUS_TRANSITION.getMessage());
-        }
-        break;
+        // Admin cannot change SHIPPING status
+        // User must confirm received via /user/orders/{id}/confirm-received
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+            ErrorMessage.ORDER_CANNOT_CHANGE_SHIPPING_STATUS.getMessage());
       case COMPLETED:
       case CANCELED:
         throw new ResponseStatusException(HttpStatus.BAD_REQUEST,

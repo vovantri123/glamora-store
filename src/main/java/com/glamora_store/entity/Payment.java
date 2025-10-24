@@ -24,7 +24,7 @@ public class Payment extends AuditableEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @OneToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "order_id", nullable = false)
   private Order order;
 
@@ -50,5 +50,6 @@ public class Payment extends AuditableEntity {
 
   @Column(name = "pay_url", columnDefinition = "TEXT")
   private String payUrl; // URL mà user được redirect đến trang thanh toán của VNPay
-  // Ví dụ: https://sandbox.vnpayment.vn/paymentv2/vpcpay.html?vnp_TxnRef=123456...
+  // Ví dụ:
+  // https://sandbox.vnpayment.vn/paymentv2/vpcpay.html?vnp_TxnRef=123456...
 }

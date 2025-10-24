@@ -60,6 +60,7 @@ public enum SuccessMessage {
   UPDATE_ORDER_SUCCESS("Update order successfully"),
   DELETE_ORDER_SUCCESS("Delete order successfully"),
   CANCEL_ORDER_SUCCESS("Cancel order successfully"),
+  CONFIRM_ORDER_RECEIVED_SUCCESS("Order confirmed as received successfully"),
   GET_ORDER_SUCCESS("Get order successfully"),
   SEARCH_ORDER_SUCCESS("Search orders successfully"),
   // Product Review messages

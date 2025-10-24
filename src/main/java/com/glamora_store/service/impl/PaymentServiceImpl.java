@@ -47,12 +47,23 @@ public class PaymentServiceImpl implements PaymentService {
             () -> new ResponseStatusException(
                 HttpStatus.NOT_FOUND, ErrorMessage.ORDER_NOT_FOUND.getMessage()));
 
-    // Kiểm tra payment đã tồn tại cho order này chưa
+    // Kiểm tra payment đã SUCCESS cho order này chưa
     if (paymentRepository.existsByOrderIdAndStatus(
         request.getOrderId(), PaymentStatus.SUCCESS)) {
       throw new ResponseStatusException(
           HttpStatus.BAD_REQUEST, ErrorMessage.PAYMENT_ALREADY_COMPLETED.getMessage());
     }
+
+    // Hủy tất cả payment PENDING cũ trước khi tạo mới
+    // (User có thể tạo payment VNPay nhiều lần nếu không thanh toán)
+    paymentRepository.findByOrderIdOrderByCreatedAtDesc(request.getOrderId())
+        .stream()
+        .filter(p -> p.getStatus() == PaymentStatus.PENDING)
+        .forEach(p -> {
+          p.setStatus(PaymentStatus.CANCELLED);
+          p.setFailedReason("Cancelled due to new payment creation");
+          paymentRepository.save(p);
+        });
 
     // Kiểm tra payment method có tồn tại và active không
     PaymentMethod paymentMethod = paymentMethodRepository
@@ -91,8 +102,9 @@ public class PaymentServiceImpl implements PaymentService {
 
   @Override
   public PaymentResponse getPaymentByOrderId(Long orderId) {
+    // Lấy payment mới nhất (theo createdAt desc)
     Payment payment = paymentRepository
-        .findByOrderId(orderId)
+        .findFirstByOrderIdOrderByCreatedAtDesc(orderId)
         .orElseThrow(
             () -> new ResponseStatusException(
                 HttpStatus.NOT_FOUND, ErrorMessage.PAYMENT_NOT_FOUND.getMessage()));
@@ -121,7 +133,8 @@ public class PaymentServiceImpl implements PaymentService {
         .findByTransactionId(transactionId)
         .orElseGet(
             () -> {
-              // Nếu không tìm thấy payment theo transactionId, tìm theo orderId
+              // Nếu không tìm thấy payment theo transactionId, tìm theo orderId (payment mới
+              // nhất)
               String orderInfo = vnpayParams.get("vnp_OrderInfo");
               if (orderInfo != null && orderInfo.startsWith("Payment for order ")) {
                 String orderCode = orderInfo.replace("Payment for order ", "");
@@ -131,8 +144,10 @@ public class PaymentServiceImpl implements PaymentService {
                         () -> new ResponseStatusException(
                             HttpStatus.NOT_FOUND,
                             ErrorMessage.ORDER_NOT_FOUND.getMessage()));
+                // return trong lambda chỉ thoát khỏi lambda và trả về giá trị cho orElseGet(),
+                // method vẫn tiếp tục chạy!
                 return paymentRepository
-                    .findByOrderId(order.getId())
+                    .findFirstByOrderIdOrderByCreatedAtDesc(order.getId())
                     .orElseThrow(
                         () -> new ResponseStatusException(
                             HttpStatus.NOT_FOUND,
@@ -189,8 +204,9 @@ public class PaymentServiceImpl implements PaymentService {
   @Override
   @Transactional
   public PaymentResponse cancelPayment(Long orderId) {
+    // Lấy payment mới nhất (theo createdAt desc)
     Payment payment = paymentRepository
-        .findByOrderId(orderId)
+        .findFirstByOrderIdOrderByCreatedAtDesc(orderId)
         .orElseThrow(
             () -> new ResponseStatusException(
                 HttpStatus.NOT_FOUND, ErrorMessage.PAYMENT_NOT_FOUND.getMessage()));

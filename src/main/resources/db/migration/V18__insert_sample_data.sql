@@ -58,7 +58,7 @@ INSERT INTO categories (name, description, image_url, is_deleted, parent_id, cre
 ('Thời Trang Nam', 'Tất cả sản phẩm thời trang dành cho nam giới', 'https://images.unsplash.com/photo-1490578474895-699cd4e2cf59?w=500', false, NULL, CURRENT_TIMESTAMP),
 ('Thời Trang Nữ', 'Tất cả sản phẩm thời trang dành cho nữ giới', 'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=500', false, NULL, CURRENT_TIMESTAMP);
 
--- Danh mục con level 2 của "Thời Trang Nam"
+-- Danh mục con level 2 của "Thời Trang Nam"  
 INSERT INTO categories (name, description, image_url, is_deleted, parent_id, created_at) VALUES
 ('Áo Nam', 'Áo thun, áo sơ mi, áo khoác nam', 'https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=500', false, (SELECT id FROM categories WHERE name = 'Thời Trang Nam'), CURRENT_TIMESTAMP),
 ('Quần Nam', 'Quần jean, quần tây, quần short nam', 'https://images.unsplash.com/photo-1473966968600-fa801b869a1a?w=500', false, (SELECT id FROM categories WHERE name = 'Thời Trang Nam'), CURRENT_TIMESTAMP),
@@ -137,8 +137,8 @@ INSERT INTO shipping_methods (name, code, base_fee, estimated_days, fee_per_km, 
 ('Viettel Post', 'VIETTEL', 27000.00, 4, 3100, true, 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Viettel_Post_logo.svg/2560px-Viettel_Post_logo.svg.png', 'Bưu chính Viettel - Giao hàng toàn quốc', CURRENT_TIMESTAMP);
 
 INSERT INTO payment_methods (name, is_active, logo_url, description, created_at) VALUES
-('COD - Thanh toán khi nhận hàng', true, 'https://i.imgur.com/cod-icon.png', 'Thanh toán tiền mặt khi nhận hàng', CURRENT_TIMESTAMP),
-('VNPay', true, 'https://i.imgur.com/vnpay-logo.png', 'Thanh toán qua VNPay - Hỗ trợ thẻ ATM, Visa, MasterCard', CURRENT_TIMESTAMP);
+('COD', true, 'https://img.freepik.com/premium-vector/cash-delivery-label_686319-773.jpg', 'Thanh toán tiền mặt khi nhận hàng', CURRENT_TIMESTAMP),
+('VNPay', true, 'https://vinadesign.vn/uploads/images/2023/05/vnpay-logo-vinadesign-25-12-57-55.jpg', 'Thanh toán qua VNPay - Hỗ trợ thẻ ATM, Visa, MasterCard', CURRENT_TIMESTAMP);
 
 -- ============================================
 -- VOUCHERS - Mã giảm giá
@@ -749,8 +749,80 @@ INSERT INTO order_items (order_id, variant_id, quantity, price, total_price, cre
 ((SELECT id FROM orders WHERE order_code = 'GLA20250118003'), (SELECT id FROM product_variants WHERE sku = 'JEAN-DEN-30'), 1, 449000, 449000, CURRENT_TIMESTAMP - INTERVAL '1 day');
 
 -- ============================================
--- PAYMENTS - Thanh toán (Không insert sẵn, để hệ thống tự tạo khi đặt hàng)
+-- PAYMENTS - Thanh toán
 -- ============================================
+-- Payment cho đơn GLA20250101001 (COMPLETED) - User thử VNPay 2 lần rồi mới thanh toán COD
+INSERT INTO payments (order_id, payment_method_id, amount, status, transaction_id, payment_date, failed_reason, pay_url, created_at, updated_at) VALUES
+-- Lần 1: User tạo VNPay nhưng không thanh toán (CANCELLED do tạo payment mới)
+((SELECT id FROM orders WHERE order_code = 'GLA20250101001'), 
+ (SELECT id FROM payment_methods WHERE name = 'VNPay'), 
+ 574950, 'CANCELLED', NULL, NULL, 'Cancelled due to new payment creation', 
+ 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html?vnp_TxnRef=12345678...', 
+ CURRENT_TIMESTAMP - INTERVAL '10 days 2 hours', CURRENT_TIMESTAMP - INTERVAL '10 days 1 hour'),
+-- Lần 2: User tạo VNPay lần 2 nhưng vẫn không thanh toán (EXPIRED sau 15 phút)
+((SELECT id FROM orders WHERE order_code = 'GLA20250101001'), 
+ (SELECT id FROM payment_methods WHERE name = 'VNPay'), 
+ 574950, 'EXPIRED', NULL, NULL, 'Payment URL expired after 15 minutes', 
+ 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html?vnp_TxnRef=23456789...', 
+ CURRENT_TIMESTAMP - INTERVAL '10 days 1 hour', CURRENT_TIMESTAMP - INTERVAL '10 days 45 minutes'),
+-- Lần 3: User chọn COD và đã nhận hàng thành công (SUCCESS)
+((SELECT id FROM orders WHERE order_code = 'GLA20250101001'), 
+ (SELECT id FROM payment_methods WHERE name = 'COD'), 
+ 574950, 'SUCCESS', 'COD-GLA20250101001', CURRENT_TIMESTAMP - INTERVAL '3 days', NULL, NULL,
+ CURRENT_TIMESTAMP - INTERVAL '10 days 30 minutes', CURRENT_TIMESTAMP - INTERVAL '3 days');
+
+-- Payment cho đơn GLA20250115002 (SHIPPING) - User thanh toán VNPay thành công
+INSERT INTO payments (order_id, payment_method_id, amount, status, transaction_id, payment_date, failed_reason, pay_url, created_at, updated_at) VALUES
+((SELECT id FROM orders WHERE order_code = 'GLA20250115002'), 
+ (SELECT id FROM payment_methods WHERE name = 'VNPay'), 
+ 579000, 'SUCCESS', '14153188', CURRENT_TIMESTAMP - INTERVAL '2 days', NULL, 
+ 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html?vnp_TxnRef=14153188...', 
+ CURRENT_TIMESTAMP - INTERVAL '2 days 5 minutes', CURRENT_TIMESTAMP - INTERVAL '2 days');
+
+-- Payment cho đơn GLA20250118003 (PAID) - User thanh toán VNPay xong, chờ giao hàng
+INSERT INTO payments (order_id, payment_method_id, amount, status, transaction_id, payment_date, failed_reason, pay_url, created_at, updated_at) VALUES
+((SELECT id FROM orders WHERE order_code = 'GLA20250118003'), 
+ (SELECT id FROM payment_methods WHERE name = 'VNPay'), 
+ 424000, 'SUCCESS', '14156892', CURRENT_TIMESTAMP - INTERVAL '1 day', NULL, 
+ 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html?vnp_TxnRef=14156892...', 
+ CURRENT_TIMESTAMP - INTERVAL '1 day 10 minutes', CURRENT_TIMESTAMP - INTERVAL '1 day');
+
+-- Thêm 1 đơn PENDING với payment PENDING (COD)
+INSERT INTO orders (order_code, user_id, address_id, shipping_method_id, voucher_id, status, subtotal, discount_amount, shipping_fee, total_amount, note, created_at) VALUES
+('GLA20250119004',
+ (SELECT id FROM users WHERE email = 'vovantri@gmail.com'),
+ (SELECT id FROM addresses WHERE user_id = (SELECT id FROM users WHERE email = 'vovantri@gmail.com') AND is_default = true),
+ (SELECT id FROM shipping_methods WHERE code = 'JT'),
+ NULL,
+ 'PENDING', 199000, 0, 28000, 227000, 'Đơn hàng mới tạo, chưa thanh toán', CURRENT_TIMESTAMP - INTERVAL '2 hours');
+
+INSERT INTO order_items (order_id, variant_id, quantity, price, total_price, created_at) VALUES
+((SELECT id FROM orders WHERE order_code = 'GLA20250119004'), (SELECT id FROM product_variants WHERE sku = 'ATBC-TRANG-L'), 1, 199000, 199000, CURRENT_TIMESTAMP - INTERVAL '2 hours');
+
+INSERT INTO payments (order_id, payment_method_id, amount, status, transaction_id, payment_date, failed_reason, pay_url, created_at, updated_at) VALUES
+((SELECT id FROM orders WHERE order_code = 'GLA20250119004'), 
+ (SELECT id FROM payment_methods WHERE name = 'COD'), 
+ 227000, 'PENDING', NULL, NULL, NULL, NULL,
+ CURRENT_TIMESTAMP - INTERVAL '2 hours', CURRENT_TIMESTAMP - INTERVAL '2 hours');
+
+-- Thêm 1 đơn CANCELLED với payment CANCELLED
+INSERT INTO orders (order_code, user_id, address_id, shipping_method_id, voucher_id, status, subtotal, discount_amount, shipping_fee, total_amount, note, canceled_reason, created_at) VALUES
+('GLA20250117005',
+ (SELECT id FROM users WHERE email = 'phamducan@gmail.com'),
+ (SELECT id FROM addresses WHERE user_id = (SELECT id FROM users WHERE email = 'phamducan@gmail.com') LIMIT 1),
+ (SELECT id FROM shipping_methods WHERE code = 'GHTK'),
+ NULL,
+ 'CANCELED', 249000, 0, 25000, 274000, NULL, 'Khách hàng đổi ý không mua nữa', CURRENT_TIMESTAMP - INTERVAL '3 days');
+
+INSERT INTO order_items (order_id, variant_id, quantity, price, total_price, created_at) VALUES
+((SELECT id FROM orders WHERE order_code = 'GLA20250117005'), (SELECT id FROM product_variants WHERE sku = 'OVER-DEN-L'), 1, 249000, 249000, CURRENT_TIMESTAMP - INTERVAL '3 days');
+
+INSERT INTO payments (order_id, payment_method_id, amount, status, transaction_id, payment_date, failed_reason, pay_url, created_at, updated_at) VALUES
+((SELECT id FROM orders WHERE order_code = 'GLA20250117005'), 
+ (SELECT id FROM payment_methods WHERE name = 'VNPay'), 
+ 274000, 'CANCELLED', NULL, NULL, 'Order cancelled by user', 
+ 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html?vnp_TxnRef=14151234...',
+ CURRENT_TIMESTAMP - INTERVAL '3 days 10 minutes', CURRENT_TIMESTAMP - INTERVAL '3 days');
 
 
 -- ============================================

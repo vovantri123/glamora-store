@@ -64,7 +64,8 @@ public enum ErrorMessage {
   ORDER_CANNOT_DELETE("Order can only be deleted when in CANCELED status"),
   ORDER_INVALID_STATUS_TRANSITION("Invalid order status transition"),
   ORDER_STATUS_CANNOT_CHANGE_COMPLETED("Cannot change status of completed orders"),
-  ORDER_STATUS_CANNOT_CHANGE_CANCELED("Cannot change status of canceled orders"),
+  ORDER_CANNOT_CONFIRM_RECEIVED("Can only confirm orders in SHIPPING status"),
+  ORDER_CANNOT_CHANGE_SHIPPING_STATUS("Cannot change SHIPPING status. User must confirm order received"),
 
   // Message in dto - Start
   FULL_NAME_REQUIRED("Full name is required"),
