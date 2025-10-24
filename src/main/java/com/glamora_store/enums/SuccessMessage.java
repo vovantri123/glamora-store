@@ -72,7 +72,16 @@ public enum SuccessMessage {
   OPERATION_SUCCESSFUL("Operation successful"),
   CREATED_SUCCESSFULLY("Created successfully"),
   UPDATED_SUCCESSFULLY("Updated successfully"),
-  DELETED_SUCCESSFULLY("Deleted successfully");
+  DELETED_SUCCESSFULLY("Deleted successfully"),
+  // Payment messages
+  CREATE_PAYMENT_SUCCESS("Create payment successfully"),
+  PAYMENT_SUCCESS("Payment completed successfully"),
+  PAYMENT_REFUND_SUCCESS("Payment refunded successfully"),
+  GET_PAYMENT_SUCCESS("Get payment successfully"),
+  GET_ALL_PAYMENT_METHOD_SUCCESS("Get all payment methods successfully"),
+  GET_PAYMENT_METHOD_SUCCESS("Get payment method successfully"),
+  PAYMENT_URL_GENERATED("Payment URL generated successfully"),
+  PAYMENT_VERIFIED_SUCCESS("Payment verified successfully");
 
   private final String message;
 

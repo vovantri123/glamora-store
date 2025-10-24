@@ -18,7 +18,7 @@ public class PaymentMethod extends AuditableEntity {
   private Long id;
 
   @Column(nullable = false, unique = true, length = 100)
-  private String name; // VNPay, COD, Momo,...
+  private String name; // VNPay, COD,...
 
   @Column(columnDefinition = "TEXT")
   private String description;

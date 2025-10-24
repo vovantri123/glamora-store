@@ -122,6 +122,12 @@
       <artifactId>spring-boot-starter-mail</artifactId>
     </dependency>
 
+    <!-- Thư viện encoding/decoding nhiều loại như: Base64, Hex, MD5, SHA-1, SHA-256 -->
+    <dependency>
+      <groupId>commons-codec</groupId>
+      <artifactId>commons-codec</artifactId>
+    </dependency>
+
 
   </dependencies>
 

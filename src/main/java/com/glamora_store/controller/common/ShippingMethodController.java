@@ -26,8 +26,8 @@ public class ShippingMethodController {
   @Operation(summary = "Get all active shipping methods", description = "Get list of all active shipping methods available for customers")
   public ApiResponse<List<ShippingMethodResponse>> getAllActiveShippingMethods() {
     return new ApiResponse<>(
-        SuccessMessage.OPERATION_SUCCESSFUL.getMessage(),
-        shippingMethodService.getAllActiveShippingMethods()
+      SuccessMessage.OPERATION_SUCCESSFUL.getMessage(),
+      shippingMethodService.getAllActiveShippingMethods()
     );
   }
 
@@ -35,8 +35,8 @@ public class ShippingMethodController {
   @Operation(summary = "Get shipping method by ID", description = "Get detailed information of a specific shipping method")
   public ApiResponse<ShippingMethodResponse> getShippingMethodById(@PathVariable Long id) {
     return new ApiResponse<>(
-        SuccessMessage.OPERATION_SUCCESSFUL.getMessage(),
-        shippingMethodService.getShippingMethodById(id)
+      SuccessMessage.OPERATION_SUCCESSFUL.getMessage(),
+      shippingMethodService.getShippingMethodById(id)
     );
   }
 }

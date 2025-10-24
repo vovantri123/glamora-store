@@ -127,6 +127,8 @@ public enum ErrorMessage {
   ORDER_CANCEL_REASON_INVALID("Cancel reason must be between 10 and 500 characters"),
   ORDER_STATUS_REQUIRED("Order status is required"),
 
+  ORDER_ID_REQUIRED("Order ID is required"),
+
   REVIEW_NOT_FOUND("Review not found"),
   REVIEW_ALREADY_EXISTS("You have already reviewed this product"),
   REVIEW_ACCESS_DENIED("You do not have permission to access this review"),
@@ -136,6 +138,21 @@ public enum ErrorMessage {
   REVIEW_CANNOT_REVIEW_OWN_PRODUCT("You cannot review your own product"),
   REVIEW_PRODUCT_ID_REQUIRED("Product ID is required"),
   REVIEW_VARIANT_ID_REQUIRED("Variant ID is required"),
+  PAYMENT_NOT_FOUND("Payment not found"),
+  PAYMENT_METHOD_NOT_FOUND("Payment method not found"),
+  PAYMENT_METHOD_INACTIVE("Payment method is not active"),
+  PAYMENT_ALREADY_COMPLETED("Payment has already been completed"),
+  PAYMENT_FAILED("Payment failed"),
+  PAYMENT_CANCELLED("Payment has been cancelled"),
+  PAYMENT_EXPIRED("Payment URL has expired"),
+  PAYMENT_TRANSACTION_INVALID("Invalid payment transaction"),
+  PAYMENT_AMOUNT_MISMATCH("Payment amount does not match order total"),
+  PAYMENT_METHOD_ID_REQUIRED("Payment method ID is required"),
+  VNPAY_CONFIG_MISSING("VNPay configuration is missing"),
+  VNPAY_PAYMENT_URL_ERROR("Error generating VNPay payment URL"),
+  VNPAY_SIGNATURE_INVALID("Invalid VNPay signature"),
+  VNPAY_RETURN_URL_INVALID("Invalid VNPay return URL"),
+
   // Message in dto - End
   ;
 

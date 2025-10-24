@@ -112,7 +112,7 @@ public class GlobalExceptionHandler {
     return new ApiResponse<>(ErrorMessage.MALFORMED_JSON.getMessage() + ex.getMessage());
   }
 
-  // Handle wrong URL paths that look like static resources (e.g., /api/v1/patients/8/234)
+  // Handle wrong URL paths that look like static resources (e.g., /patients/8/234)
   @ExceptionHandler(NoResourceFoundException.class)
   @ResponseStatus(HttpStatus.NOT_FOUND)
   public ApiResponse<Void> handleNoResourceFound(NoResourceFoundException ex) {

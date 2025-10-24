@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 public class ProductController {
 
   private final ProductService productService;
-
+ 
   @GetMapping
   public ApiResponse<PageResponse<ProductResponse>> searchProducts(
     @RequestParam(required = false) Long categoryId,

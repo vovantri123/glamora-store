@@ -388,6 +388,152 @@ INSERT INTO product_variant_values (variant_id, attribute_value_id, created_at) 
 (14, (SELECT id FROM attribute_values WHERE value = 'Trắng' LIMIT 1), CURRENT_TIMESTAMP),
 (14, (SELECT id FROM attribute_values WHERE value = 'XL' LIMIT 1), CURRENT_TIMESTAMP);
 
+-- Áo Sơ Mi Trắng (variants 15-17)
+INSERT INTO product_variant_values (variant_id, attribute_value_id, created_at) VALUES
+(15, (SELECT id FROM attribute_values WHERE value = 'Trắng' LIMIT 1), CURRENT_TIMESTAMP),
+(15, (SELECT id FROM attribute_values WHERE value = 'M' LIMIT 1), CURRENT_TIMESTAMP),
+(16, (SELECT id FROM attribute_values WHERE value = 'Trắng' LIMIT 1), CURRENT_TIMESTAMP),
+(16, (SELECT id FROM attribute_values WHERE value = 'L' LIMIT 1), CURRENT_TIMESTAMP),
+(17, (SELECT id FROM attribute_values WHERE value = 'Trắng' LIMIT 1), CURRENT_TIMESTAMP),
+(17, (SELECT id FROM attribute_values WHERE value = 'XL' LIMIT 1), CURRENT_TIMESTAMP);
+
+-- Áo Sơ Mi Kẻ (variants 18-19)
+INSERT INTO product_variant_values (variant_id, attribute_value_id, created_at) VALUES
+(18, (SELECT id FROM attribute_values WHERE value = 'Xanh Navy' LIMIT 1), CURRENT_TIMESTAMP),
+(18, (SELECT id FROM attribute_values WHERE value = 'M' LIMIT 1), CURRENT_TIMESTAMP),
+(19, (SELECT id FROM attribute_values WHERE value = 'Xanh Navy' LIMIT 1), CURRENT_TIMESTAMP),
+(19, (SELECT id FROM attribute_values WHERE value = 'L' LIMIT 1), CURRENT_TIMESTAMP);
+
+-- Áo Sơ Mi Linen (variants 20-22)
+INSERT INTO product_variant_values (variant_id, attribute_value_id, created_at) VALUES
+(20, (SELECT id FROM attribute_values WHERE value = 'Be' LIMIT 1), CURRENT_TIMESTAMP),
+(20, (SELECT id FROM attribute_values WHERE value = 'M' LIMIT 1), CURRENT_TIMESTAMP),
+(21, (SELECT id FROM attribute_values WHERE value = 'Be' LIMIT 1), CURRENT_TIMESTAMP),
+(21, (SELECT id FROM attribute_values WHERE value = 'L' LIMIT 1), CURRENT_TIMESTAMP),
+(22, (SELECT id FROM attribute_values WHERE value = 'Trắng' LIMIT 1), CURRENT_TIMESTAMP),
+(22, (SELECT id FROM attribute_values WHERE value = 'M' LIMIT 1), CURRENT_TIMESTAMP);
+
+-- Áo Khoác Jean (variants 23-25)
+INSERT INTO product_variant_values (variant_id, attribute_value_id, created_at) VALUES
+(23, (SELECT id FROM attribute_values WHERE value = 'Xanh Denim' LIMIT 1), CURRENT_TIMESTAMP),
+(23, (SELECT id FROM attribute_values WHERE value = 'M' LIMIT 1), CURRENT_TIMESTAMP),
+(24, (SELECT id FROM attribute_values WHERE value = 'Xanh Denim' LIMIT 1), CURRENT_TIMESTAMP),
+(24, (SELECT id FROM attribute_values WHERE value = 'L' LIMIT 1), CURRENT_TIMESTAMP),
+(25, (SELECT id FROM attribute_values WHERE value = 'Xanh Denim' LIMIT 1), CURRENT_TIMESTAMP),
+(25, (SELECT id FROM attribute_values WHERE value = 'XL' LIMIT 1), CURRENT_TIMESTAMP);
+
+-- Áo Hoodie (variants 26-29)
+INSERT INTO product_variant_values (variant_id, attribute_value_id, created_at) VALUES
+(26, (SELECT id FROM attribute_values WHERE value = 'Đen' LIMIT 1), CURRENT_TIMESTAMP),
+(26, (SELECT id FROM attribute_values WHERE value = 'L' LIMIT 1), CURRENT_TIMESTAMP),
+(27, (SELECT id FROM attribute_values WHERE value = 'Đen' LIMIT 1), CURRENT_TIMESTAMP),
+(27, (SELECT id FROM attribute_values WHERE value = 'XL' LIMIT 1), CURRENT_TIMESTAMP),
+(28, (SELECT id FROM attribute_values WHERE value = 'Xám' LIMIT 1), CURRENT_TIMESTAMP),
+(28, (SELECT id FROM attribute_values WHERE value = 'L' LIMIT 1), CURRENT_TIMESTAMP),
+(29, (SELECT id FROM attribute_values WHERE value = 'Xám' LIMIT 1), CURRENT_TIMESTAMP),
+(29, (SELECT id FROM attribute_values WHERE value = 'XL' LIMIT 1), CURRENT_TIMESTAMP);
+
+-- Áo Bomber (variants 30-32)
+INSERT INTO product_variant_values (variant_id, attribute_value_id, created_at) VALUES
+(30, (SELECT id FROM attribute_values WHERE value = 'Đen' LIMIT 1), CURRENT_TIMESTAMP),
+(30, (SELECT id FROM attribute_values WHERE value = 'M' LIMIT 1), CURRENT_TIMESTAMP),
+(31, (SELECT id FROM attribute_values WHERE value = 'Đen' LIMIT 1), CURRENT_TIMESTAMP),
+(31, (SELECT id FROM attribute_values WHERE value = 'L' LIMIT 1), CURRENT_TIMESTAMP),
+(32, (SELECT id FROM attribute_values WHERE value = 'Nâu' LIMIT 1), CURRENT_TIMESTAMP),
+(32, (SELECT id FROM attribute_values WHERE value = 'M' LIMIT 1), CURRENT_TIMESTAMP);
+
+-- Quần Jean Nam (variants 33-36)
+INSERT INTO product_variant_values (variant_id, attribute_value_id, created_at) VALUES
+(33, (SELECT id FROM attribute_values WHERE value = 'Đen' LIMIT 1), CURRENT_TIMESTAMP),
+(33, (SELECT id FROM attribute_values WHERE value = '29' LIMIT 1), CURRENT_TIMESTAMP),
+(34, (SELECT id FROM attribute_values WHERE value = 'Đen' LIMIT 1), CURRENT_TIMESTAMP),
+(34, (SELECT id FROM attribute_values WHERE value = '30' LIMIT 1), CURRENT_TIMESTAMP),
+(35, (SELECT id FROM attribute_values WHERE value = 'Đen' LIMIT 1), CURRENT_TIMESTAMP),
+(35, (SELECT id FROM attribute_values WHERE value = '31' LIMIT 1), CURRENT_TIMESTAMP),
+(36, (SELECT id FROM attribute_values WHERE value = 'Đen' LIMIT 1), CURRENT_TIMESTAMP),
+(36, (SELECT id FROM attribute_values WHERE value = '32' LIMIT 1), CURRENT_TIMESTAMP);
+
+-- Quần Tây Nam (variants 37-40)
+INSERT INTO product_variant_values (variant_id, attribute_value_id, created_at) VALUES
+(37, (SELECT id FROM attribute_values WHERE value = 'Đen' LIMIT 1), CURRENT_TIMESTAMP),
+(37, (SELECT id FROM attribute_values WHERE value = '29' LIMIT 1), CURRENT_TIMESTAMP),
+(38, (SELECT id FROM attribute_values WHERE value = 'Đen' LIMIT 1), CURRENT_TIMESTAMP),
+(38, (SELECT id FROM attribute_values WHERE value = '30' LIMIT 1), CURRENT_TIMESTAMP),
+(39, (SELECT id FROM attribute_values WHERE value = 'Xám' LIMIT 1), CURRENT_TIMESTAMP),
+(39, (SELECT id FROM attribute_values WHERE value = '29' LIMIT 1), CURRENT_TIMESTAMP),
+(40, (SELECT id FROM attribute_values WHERE value = 'Xám' LIMIT 1), CURRENT_TIMESTAMP),
+(40, (SELECT id FROM attribute_values WHERE value = '30' LIMIT 1), CURRENT_TIMESTAMP);
+
+-- Quần Kaki Nam (variants 41-43)
+INSERT INTO product_variant_values (variant_id, attribute_value_id, created_at) VALUES
+(41, (SELECT id FROM attribute_values WHERE value = 'Be' LIMIT 1), CURRENT_TIMESTAMP),
+(41, (SELECT id FROM attribute_values WHERE value = '30' LIMIT 1), CURRENT_TIMESTAMP),
+(42, (SELECT id FROM attribute_values WHERE value = 'Be' LIMIT 1), CURRENT_TIMESTAMP),
+(42, (SELECT id FROM attribute_values WHERE value = '31' LIMIT 1), CURRENT_TIMESTAMP),
+(43, (SELECT id FROM attribute_values WHERE value = 'Nâu' LIMIT 1), CURRENT_TIMESTAMP),
+(43, (SELECT id FROM attribute_values WHERE value = '30' LIMIT 1), CURRENT_TIMESTAMP);
+
+-- Áo Croptop Nữ (variants 44-47)
+INSERT INTO product_variant_values (variant_id, attribute_value_id, created_at) VALUES
+(44, (SELECT id FROM attribute_values WHERE value = 'Đen' LIMIT 1), CURRENT_TIMESTAMP),
+(44, (SELECT id FROM attribute_values WHERE value = 'S' LIMIT 1), CURRENT_TIMESTAMP),
+(45, (SELECT id FROM attribute_values WHERE value = 'Đen' LIMIT 1), CURRENT_TIMESTAMP),
+(45, (SELECT id FROM attribute_values WHERE value = 'M' LIMIT 1), CURRENT_TIMESTAMP),
+(46, (SELECT id FROM attribute_values WHERE value = 'Trắng' LIMIT 1), CURRENT_TIMESTAMP),
+(46, (SELECT id FROM attribute_values WHERE value = 'S' LIMIT 1), CURRENT_TIMESTAMP),
+(47, (SELECT id FROM attribute_values WHERE value = 'Trắng' LIMIT 1), CURRENT_TIMESTAMP),
+(47, (SELECT id FROM attribute_values WHERE value = 'M' LIMIT 1), CURRENT_TIMESTAMP);
+
+-- Áo Kiểu Tay Bồng (variants 48-50)
+INSERT INTO product_variant_values (variant_id, attribute_value_id, created_at) VALUES
+(48, (SELECT id FROM attribute_values WHERE value = 'Trắng' LIMIT 1), CURRENT_TIMESTAMP),
+(48, (SELECT id FROM attribute_values WHERE value = 'M' LIMIT 1), CURRENT_TIMESTAMP),
+(49, (SELECT id FROM attribute_values WHERE value = 'Trắng' LIMIT 1), CURRENT_TIMESTAMP),
+(49, (SELECT id FROM attribute_values WHERE value = 'L' LIMIT 1), CURRENT_TIMESTAMP),
+(50, (SELECT id FROM attribute_values WHERE value = 'Hồng' LIMIT 1), CURRENT_TIMESTAMP),
+(50, (SELECT id FROM attribute_values WHERE value = 'M' LIMIT 1), CURRENT_TIMESTAMP);
+
+-- Áo Sơ Mi Lụa Nữ (variants 51-52)
+INSERT INTO product_variant_values (variant_id, attribute_value_id, created_at) VALUES
+(51, (SELECT id FROM attribute_values WHERE value = 'Trắng' LIMIT 1), CURRENT_TIMESTAMP),
+(51, (SELECT id FROM attribute_values WHERE value = 'M' LIMIT 1), CURRENT_TIMESTAMP),
+(52, (SELECT id FROM attribute_values WHERE value = 'Trắng' LIMIT 1), CURRENT_TIMESTAMP),
+(52, (SELECT id FROM attribute_values WHERE value = 'L' LIMIT 1), CURRENT_TIMESTAMP);
+
+-- Áo Blazer Nữ (variants 53-55)
+INSERT INTO product_variant_values (variant_id, attribute_value_id, created_at) VALUES
+(53, (SELECT id FROM attribute_values WHERE value = 'Đen' LIMIT 1), CURRENT_TIMESTAMP),
+(53, (SELECT id FROM attribute_values WHERE value = 'M' LIMIT 1), CURRENT_TIMESTAMP),
+(54, (SELECT id FROM attribute_values WHERE value = 'Đen' LIMIT 1), CURRENT_TIMESTAMP),
+(54, (SELECT id FROM attribute_values WHERE value = 'L' LIMIT 1), CURRENT_TIMESTAMP),
+(55, (SELECT id FROM attribute_values WHERE value = 'Be' LIMIT 1), CURRENT_TIMESTAMP),
+(55, (SELECT id FROM attribute_values WHERE value = 'M' LIMIT 1), CURRENT_TIMESTAMP);
+
+-- Quần Jean Nữ (variants 56-58)
+INSERT INTO product_variant_values (variant_id, attribute_value_id, created_at) VALUES
+(56, (SELECT id FROM attribute_values WHERE value = 'Xanh Denim' LIMIT 1), CURRENT_TIMESTAMP),
+(56, (SELECT id FROM attribute_values WHERE value = '28' LIMIT 1), CURRENT_TIMESTAMP),
+(57, (SELECT id FROM attribute_values WHERE value = 'Xanh Denim' LIMIT 1), CURRENT_TIMESTAMP),
+(57, (SELECT id FROM attribute_values WHERE value = '29' LIMIT 1), CURRENT_TIMESTAMP),
+(58, (SELECT id FROM attribute_values WHERE value = 'Xanh Denim' LIMIT 1), CURRENT_TIMESTAMP),
+(58, (SELECT id FROM attribute_values WHERE value = '30' LIMIT 1), CURRENT_TIMESTAMP);
+
+-- Chân Váy Midi (variants 59-61)
+INSERT INTO product_variant_values (variant_id, attribute_value_id, created_at) VALUES
+(59, (SELECT id FROM attribute_values WHERE value = 'Đen' LIMIT 1), CURRENT_TIMESTAMP),
+(59, (SELECT id FROM attribute_values WHERE value = 'S' LIMIT 1), CURRENT_TIMESTAMP),
+(60, (SELECT id FROM attribute_values WHERE value = 'Đen' LIMIT 1), CURRENT_TIMESTAMP),
+(60, (SELECT id FROM attribute_values WHERE value = 'M' LIMIT 1), CURRENT_TIMESTAMP),
+(61, (SELECT id FROM attribute_values WHERE value = 'Be' LIMIT 1), CURRENT_TIMESTAMP),
+(61, (SELECT id FROM attribute_values WHERE value = 'S' LIMIT 1), CURRENT_TIMESTAMP);
+
+-- Đầm Maxi (variants 62-63)
+INSERT INTO product_variant_values (variant_id, attribute_value_id, created_at) VALUES
+(62, (SELECT id FROM attribute_values WHERE value = 'Hồng' LIMIT 1), CURRENT_TIMESTAMP),
+(62, (SELECT id FROM attribute_values WHERE value = 'M' LIMIT 1), CURRENT_TIMESTAMP),
+(63, (SELECT id FROM attribute_values WHERE value = 'Hồng' LIMIT 1), CURRENT_TIMESTAMP),
+(63, (SELECT id FROM attribute_values WHERE value = 'L' LIMIT 1), CURRENT_TIMESTAMP);
+
 -- ============================================
 -- PRODUCT IMAGES - Hình ảnh sản phẩm
 -- ============================================
@@ -425,8 +571,106 @@ INSERT INTO product_images (image_url, alt_text, is_thumbnail, display_order, pr
 
 -- Đầm Maxi (product_id=19)
 INSERT INTO product_images (image_url, alt_text, is_thumbnail, display_order, product_id, variant_id, created_at) VALUES
-('https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=800', 'Đầm maxi hoa', true, 1, 19, 57, CURRENT_TIMESTAMP),
+('https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=800', 'Đầm maxi hoa', true, 1, 19, 62, CURRENT_TIMESTAMP),
 ('https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=800', 'Chi tiết đầm maxi', false, 2, 19, NULL, CURRENT_TIMESTAMP);
+
+-- Áo Oversize (product_id=3)
+INSERT INTO product_images (image_url, alt_text, is_thumbnail, display_order, product_id, variant_id, created_at) VALUES
+('https://images.unsplash.com/photo-1562157873-818bc0726f68?w=800', 'Áo thun oversize đen', true, 1, 3, 11, CURRENT_TIMESTAMP),
+('https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=800', 'Áo thun oversize trắng', false, 2, 3, 13, CURRENT_TIMESTAMP);
+
+-- Áo Sơ Mi Kẻ (product_id=5)
+INSERT INTO product_images (image_url, alt_text, is_thumbnail, display_order, product_id, variant_id, created_at) VALUES
+('https://images.unsplash.com/photo-1603252109303-2751441dd157?w=800', 'Áo sơ mi kẻ sọc navy', true, 1, 5, 18, CURRENT_TIMESTAMP),
+('https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=800', 'Chi tiết áo sơ mi kẻ', false, 2, 5, NULL, CURRENT_TIMESTAMP);
+
+-- Áo Sơ Mi Linen (product_id=6)
+INSERT INTO product_images (image_url, alt_text, is_thumbnail, display_order, product_id, variant_id, created_at) VALUES
+('https://images.unsplash.com/photo-1598032895397-b9c88a8df1f7?w=800', 'Áo sơ mi linen be', true, 1, 6, 20, CURRENT_TIMESTAMP),
+('https://images.unsplash.com/photo-1620799139834-6b8f844a2ecc?w=800', 'Áo sơ mi linen trắng', false, 2, 6, 22, CURRENT_TIMESTAMP);
+
+-- Áo Hoodie (product_id=8)
+INSERT INTO product_images (image_url, alt_text, is_thumbnail, display_order, product_id, variant_id, created_at) VALUES
+('https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=800', 'Áo hoodie đen', true, 1, 8, 26, CURRENT_TIMESTAMP),
+('https://images.unsplash.com/photo-1578587018452-892bacefd3f2?w=800', 'Áo hoodie xám', false, 2, 8, 28, CURRENT_TIMESTAMP);
+
+-- Áo Bomber (product_id=9)
+INSERT INTO product_images (image_url, alt_text, is_thumbnail, display_order, product_id, variant_id, created_at) VALUES
+('https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=800', 'Áo bomber đen', true, 1, 9, 30, CURRENT_TIMESTAMP),
+('https://images.unsplash.com/photo-1578932750294-f5075e85f44a?w=800', 'Áo bomber nâu', false, 2, 9, 32, CURRENT_TIMESTAMP);
+
+-- Quần Jean Straight (product_id=11)
+INSERT INTO product_images (image_url, alt_text, is_thumbnail, display_order, product_id, variant_id, created_at) VALUES
+('https://images.unsplash.com/photo-1542272604-787c3835535d?w=800', 'Quần jean straight đen', true, 1, 11, 33, CURRENT_TIMESTAMP),
+('https://images.unsplash.com/photo-1604176354204-9268737828e4?w=800', 'Chi tiết quần jean', false, 2, 11, NULL, CURRENT_TIMESTAMP);
+
+-- Quần Tây Nam (product_id=12)
+INSERT INTO product_images (image_url, alt_text, is_thumbnail, display_order, product_id, variant_id, created_at) VALUES
+('https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?w=800', 'Quần tây công sở đen', true, 1, 12, 37, CURRENT_TIMESTAMP),
+('https://images.unsplash.com/photo-1594938291221-94f18cbb5660?w=800', 'Quần tây xám', false, 2, 12, 39, CURRENT_TIMESTAMP);
+
+-- Quần Kaki (product_id=13)
+INSERT INTO product_images (image_url, alt_text, is_thumbnail, display_order, product_id, variant_id, created_at) VALUES
+('https://images.unsplash.com/photo-1473966968600-fa801b869a1a?w=800', 'Quần kaki túi hộp be', true, 1, 13, 41, CURRENT_TIMESTAMP),
+('https://images.unsplash.com/photo-1506629082955-511b1aa562c8?w=800', 'Quần kaki nâu', false, 2, 13, 43, CURRENT_TIMESTAMP);
+
+-- Áo Thun Form Rộng Nữ (product_id=15)
+INSERT INTO product_images (image_url, alt_text, is_thumbnail, display_order, product_id, variant_id, created_at) VALUES
+('https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800', 'Áo thun form rộng', true, 1, 15, 51, CURRENT_TIMESTAMP),
+('https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=800', 'Chi tiết áo thun', false, 2, 15, NULL, CURRENT_TIMESTAMP);
+
+-- Áo Kiểu Tay Bồng (product_id=16)
+INSERT INTO product_images (image_url, alt_text, is_thumbnail, display_order, product_id, variant_id, created_at) VALUES
+('https://images.unsplash.com/photo-1485968579580-b6d095142e6e?w=800', 'Áo kiểu tay bồng trắng', true, 1, 16, 48, CURRENT_TIMESTAMP),
+('https://images.unsplash.com/photo-1564859228273-274232fdb516?w=800', 'Áo kiểu hồng', false, 2, 16, 50, CURRENT_TIMESTAMP);
+
+-- Áo Sơ Mi Lụa Nữ (product_id=17)
+INSERT INTO product_images (image_url, alt_text, is_thumbnail, display_order, product_id, variant_id, created_at) VALUES
+('https://images.unsplash.com/photo-1594846497743-9f0dd0d6d3b6?w=800', 'Áo sơ mi lụa trắng', true, 1, 17, 51, CURRENT_TIMESTAMP),
+('https://images.unsplash.com/photo-1609251297586-5d8e7c2e5f2c?w=800', 'Chi tiết áo sơ mi lụa', false, 2, 17, NULL, CURRENT_TIMESTAMP);
+
+-- Áo Blazer Nữ (product_id=18)
+INSERT INTO product_images (image_url, alt_text, is_thumbnail, display_order, product_id, variant_id, created_at) VALUES
+('https://images.unsplash.com/photo-1591369822096-ffd140ec948f?w=800', 'Áo blazer đen', true, 1, 18, 53, CURRENT_TIMESTAMP),
+('https://images.unsplash.com/photo-1594223515816-1ad1f9166a4b?w=800', 'Áo blazer be', false, 2, 18, 55, CURRENT_TIMESTAMP);
+
+-- Quần Jean Nữ Ống Đứng (product_id=20)
+INSERT INTO product_images (image_url, alt_text, is_thumbnail, display_order, product_id, variant_id, created_at) VALUES
+('https://images.unsplash.com/photo-1582552938357-32b906df40cb?w=800', 'Quần jean nữ ống đứng', true, 1, 20, 56, CURRENT_TIMESTAMP),
+('https://images.unsplash.com/photo-1584370848010-d7fe6bc767ec?w=800', 'Chi tiết quần jean nữ', false, 2, 20, NULL, CURRENT_TIMESTAMP);
+
+-- Quần Jean Skinny (product_id=21)
+INSERT INTO product_images (image_url, alt_text, is_thumbnail, display_order, product_id, variant_id, created_at) VALUES
+('https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=800', 'Quần jean skinny', true, 1, 21, NULL, CURRENT_TIMESTAMP);
+
+-- Quần Tây Ống Suông (product_id=22)
+INSERT INTO product_images (image_url, alt_text, is_thumbnail, display_order, product_id, variant_id, created_at) VALUES
+('https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=800', 'Quần tây ống suông', true, 1, 22, NULL, CURRENT_TIMESTAMP);
+
+-- Quần Baggy (product_id=23)
+INSERT INTO product_images (image_url, alt_text, is_thumbnail, display_order, product_id, variant_id, created_at) VALUES
+('https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?w=800', 'Quần baggy ulzzang', true, 1, 23, NULL, CURRENT_TIMESTAMP);
+
+-- Chân Váy Midi (product_id=24)
+INSERT INTO product_images (image_url, alt_text, is_thumbnail, display_order, product_id, variant_id, created_at) VALUES
+('https://images.unsplash.com/photo-1583496661160-fb5886a0aaaa?w=800', 'Chân váy chữ A midi đen', true, 1, 24, 59, CURRENT_TIMESTAMP),
+('https://images.unsplash.com/photo-1566174053879-31528523f8ae?w=800', 'Chân váy be', false, 2, 24, 61, CURRENT_TIMESTAMP);
+
+-- Váy Xòe Dự Tiệc (product_id=25)
+INSERT INTO product_images (image_url, alt_text, is_thumbnail, display_order, product_id, variant_id, created_at) VALUES
+('https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=800', 'Váy xòe dự tiệc', true, 1, 25, NULL, CURRENT_TIMESTAMP);
+
+-- Chân Váy Jean (product_id=26)
+INSERT INTO product_images (image_url, alt_text, is_thumbnail, display_order, product_id, variant_id, created_at) VALUES
+('https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?w=800', 'Chân váy jean xẻ tà', true, 1, 26, NULL, CURRENT_TIMESTAMP);
+
+-- Đầm Suông (product_id=28)
+INSERT INTO product_images (image_url, alt_text, is_thumbnail, display_order, product_id, variant_id, created_at) VALUES
+('https://images.unsplash.com/photo-1566174053879-31528523f8ae?w=800', 'Đầm suông công sở', true, 1, 28, NULL, CURRENT_TIMESTAMP);
+
+-- Đầm Dự Tiệc (product_id=29)
+INSERT INTO product_images (image_url, alt_text, is_thumbnail, display_order, product_id, variant_id, created_at) VALUES
+('https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=800', 'Đầm dự tiệc sang trọng', true, 1, 29, NULL, CURRENT_TIMESTAMP);
 
 -- ============================================
 -- CARTS & ADDRESSES - Giỏ hàng & Địa chỉ mẫu
@@ -505,12 +749,9 @@ INSERT INTO order_items (order_id, variant_id, quantity, price, total_price, cre
 ((SELECT id FROM orders WHERE order_code = 'GLA20250118003'), (SELECT id FROM product_variants WHERE sku = 'JEAN-DEN-30'), 1, 449000, 449000, CURRENT_TIMESTAMP - INTERVAL '1 day');
 
 -- ============================================
--- PAYMENTS - Thanh toán
+-- PAYMENTS - Thanh toán (Không insert sẵn, để hệ thống tự tạo khi đặt hàng)
 -- ============================================
-INSERT INTO payments (order_id, payment_method_id, amount, status, transaction_id, payment_date, created_at) VALUES
-((SELECT id FROM orders WHERE order_code = 'GLA20250101001'), (SELECT id FROM payment_methods WHERE name = 'VNPay'), 574950, 'SUCCESS', 'VNPAY20250101ABC123', CURRENT_TIMESTAMP - INTERVAL '10 days', CURRENT_TIMESTAMP - INTERVAL '10 days'),
-((SELECT id FROM orders WHERE order_code = 'GLA20250115002'), (SELECT id FROM payment_methods WHERE name = 'COD - Thanh toán khi nhận hàng'), 579000, 'PENDING', NULL, NULL, CURRENT_TIMESTAMP - INTERVAL '2 days'),
-((SELECT id FROM orders WHERE order_code = 'GLA20250118003'), (SELECT id FROM payment_methods WHERE name = 'VNPay'), 424000, 'SUCCESS', 'VNPAY20250118XYZ789', CURRENT_TIMESTAMP - INTERVAL '1 day', CURRENT_TIMESTAMP - INTERVAL '1 day');
+
 
 -- ============================================
 -- PRODUCT REVIEWS - Đánh giá sản phẩm
