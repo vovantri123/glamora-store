@@ -60,8 +60,14 @@ public enum SuccessMessage {
   UPDATE_ORDER_SUCCESS("Update order successfully"),
   DELETE_ORDER_SUCCESS("Delete order successfully"),
   CANCEL_ORDER_SUCCESS("Cancel order successfully"),
-  GET_ORDER_SUCCESS("Get order successfully"), 
+  GET_ORDER_SUCCESS("Get order successfully"),
   SEARCH_ORDER_SUCCESS("Search orders successfully"),
+  // Product Review messages
+  CREATE_REVIEW_SUCCESS("Create review successfully"),
+  UPDATE_REVIEW_SUCCESS("Update review successfully"),
+  DELETE_REVIEW_SUCCESS("Delete review successfully"),
+  GET_REVIEW_SUCCESS("Get review successfully"),
+  GET_ALL_REVIEW_SUCCESS("Get all reviews successfully"),
   // Generic messages
   OPERATION_SUCCESSFUL("Operation successful"),
   CREATED_SUCCESSFULLY("Created successfully"),

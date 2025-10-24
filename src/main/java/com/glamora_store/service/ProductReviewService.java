@@ -1,0 +1,33 @@
+package com.glamora_store.service;
+
+import com.glamora_store.dto.request.user.review.CreateReviewRequest;
+import com.glamora_store.dto.request.user.review.UpdateReviewRequest;
+import com.glamora_store.dto.response.common.PageResponse;
+import com.glamora_store.dto.response.common.review.ProductRatingStatsResponse;
+import com.glamora_store.dto.response.common.review.ProductReviewResponse;
+import org.springframework.data.domain.Pageable;
+
+public interface ProductReviewService {
+
+  // User endpoints
+  ProductReviewResponse createReview(CreateReviewRequest request);
+
+  ProductReviewResponse updateMyReview(Long reviewId, UpdateReviewRequest request);
+
+  void deleteMyReview(Long reviewId);
+
+  ProductReviewResponse getReviewById(Long reviewId);
+
+  PageResponse<ProductReviewResponse> getMyReviews(Pageable pageable);
+
+  // Common endpoints
+  PageResponse<ProductReviewResponse> getReviewsByProductId(Long productId, Integer rating,
+                                                            Boolean isVerifiedPurchase, Pageable pageable);
+
+  ProductRatingStatsResponse getProductRatingStats(Long productId);
+
+  // Admin endpoints
+  void deleteReview(Long reviewId);
+
+  PageResponse<ProductReviewResponse> getAllReviews(Pageable pageable);
+}

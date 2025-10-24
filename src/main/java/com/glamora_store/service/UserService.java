@@ -6,9 +6,9 @@ import com.glamora_store.dto.request.admin.iam.UserUpdateRequest;
 import com.glamora_store.dto.request.common.iam.PasswordUpdateRequest;
 import com.glamora_store.dto.request.user.iam.UserProfileUpdateRequest;
 import com.glamora_store.dto.response.admin.iam.UserResponse;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import com.glamora_store.dto.response.common.PageResponse;
 import com.glamora_store.dto.response.user.iam.UserProfileResponse;
+import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
 
@@ -29,8 +29,8 @@ public interface UserService {
 
   UserResponse activeUser(Long userid);
 
-  Page<UserResponse> searchUsers(
-      String fullname, LocalDate dob, boolean includeDeleted, Pageable pageable);
+  PageResponse<UserResponse> searchUsers(
+    String fullname, LocalDate dob, boolean includeDeleted, Pageable pageable);
 
   UserResponse updateRolesForUser(Long userId, UserRoleUpdateRequest request);
 

@@ -126,6 +126,16 @@ public enum ErrorMessage {
   ORDER_CANCEL_REASON_REQUIRED("Cancel reason is required"),
   ORDER_CANCEL_REASON_INVALID("Cancel reason must be between 10 and 500 characters"),
   ORDER_STATUS_REQUIRED("Order status is required"),
+
+  REVIEW_NOT_FOUND("Review not found"),
+  REVIEW_ALREADY_EXISTS("You have already reviewed this product"),
+  REVIEW_ACCESS_DENIED("You do not have permission to access this review"),
+  REVIEW_RATING_REQUIRED("Rating is required"),
+  REVIEW_RATING_INVALID("Rating must be between 1 and 5"),
+  REVIEW_COMMENT_TOO_LONG("Comment must not exceed 2000 characters"),
+  REVIEW_CANNOT_REVIEW_OWN_PRODUCT("You cannot review your own product"),
+  REVIEW_PRODUCT_ID_REQUIRED("Product ID is required"),
+  REVIEW_VARIANT_ID_REQUIRED("Variant ID is required"),
   // Message in dto - End
   ;
 

@@ -4,8 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-import java.time.LocalDateTime;
-
 @Getter
 @Setter
 @NoArgsConstructor
@@ -44,13 +42,6 @@ public class ProductReview extends AuditableEntity {
 
   @Column(columnDefinition = "TEXT")
   private String comment;
-  // @ElementCollection
-  // @CollectionTable(name = "review_images", joinColumns = @JoinColumn(name =
-  // "review_id"))
-  // @Column(name = "image_url", columnDefinition = "TEXT")
-  // @Builder.Default
-  // private List<String> imageUrls = new ArrayList<>(); // Ảnh đính kèm trong
-  // review (sẽ làm sau)
 
   @Column(name = "is_verified_purchase")
   @Builder.Default
