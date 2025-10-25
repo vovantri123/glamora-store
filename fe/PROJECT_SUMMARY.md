@@ -3,8 +3,9 @@
 ## 🎉 Đã cài đặt thành công!
 
 ### ✨ Stack công nghệ
+
 - ✅ **Next.js 16** (App Router)
-- ✅ **React 19.2** 
+- ✅ **React 19.2**
 - ✅ **TypeScript 5**
 - ✅ **Tailwind CSS v4** (PostCSS)
 - ✅ **ESLint 9** (Next.js config)
@@ -49,37 +50,42 @@ fe/
 
 ## 🚀 Commands
 
-| Command | Mô tả |
-|---------|-------|
-| `npm run dev` | 🔥 Start dev server (http://localhost:3000) |
-| `npm run build` | 📦 Build production |
-| `npm start` | ▶️ Start production server |
-| `npm run lint` | 🔍 Check linting |
-| `npm run lint:fix` | 🔧 Fix linting issues |
-| `npm run format` | ✨ Format all code |
-| `npm run format:check` | 👀 Check formatting |
+| Command                | Mô tả                                       |
+| ---------------------- | ------------------------------------------- |
+| `npm run dev`          | 🔥 Start dev server (http://localhost:3000) |
+| `npm run build`        | 📦 Build production                         |
+| `npm start`            | ▶️ Start production server                  |
+| `npm run lint`         | 🔍 Check linting                            |
+| `npm run lint:fix`     | 🔧 Fix linting issues                       |
+| `npm run format`       | ✨ Format all code                          |
+| `npm run format:check` | 👀 Check formatting                         |
 
 ## 🎯 Features
 
 ### ✅ Auto-formatting on Commit
+
 Mỗi khi commit, code sẽ tự động được:
+
 - ✨ Format với Prettier
 - 🔧 Fix với ESLint
 - 📐 Sort Tailwind classes
 - ⚡ Chỉ xử lý staged files (nhanh!)
 
 ### ✅ VSCode Integration
+
 - 💾 Format on save
 - 🔧 ESLint auto-fix on save
 - 🎨 Tailwind IntelliSense
 - 📦 Extension recommendations
 
 ### ✅ Type Safety
+
 - 🔒 TypeScript strict mode
 - 📝 Full type definitions
 - 🎯 Path alias: `@/*` → `src/*`
 
 ### ✅ Best Practices
+
 - 📁 Organized folder structure
 - 🎨 Design system ready (Button component)
 - 🌐 API utilities với error handling
@@ -90,6 +96,7 @@ Mỗi khi commit, code sẽ tự động được:
 ## 📚 Files đã tạo
 
 ### Configuration Files
+
 - ✅ `.prettierrc` - Prettier config
 - ✅ `.prettierignore` - Ignore patterns
 - ✅ `.editorconfig` - Editor consistency
@@ -100,20 +107,24 @@ Mỗi khi commit, code sẽ tự động được:
 - ✅ `tsconfig.json` - TypeScript config
 
 ### VSCode Setup
+
 - ✅ `.vscode/settings.json` - Format on save
 - ✅ `.vscode/extensions.json` - Recommended extensions
 
 ### Git Hooks
+
 - ✅ `.husky/pre-commit` - Auto-format hook
 - ✅ `package.json` - lint-staged config
 
 ### Documentation
+
 - ✅ `README.md` - Project overview
 - ✅ `SETUP_GUIDE.md` - Detailed setup guide
 - ✅ `COMMIT_CONVENTION.md` - Commit guidelines
 - ✅ `PROJECT_SUMMARY.md` - This file!
 
 ### Example Code
+
 - ✅ `src/components/Button.tsx` - Reusable button
 - ✅ `src/lib/api.ts` - API utilities
 - ✅ `src/lib/constants.ts` - App constants
@@ -175,6 +186,7 @@ const products = await getProducts();
 Bây giờ bạn có thể:
 
 1. **Start Development**
+
    ```bash
    npm run dev
    ```
@@ -201,30 +213,35 @@ Bây giờ bạn có thể:
 ## 🏆 Best Practices Implemented
 
 ✅ **Code Quality**
+
 - ESLint + Prettier integration
 - TypeScript strict mode
 - Auto-formatting on commit
 - Pre-commit hooks
 
 ✅ **Developer Experience**
+
 - VSCode settings
 - Extension recommendations
 - Path aliases (`@/*`)
 - Fast Refresh
 
 ✅ **Project Structure**
+
 - Components folder
 - Lib utilities
 - Constants management
 - API layer
 
 ✅ **Documentation**
+
 - Comprehensive README
 - Setup guide
 - Commit convention
 - Code comments
 
 ✅ **Performance**
+
 - Next.js optimizations
 - Image optimization
 - Font optimization (Geist)
@@ -235,6 +252,7 @@ Bây giờ bạn có thể:
 ## 🎉 Kết luận
 
 Setup hoàn tất! Project đã sẵn sàng cho development với:
+
 - ⚡ Next.js 16 (latest)
 - 🎨 Tailwind CSS v4
 - 📝 TypeScript
@@ -245,4 +263,4 @@ Setup hoàn tất! Project đã sẵn sàng cho development với:
 
 ---
 
-*Generated on: ${new Date().toLocaleString('vi-VN')}*
+_Generated on: ${new Date().toLocaleString('vi-VN')}_
