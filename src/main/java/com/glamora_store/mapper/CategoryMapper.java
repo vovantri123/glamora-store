@@ -1,5 +1,8 @@
 package com.glamora_store.mapper;
 
+import com.glamora_store.dto.request.admin.category.CategoryCreateRequest;
+import com.glamora_store.dto.request.admin.category.CategoryUpdateRequest;
+import com.glamora_store.dto.response.admin.category.CategoryAdminResponse;
 import com.glamora_store.dto.response.common.category.CategoryResponse;
 import com.glamora_store.entity.Category;
 import org.mapstruct.*;
@@ -22,4 +25,33 @@ public interface CategoryMapper {
             response.setChildren(toCategoryResponseList(category.getChildren().stream().toList()));
         }
     }
+
+    // Admin mappings
+    @Mapping(target = "parentId", source = "parent.id")
+    @Mapping(target = "parentName", source = "parent.name")
+    CategoryAdminResponse toCategoryAdminResponse(Category category);
+
+    List<CategoryAdminResponse> toCategoryAdminResponseList(List<Category> categories);
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "isDeleted", ignore = true)
+    @Mapping(target = "parent", ignore = true)
+    @Mapping(target = "children", ignore = true)
+    @Mapping(target = "products", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "createdBy", ignore = true)
+    @Mapping(target = "updatedBy", ignore = true)
+    Category toCategory(CategoryCreateRequest request);
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "isDeleted", ignore = true)
+    @Mapping(target = "parent", ignore = true)
+    @Mapping(target = "children", ignore = true)
+    @Mapping(target = "products", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "createdBy", ignore = true)
+    @Mapping(target = "updatedBy", ignore = true)
+    void updateCategoryFromRequest(CategoryUpdateRequest request, @MappingTarget Category category);
 }

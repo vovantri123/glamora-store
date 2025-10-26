@@ -20,10 +20,21 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
   Page<Product> findByCategoryIdAndIsDeletedFalse(Long categoryId, Pageable pageable);
 
   @Query(value = "SELECT * FROM products p WHERE p.is_deleted = false " +
-    "AND (:categoryId IS NULL OR p.category_id = :categoryId) " +
-    "AND (:keyword IS NULL OR LOWER(p.name) LIKE LOWER(CONCAT('%', :keyword, '%')))",
-    nativeQuery = true)
+      "AND (:categoryId IS NULL OR p.category_id = :categoryId) " +
+      "AND (:keyword IS NULL OR LOWER(p.name) LIKE LOWER(CONCAT('%', :keyword, '%')))", nativeQuery = true)
   Page<Product> searchProducts(@Param("categoryId") Long categoryId,
-                               @Param("keyword") String keyword,
-                               Pageable pageable);
+      @Param("keyword") String keyword,
+      Pageable pageable);
+
+  // Admin queries
+  @Query("SELECT p FROM Product p WHERE " +
+      "(:categoryId IS NULL OR p.category.id = :categoryId) " +
+      "AND (:keyword IS NULL OR LOWER(p.name) LIKE LOWER(CONCAT('%', :keyword, '%'))) " +
+      "AND (:includeDeleted = true OR p.isDeleted = false)")
+  Page<Product> searchProductsForAdmin(@Param("categoryId") Long categoryId,
+      @Param("keyword") String keyword,
+      @Param("includeDeleted") Boolean includeDeleted,
+      Pageable pageable);
+
+  boolean existsByName(String name);
 }

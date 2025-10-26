@@ -36,6 +36,23 @@ public enum ErrorMessage {
   CATEGORY_NOT_FOUND("Category not found"),
   PRODUCT_NOT_FOUND("Product not found"),
 
+  // Category validation messages
+  CATEGORY_NAME_REQUIRED("Category name is required"),
+  CATEGORY_NAME_TOO_LONG("Category name must not exceed 255 characters"),
+  CATEGORY_DESCRIPTION_TOO_LONG("Category description must not exceed 1000 characters"),
+  CATEGORY_IMAGE_URL_INVALID("Category image URL is invalid"),
+  CATEGORY_NAME_ALREADY_EXISTS("Category name already exists"),
+  CATEGORY_CANNOT_BE_OWN_PARENT("Category cannot be its own parent"),
+  CATEGORY_CANNOT_DELETE_WITH_PRODUCTS(
+      "Cannot delete category with products. Please reassign or delete products first."),
+
+  // Product validation messages
+  PRODUCT_NAME_REQUIRED("Product name is required"),
+  PRODUCT_NAME_TOO_LONG("Product name must not exceed 255 characters"),
+  PRODUCT_DESCRIPTION_TOO_LONG("Product description must not exceed 5000 characters"),
+  PRODUCT_CATEGORY_ID_REQUIRED("Category ID is required"),
+  PRODUCT_NAME_ALREADY_EXISTS("Product name already exists"),
+
   CART_NOT_FOUND("Cart not found"),
   CART_ITEM_NOT_FOUND("Cart item not found"),
   PRODUCT_VARIANT_NOT_FOUND("Product variant not found"),

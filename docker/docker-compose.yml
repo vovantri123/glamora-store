@@ -1,0 +1,19 @@
+services:
+  elasticsearch:
+    container_name: elasticsearch
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.15.3
+    environment:
+      - discovery.type=single-node # chạy chế độ 1 node
+      - xpack.security.enabled=false # tắt bảo mật cho dev (khỏi cần token)
+      - ES_JAVA_OPTS=-Xms1g -Xmx1g # giới hạn RAM 1GB
+    ports:
+      - '9200:9200'
+    volumes:
+      - ./data/es_data:/usr/share/elasticsearch/data
+    networks:
+      - glamora-network
+
+networks:
+  glamora-network:
+    name: glamora-network
+    driver: bridge

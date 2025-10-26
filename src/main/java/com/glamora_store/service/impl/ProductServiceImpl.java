@@ -1,10 +1,16 @@
 package com.glamora_store.service.impl;
 
+import com.glamora_store.dto.request.admin.product.ProductCreateRequest;
+import com.glamora_store.dto.request.admin.product.ProductUpdateRequest;
+import com.glamora_store.dto.response.admin.iam.UserResponse;
+import com.glamora_store.dto.response.admin.product.ProductAdminResponse;
 import com.glamora_store.dto.response.common.PageResponse;
 import com.glamora_store.dto.response.common.product.ProductResponse;
+import com.glamora_store.entity.Category;
 import com.glamora_store.entity.Product;
 import com.glamora_store.enums.ErrorMessage;
 import com.glamora_store.mapper.ProductMapper;
+import com.glamora_store.repository.CategoryRepository;
 import com.glamora_store.repository.ProductRepository;
 import com.glamora_store.service.ProductService;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +29,7 @@ public class ProductServiceImpl implements ProductService {
 
   private final ProductRepository productRepository;
   private final ProductMapper productMapper;
+  private final CategoryRepository categoryRepository;
 
   @Override
   @Transactional(readOnly = true)
@@ -45,14 +52,108 @@ public class ProductServiceImpl implements ProductService {
 
     Page<Product> productPage = productRepository.searchProducts(categoryId, keyword, pageable);
 
-    return PageResponse.<ProductResponse>builder()
-        .content(productMapper.toProductResponseList(productPage.getContent()))
-        .pageNumber(productPage.getNumber())
-        .pageSize(productPage.getSize())
-        .numberOfElements(productPage.getNumberOfElements())
-        .totalElements(productPage.getTotalElements())
-        .totalPages(productPage.getTotalPages())
-        .last(productPage.isLast())
-        .build();
+    return PageResponse.from(productPage.map(productMapper::toProductResponse));
+  }
+
+  // Admin methods implementation
+  @Override
+  @Transactional
+  public ProductAdminResponse createProduct(ProductCreateRequest request) {
+    // Check if product name already exists
+    if (productRepository.existsByName(request.getName())) {
+      throw new ResponseStatusException(
+          HttpStatus.BAD_REQUEST,
+          ErrorMessage.PRODUCT_NAME_ALREADY_EXISTS.getMessage());
+    }
+
+    // Verify category exists
+    Category category = categoryRepository.findByIdAndIsDeletedFalse(request.getCategoryId())
+        .orElseThrow(() -> new ResponseStatusException(
+            HttpStatus.NOT_FOUND,
+            ErrorMessage.CATEGORY_NOT_FOUND.getMessage()));
+
+    Product product = productMapper.toProduct(request);
+    product.setCategory(category);
+    product.setIsDeleted(false);
+
+    Product savedProduct = productRepository.save(product);
+    return productMapper.toProductAdminResponse(savedProduct);
+  }
+
+  @Override
+  @Transactional
+  public ProductAdminResponse updateProduct(Long id, ProductUpdateRequest request) {
+    Product product = productRepository.findById(id)
+        .orElseThrow(() -> new ResponseStatusException(
+            HttpStatus.NOT_FOUND,
+            ErrorMessage.PRODUCT_NOT_FOUND.getMessage()));
+
+    // Check if new name already exists (excluding current product)
+    if (request.getName() != null && !request.getName().equals(product.getName())) {
+      if (productRepository.existsByName(request.getName())) {
+        throw new ResponseStatusException(
+            HttpStatus.BAD_REQUEST,
+            ErrorMessage.PRODUCT_NAME_ALREADY_EXISTS.getMessage());
+      }
+    }
+
+    productMapper.updateProductFromRequest(request, product);
+
+    // Update category if categoryId is provided
+    if (request.getCategoryId() != null) {
+      Category category = categoryRepository.findByIdAndIsDeletedFalse(request.getCategoryId())
+          .orElseThrow(() -> new ResponseStatusException(
+              HttpStatus.NOT_FOUND,
+              ErrorMessage.CATEGORY_NOT_FOUND.getMessage()));
+      product.setCategory(category);
+    }
+
+    Product updatedProduct = productRepository.save(product);
+    return productMapper.toProductAdminResponse(updatedProduct);
+  }
+
+  @Override
+  @Transactional
+  public void deleteProduct(Long id) {
+    Product product = productRepository.findById(id)
+        .orElseThrow(() -> new ResponseStatusException(
+            HttpStatus.NOT_FOUND,
+            ErrorMessage.PRODUCT_NOT_FOUND.getMessage()));
+
+    // Soft delete
+    product.setIsDeleted(true);
+    productRepository.save(product);
+  }
+
+  @Override
+  @Transactional
+  public ProductAdminResponse activateProduct(Long id) {
+    Product product = productRepository.findById(id)
+        .orElseThrow(() -> new ResponseStatusException(
+            HttpStatus.NOT_FOUND,
+            ErrorMessage.PRODUCT_NOT_FOUND.getMessage()));
+
+    product.setIsDeleted(false);
+    Product activatedProduct = productRepository.save(product);
+    return productMapper.toProductAdminResponse(activatedProduct);
+  }
+
+  @Override
+  @Transactional(readOnly = true)
+  public PageResponse<ProductAdminResponse> searchProductsForAdmin(Long categoryId, String keyword,
+      Boolean includeDeleted, Pageable pageable) {
+    Page<Product> productPage = productRepository.searchProductsForAdmin(categoryId, keyword, includeDeleted, pageable);
+
+    return PageResponse.from(productPage.map(productMapper::toProductAdminResponse));
+  }
+
+  @Override
+  @Transactional(readOnly = true)
+  public ProductAdminResponse getProductByIdForAdmin(Long id) {
+    Product product = productRepository.findById(id)
+        .orElseThrow(() -> new ResponseStatusException(
+            HttpStatus.NOT_FOUND,
+            ErrorMessage.PRODUCT_NOT_FOUND.getMessage()));
+    return productMapper.toProductAdminResponse(product);
   }
 }

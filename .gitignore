@@ -37,3 +37,6 @@ build/
 # Environment & Secrets
 .env
 .env.*z
+
+# Ignore Elasticsearch data
+docker/data/
