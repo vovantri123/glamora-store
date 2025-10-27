@@ -13,3 +13,12 @@ CREATE TABLE product_variants (
     product_id BIGINT NOT NULL,
     FOREIGN KEY (product_id) REFERENCES products(id)
 );
+
+-- Create sequence for SKU auto-generation
+-- Format: GLM-{5-digit} (e.g., GLM-00001, GLM-00002, GLM-99999, GLM-100000)
+-- GLM = GLaMora brand identifier
+CREATE SEQUENCE sku_sequence
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO CYCLE;

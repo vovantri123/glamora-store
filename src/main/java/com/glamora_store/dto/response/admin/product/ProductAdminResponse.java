@@ -13,23 +13,23 @@ import java.time.LocalDateTime;
 @Builder
 public class ProductAdminResponse {
 
-    private Long id;
+  private Long id;
 
-    private String name;
+  private String name;
 
-    private String description;
+  private String description;
 
-    private Long categoryId;
+  private Long categoryId;
 
-    private String categoryName;
+  private String categoryName;
 
-    private Boolean isDeleted;
+  private Boolean isDeleted;
 
-    private LocalDateTime createdAt;
+  private LocalDateTime createdAt;
 
-    private LocalDateTime updatedAt;
+  private LocalDateTime updatedAt;
 
-    private String createdBy;
+  private String createdBy;
 
-    private String updatedBy;
+  private String updatedBy;
 }

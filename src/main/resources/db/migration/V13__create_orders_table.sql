@@ -25,6 +25,7 @@ CREATE TABLE orders (
 
 -- Create sequence for daily order numbering
 -- This sequence resets daily and is used to generate sequential order codes
+-- Format: ORD-YYYYMMDD-XXXX (e.g., ORD-20251023-0001)
 CREATE SEQUENCE order_daily_sequence
     START WITH 1
     INCREMENT BY 1

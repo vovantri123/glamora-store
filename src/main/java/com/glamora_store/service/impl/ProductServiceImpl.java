@@ -2,7 +2,6 @@ package com.glamora_store.service.impl;
 
 import com.glamora_store.dto.request.admin.product.ProductCreateRequest;
 import com.glamora_store.dto.request.admin.product.ProductUpdateRequest;
-import com.glamora_store.dto.response.admin.iam.UserResponse;
 import com.glamora_store.dto.response.admin.product.ProductAdminResponse;
 import com.glamora_store.dto.response.common.PageResponse;
 import com.glamora_store.dto.response.common.product.ProductResponse;

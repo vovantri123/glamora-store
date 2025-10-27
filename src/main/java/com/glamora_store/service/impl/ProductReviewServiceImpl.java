@@ -1,7 +1,9 @@
 package com.glamora_store.service.impl;
 
+import com.glamora_store.dto.request.admin.product_preview.ProductReviewUpdateRequest;
 import com.glamora_store.dto.request.user.review.CreateReviewRequest;
 import com.glamora_store.dto.request.user.review.UpdateReviewRequest;
+import com.glamora_store.dto.response.admin.product_review.ProductReviewAdminResponse;
 import com.glamora_store.dto.response.common.PageResponse;
 import com.glamora_store.dto.response.common.review.ProductRatingStatsResponse;
 import com.glamora_store.dto.response.common.review.ProductReviewResponse;
@@ -33,21 +35,20 @@ public class ProductReviewServiceImpl implements ProductReviewService {
   private final UserRepository userRepository;
   private final ProductReviewMapper reviewMapper;
 
-
   @Override
   @Transactional
   public ProductReviewResponse createReview(CreateReviewRequest request) {
     Long userId = SecurityUtil.getCurrentUserId();
     User currentUser = userRepository.findById(userId)
-      .orElseThrow(
-        () -> new ResponseStatusException(HttpStatus.UNAUTHORIZED,
-          ErrorMessage.USER_NOT_FOUND.getMessage()));
+        .orElseThrow(
+            () -> new ResponseStatusException(HttpStatus.UNAUTHORIZED,
+                ErrorMessage.USER_NOT_FOUND.getMessage()));
 
     // Validate product exists
     Product product = productRepository.findById(request.getProductId())
-      .orElseThrow(
-        () -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-          ErrorMessage.PRODUCT_NOT_FOUND.getMessage()));
+        .orElseThrow(
+            () -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                ErrorMessage.PRODUCT_NOT_FOUND.getMessage()));
 
     // Check if user already reviewed this product
     if (reviewRepository.existsByUserIdAndProductIdAndIsDeletedFalse(userId, request.getProductId())) {
@@ -62,17 +63,17 @@ public class ProductReviewServiceImpl implements ProductReviewService {
     // Set variant if provided
     if (request.getVariantId() != null) {
       ProductVariant variant = productVariantRepository.findById(request.getVariantId())
-        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-          ErrorMessage.PRODUCT_VARIANT_NOT_FOUND.getMessage()));
+          .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+              ErrorMessage.PRODUCT_VARIANT_NOT_FOUND.getMessage()));
       review.setVariant(variant);
     }
 
     // Set order and verify purchase if provided
     if (request.getOrderId() != null) {
       Order order = orderRepository.findById(request.getOrderId())
-        .orElseThrow(
-          () -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-            ErrorMessage.ORDER_NOT_FOUND.getMessage()));
+          .orElseThrow(
+              () -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                  ErrorMessage.ORDER_NOT_FOUND.getMessage()));
 
       // Check if order belongs to user and is completed
       if (!order.getUser().getId().equals(userId)) {
@@ -97,9 +98,9 @@ public class ProductReviewServiceImpl implements ProductReviewService {
     Long userId = SecurityUtil.getCurrentUserId();
 
     ProductReview review = reviewRepository.findByIdAndIsDeletedFalse(reviewId)
-      .orElseThrow(
-        () -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-          ErrorMessage.REVIEW_NOT_FOUND.getMessage()));
+        .orElseThrow(
+            () -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                ErrorMessage.REVIEW_NOT_FOUND.getMessage()));
 
     // Check if review belongs to current user
     if (!review.getUser().getId().equals(userId)) {
@@ -117,9 +118,9 @@ public class ProductReviewServiceImpl implements ProductReviewService {
     Long userId = SecurityUtil.getCurrentUserId();
 
     ProductReview review = reviewRepository.findByIdAndIsDeletedFalse(reviewId)
-      .orElseThrow(
-        () -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-          ErrorMessage.REVIEW_NOT_FOUND.getMessage()));
+        .orElseThrow(
+            () -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                ErrorMessage.REVIEW_NOT_FOUND.getMessage()));
 
     // Check if review belongs to current user
     if (!review.getUser().getId().equals(userId)) {
@@ -134,9 +135,9 @@ public class ProductReviewServiceImpl implements ProductReviewService {
   @Transactional(readOnly = true)
   public ProductReviewResponse getReviewById(Long reviewId) {
     ProductReview review = reviewRepository.findByIdAndIsDeletedFalse(reviewId)
-      .orElseThrow(
-        () -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-          ErrorMessage.REVIEW_NOT_FOUND.getMessage()));
+        .orElseThrow(
+            () -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                ErrorMessage.REVIEW_NOT_FOUND.getMessage()));
 
     return reviewMapper.toProductReviewResponse(review);
   }
@@ -147,7 +148,7 @@ public class ProductReviewServiceImpl implements ProductReviewService {
     Long userId = SecurityUtil.getCurrentUserId();
 
     Specification<ProductReview> spec = ProductReviewSpecification.isNotDeleted()
-      .and(ProductReviewSpecification.hasUserId(userId));
+        .and(ProductReviewSpecification.hasUserId(userId));
 
     Page<ProductReview> reviewPage = reviewRepository.findAll(spec, pageable);
     Page<ProductReviewResponse> responsePage = reviewPage.map(reviewMapper::toProductReviewResponse);
@@ -158,16 +159,16 @@ public class ProductReviewServiceImpl implements ProductReviewService {
   @Override
   @Transactional(readOnly = true)
   public PageResponse<ProductReviewResponse> getReviewsByProductId(Long productId, Integer rating,
-                                                                   Boolean isVerifiedPurchase, Pageable pageable) {
+      Boolean isVerifiedPurchase, Pageable pageable) {
     // Validate product exists
     if (!productRepository.existsById(productId)) {
       throw new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessage.PRODUCT_NOT_FOUND.getMessage());
     }
 
     Specification<ProductReview> spec = ProductReviewSpecification.isNotDeleted()
-      .and(ProductReviewSpecification.hasProductId(productId))
-      .and(ProductReviewSpecification.hasRating(rating))
-      .and(ProductReviewSpecification.isVerifiedPurchase(isVerifiedPurchase));
+        .and(ProductReviewSpecification.hasProductId(productId))
+        .and(ProductReviewSpecification.hasRating(rating))
+        .and(ProductReviewSpecification.isVerifiedPurchase(isVerifiedPurchase));
 
     Page<ProductReview> reviewPage = reviewRepository.findAll(spec, pageable);
     Page<ProductReviewResponse> responsePage = reviewPage.map(reviewMapper::toProductReviewResponse);
@@ -187,7 +188,7 @@ public class ProductReviewServiceImpl implements ProductReviewService {
     Long totalReviews = reviewRepository.countByProductIdAndIsDeletedFalse(productId);
 
     Specification<ProductReview> baseSpec = ProductReviewSpecification.isNotDeleted()
-      .and(ProductReviewSpecification.hasProductId(productId));
+        .and(ProductReviewSpecification.hasProductId(productId));
 
     // Count reviews by rating
     Long fiveStarCount = reviewRepository.count(baseSpec.and(ProductReviewSpecification.hasRating(5)));
@@ -197,16 +198,16 @@ public class ProductReviewServiceImpl implements ProductReviewService {
     Long oneStarCount = reviewRepository.count(baseSpec.and(ProductReviewSpecification.hasRating(1)));
 
     return reviewMapper.toProductRatingStatsResponse(productId, averageRating,
-      totalReviews, fiveStarCount, fourStarCount, threeStarCount, twoStarCount, oneStarCount);
+        totalReviews, fiveStarCount, fourStarCount, threeStarCount, twoStarCount, oneStarCount);
   }
 
   @Override
   @Transactional
   public void deleteReview(Long reviewId) {
     ProductReview review = reviewRepository.findByIdAndIsDeletedFalse(reviewId)
-      .orElseThrow(
-        () -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-          ErrorMessage.REVIEW_NOT_FOUND.getMessage()));
+        .orElseThrow(
+            () -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                ErrorMessage.REVIEW_NOT_FOUND.getMessage()));
 
     review.setIsDeleted(true);
     reviewRepository.save(review);
@@ -219,5 +220,55 @@ public class ProductReviewServiceImpl implements ProductReviewService {
     Page<ProductReviewResponse> responsePage = reviewPage.map(reviewMapper::toProductReviewResponse);
 
     return PageResponse.from(responsePage);
+  }
+
+  // Admin-specific methods
+  @Override
+  @Transactional
+  public ProductReviewAdminResponse updateProductReview(Long id, ProductReviewUpdateRequest request) {
+    ProductReview review = reviewRepository.findById(id)
+        .orElseThrow(
+            () -> new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessage.REVIEW_NOT_FOUND.getMessage()));
+
+    reviewMapper.updateProductReviewFromRequest(request, review);
+    ProductReview updatedReview = reviewRepository.save(review);
+    return reviewMapper.toProductReviewAdminResponse(updatedReview);
+  }
+
+  @Override
+  @Transactional
+  public ProductReviewAdminResponse activateProductReview(Long id) {
+    ProductReview review = reviewRepository.findById(id)
+        .orElseThrow(
+            () -> new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessage.REVIEW_NOT_FOUND.getMessage()));
+
+    review.setIsDeleted(false);
+    ProductReview activatedReview = reviewRepository.save(review);
+    return reviewMapper.toProductReviewAdminResponse(activatedReview);
+  }
+
+  @Override
+  public ProductReviewAdminResponse getProductReviewByIdForAdmin(Long id) {
+    ProductReview review = reviewRepository.findById(id)
+        .orElseThrow(
+            () -> new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessage.REVIEW_NOT_FOUND.getMessage()));
+    return reviewMapper.toProductReviewAdminResponse(review);
+  }
+
+  @Override
+  public PageResponse<ProductReviewAdminResponse> searchProductReviews(Long productId, Long userId, Integer rating,
+      Boolean includeDeleted, Pageable pageable) {
+    Specification<ProductReview> spec = Specification.allOf();
+
+    if (includeDeleted == null || !includeDeleted) {
+      spec = spec.and(ProductReviewSpecification.isNotDeleted());
+    }
+
+    spec = spec.and(ProductReviewSpecification.hasProductId(productId))
+        .and(ProductReviewSpecification.hasUserId(userId))
+        .and(ProductReviewSpecification.hasRating(rating));
+
+    Page<ProductReview> reviews = reviewRepository.findAll(spec, pageable);
+    return PageResponse.from(reviews.map(reviewMapper::toProductReviewAdminResponse));
   }
 }

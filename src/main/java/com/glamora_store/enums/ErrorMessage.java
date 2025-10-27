@@ -53,9 +53,25 @@ public enum ErrorMessage {
   PRODUCT_CATEGORY_ID_REQUIRED("Category ID is required"),
   PRODUCT_NAME_ALREADY_EXISTS("Product name already exists"),
 
+  // Product Image messages
+  PRODUCT_IMAGE_NOT_FOUND("Product image not found"),
+  PRODUCT_IMAGE_URL_REQUIRED("Image URL is required"),
+  PRODUCT_IMAGE_PRODUCT_ID_REQUIRED("Product ID is required"),
+
+  // Attribute messages
+  ATTRIBUTE_VALUE_NOT_FOUND("Attribute value not found"),
+
+  // Product Variant messages
+  PRODUCT_VARIANT_NOT_FOUND("Product variant not found"),
+  PRODUCT_VARIANT_SKU_REQUIRED("SKU is required"),
+  PRODUCT_VARIANT_SKU_EXISTS("SKU already exists"),
+  PRODUCT_VARIANT_PRICE_REQUIRED("Price is required"),
+  PRODUCT_VARIANT_PRICE_INVALID("Price must be greater than 0"),
+  PRODUCT_VARIANT_STOCK_INVALID("Stock must be greater than or equal to 0"),
+  PRODUCT_VARIANT_PRODUCT_ID_REQUIRED("Product ID is required for variant"),
+
   CART_NOT_FOUND("Cart not found"),
   CART_ITEM_NOT_FOUND("Cart item not found"),
-  PRODUCT_VARIANT_NOT_FOUND("Product variant not found"),
   INSUFFICIENT_STOCK("Insufficient stock available"),
 
   VOUCHER_NOT_FOUND("Voucher not found"),
