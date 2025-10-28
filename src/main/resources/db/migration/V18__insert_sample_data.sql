@@ -38,7 +38,7 @@ INSERT INTO role_permissions (role_name, permission_name) VALUES
 INSERT INTO users (email, full_name, password, gender, dob, is_deleted, created_at, avatar) VALUES
 ('admin@gmail.com', 'Nguyễn Văn Admin', '$2a$10$iNjWX4Qmk14lTn4L30KzouZnMJ/mecJwVIonOUHIhEItP0n77ylOe', 'MALE', '1990-01-15', false, CURRENT_TIMESTAMP, 'https://i.pravatar.cc/150?img=12'),
 ('manager@gmail.com', 'Trần Thị Mai', '$2a$10$iNjWX4Qmk14lTn4L30KzouZnMJ/mecJwVIonOUHIhEItP0n77ylOe', 'FEMALE', '1992-05-20', false, CURRENT_TIMESTAMP, 'https://i.pravatar.cc/150?img=47'),
-('vovantri@gmail.com', 'Võ Văn Trí', '$2a$10$iNjWX4Qmk14lTn4L30KzouZnMJ/mecJwVIonOUHIhEItP0n77ylOe', 'MALE', '2003-08-25', false, CURRENT_TIMESTAMP, 'https://i.pravatar.cc/150?img=33'),
+('vovantri204@gmail.com', 'Võ Văn Trí', '$2a$10$iNjWX4Qmk14lTn4L30KzouZnMJ/mecJwVIonOUHIhEItP0n77ylOe', 'MALE', '2003-08-25', false, CURRENT_TIMESTAMP, 'https://i.pravatar.cc/150?img=33'),
 ('lethihoa@gmail.com', 'Lê Thị Hoa', '$2a$10$iNjWX4Qmk14lTn4L30KzouZnMJ/mecJwVIonOUHIhEItP0n77ylOe', 'FEMALE', '1998-12-10', false, CURRENT_TIMESTAMP, 'https://i.pravatar.cc/150?img=45'),
 ('phamducan@gmail.com', 'Phạm Đức An', '$2a$10$iNjWX4Qmk14lTn4L30KzouZnMJ/mecJwVIonOUHIhEItP0n77ylOe', 'MALE', '1995-03-18', false, CURRENT_TIMESTAMP, 'https://i.pravatar.cc/150?img=15');
 
@@ -46,7 +46,7 @@ INSERT INTO users (email, full_name, password, gender, dob, is_deleted, created_
 INSERT INTO user_roles (user_id, role_name) VALUES
 ((SELECT id FROM users WHERE email = 'admin@gmail.com'), 'ADMIN'),
 ((SELECT id FROM users WHERE email = 'manager@gmail.com'), 'MANAGER'),
-((SELECT id FROM users WHERE email = 'vovantri@gmail.com'), 'USER'),
+((SELECT id FROM users WHERE email = 'vovantri204@gmail.com'), 'USER'),
 ((SELECT id FROM users WHERE email = 'lethihoa@gmail.com'), 'USER'),
 ((SELECT id FROM users WHERE email = 'phamducan@gmail.com'), 'USER');
 
@@ -678,14 +678,14 @@ INSERT INTO product_images (image_url, alt_text, is_thumbnail, display_order, pr
 
 -- Tạo giỏ hàng cho users
 INSERT INTO carts (user_id, created_at) VALUES
-((SELECT id FROM users WHERE email = 'vovantri@gmail.com'), CURRENT_TIMESTAMP),
+((SELECT id FROM users WHERE email = 'vovantri204@gmail.com'), CURRENT_TIMESTAMP),
 ((SELECT id FROM users WHERE email = 'lethihoa@gmail.com'), CURRENT_TIMESTAMP),
 ((SELECT id FROM users WHERE email = 'phamducan@gmail.com'), CURRENT_TIMESTAMP);
 
 -- Địa chỉ cho user Võ Văn Trí
 INSERT INTO addresses (user_id, receiver_name, receiver_phone, province, district, ward, street_detail, is_default, is_deleted, latitude, longitude, created_at) VALUES
-((SELECT id FROM users WHERE email = 'vovantri@gmail.com'), 'Võ Văn Trí', '0901234567', 'TP. Hồ Chí Minh', 'Quận 1', 'Phường Bến Nghé', '123 Nguyễn Huệ', true, false, 10.7769, 106.7009, CURRENT_TIMESTAMP),
-((SELECT id FROM users WHERE email = 'vovantri@gmail.com'), 'Võ Văn Trí', '0901234567', 'TP. Hồ Chí Minh', 'Quận Thủ Đức', 'Phường Linh Trung', '456 Đường Hoàng Diệu 2', false, false, 10.8709, 106.8006, CURRENT_TIMESTAMP);
+((SELECT id FROM users WHERE email = 'vovantri204@gmail.com'), 'Võ Văn Trí', '0901234567', 'TP. Hồ Chí Minh', 'Quận 1', 'Phường Bến Nghé', '123 Nguyễn Huệ', true, false, 10.7769, 106.7009, CURRENT_TIMESTAMP),
+((SELECT id FROM users WHERE email = 'vovantri204@gmail.com'), 'Võ Văn Trí', '0901234567', 'TP. Hồ Chí Minh', 'Quận Thủ Đức', 'Phường Linh Trung', '456 Đường Hoàng Diệu 2', false, false, 10.8709, 106.8006, CURRENT_TIMESTAMP);
 
 -- Địa chỉ cho user Lê Thị Hoa
 INSERT INTO addresses (user_id, receiver_name, receiver_phone, province, district, ward, street_detail, is_default, is_deleted, latitude, longitude, created_at) VALUES
@@ -697,9 +697,9 @@ INSERT INTO addresses (user_id, receiver_name, receiver_phone, province, distric
 
 -- Thêm items vào giỏ hàng (sử dụng SKU để tìm variant)
 INSERT INTO cart_items (cart_id, variant_id, quantity, created_at) VALUES
-((SELECT id FROM carts WHERE user_id = (SELECT id FROM users WHERE email = 'vovantri@gmail.com')),
+((SELECT id FROM carts WHERE user_id = (SELECT id FROM users WHERE email = 'vovantri204@gmail.com')),
  (SELECT id FROM product_variants WHERE sku = 'ATBC-DEN-M'), 2, CURRENT_TIMESTAMP),
-((SELECT id FROM carts WHERE user_id = (SELECT id FROM users WHERE email = 'vovantri@gmail.com')),
+((SELECT id FROM carts WHERE user_id = (SELECT id FROM users WHERE email = 'vovantri204@gmail.com')),
  (SELECT id FROM product_variants WHERE sku = 'JEAN-DEN-30'), 1, CURRENT_TIMESTAMP),
 ((SELECT id FROM carts WHERE user_id = (SELECT id FROM users WHERE email = 'lethihoa@gmail.com')),
  (SELECT id FROM product_variants WHERE sku = 'CROP-DEN-S'), 1, CURRENT_TIMESTAMP),
@@ -710,8 +710,8 @@ INSERT INTO cart_items (cart_id, variant_id, quantity, created_at) VALUES
 -- USER VOUCHERS - Gán voucher cho users
 -- ============================================
 INSERT INTO user_vouchers (user_id, voucher_id, is_deleted, created_at) VALUES
-((SELECT id FROM users WHERE email = 'vovantri@gmail.com'), (SELECT id FROM vouchers WHERE code = 'GLAMORA2025'), false, CURRENT_TIMESTAMP),
-((SELECT id FROM users WHERE email = 'vovantri@gmail.com'), (SELECT id FROM vouchers WHERE code = 'FREESHIP50K'), false, CURRENT_TIMESTAMP),
+((SELECT id FROM users WHERE email = 'vovantri204@gmail.com'), (SELECT id FROM vouchers WHERE code = 'GLAMORA2025'), false, CURRENT_TIMESTAMP),
+((SELECT id FROM users WHERE email = 'vovantri204@gmail.com'), (SELECT id FROM vouchers WHERE code = 'FREESHIP50K'), false, CURRENT_TIMESTAMP),
 ((SELECT id FROM users WHERE email = 'lethihoa@gmail.com'), (SELECT id FROM vouchers WHERE code = 'NEWMEMBER'), false, CURRENT_TIMESTAMP),
 ((SELECT id FROM users WHERE email = 'phamducan@gmail.com'), (SELECT id FROM vouchers WHERE code = 'GLAMORA2025'), false, CURRENT_TIMESTAMP);
 
@@ -720,8 +720,8 @@ INSERT INTO user_vouchers (user_id, voucher_id, is_deleted, created_at) VALUES
 -- ============================================
 INSERT INTO orders (order_code, user_id, address_id, shipping_method_id, voucher_id, status, subtotal, discount_amount, shipping_fee, total_amount, note, created_at) VALUES
 ('GLA20250101001',
- (SELECT id FROM users WHERE email = 'vovantri@gmail.com'),
- (SELECT id FROM addresses WHERE user_id = (SELECT id FROM users WHERE email = 'vovantri@gmail.com') AND is_default = true),
+ (SELECT id FROM users WHERE email = 'vovantri204@gmail.com'),
+ (SELECT id FROM addresses WHERE user_id = (SELECT id FROM users WHERE email = 'vovantri204@gmail.com') AND is_default = true),
  (SELECT id FROM shipping_methods WHERE code = 'GHTK'),
  (SELECT id FROM vouchers WHERE code = 'GLAMORA2025'),
  'COMPLETED', 647000, 97050, 25000, 574950, 'Giao hàng giờ hành chính', CURRENT_TIMESTAMP - INTERVAL '10 days'),
@@ -790,8 +790,8 @@ INSERT INTO payments (order_id, payment_method_id, amount, status, transaction_i
 -- Thêm 1 đơn PENDING với payment PENDING (COD)
 INSERT INTO orders (order_code, user_id, address_id, shipping_method_id, voucher_id, status, subtotal, discount_amount, shipping_fee, total_amount, note, created_at) VALUES
 ('GLA20250119004',
- (SELECT id FROM users WHERE email = 'vovantri@gmail.com'),
- (SELECT id FROM addresses WHERE user_id = (SELECT id FROM users WHERE email = 'vovantri@gmail.com') AND is_default = true),
+ (SELECT id FROM users WHERE email = 'vovantri204@gmail.com'),
+ (SELECT id FROM addresses WHERE user_id = (SELECT id FROM users WHERE email = 'vovantri204@gmail.com') AND is_default = true),
  (SELECT id FROM shipping_methods WHERE code = 'JT'),
  NULL,
  'PENDING', 199000, 0, 28000, 227000, 'Đơn hàng mới tạo, chưa thanh toán', CURRENT_TIMESTAMP - INTERVAL '2 hours');
@@ -829,6 +829,6 @@ INSERT INTO payments (order_id, payment_method_id, amount, status, transaction_i
 -- PRODUCT REVIEWS - Đánh giá sản phẩm
 -- ============================================
 INSERT INTO product_reviews (product_id, variant_id, user_id, order_id, rating, comment, is_verified_purchase, is_deleted, created_at) VALUES
-((SELECT product_id FROM product_variants WHERE sku = 'ATBC-DEN-M'), (SELECT id FROM product_variants WHERE sku = 'ATBC-DEN-M'), (SELECT id FROM users WHERE email = 'vovantri@gmail.com'), (SELECT id FROM orders WHERE order_code = 'GLA20250101001'), 5, 'Áo rất đẹp, chất lượng tốt, form dáng vừa vặn. Shop giao hàng nhanh!', true, false, CURRENT_TIMESTAMP - INTERVAL '9 days'),
+((SELECT product_id FROM product_variants WHERE sku = 'ATBC-DEN-M'), (SELECT id FROM product_variants WHERE sku = 'ATBC-DEN-M'), (SELECT id FROM users WHERE email = 'vovantri204@gmail.com'), (SELECT id FROM orders WHERE order_code = 'GLA20250101001'), 5, 'Áo rất đẹp, chất lượng tốt, form dáng vừa vặn. Shop giao hàng nhanh!', true, false, CURRENT_TIMESTAMP - INTERVAL '9 days'),
 ((SELECT product_id FROM product_variants WHERE sku = 'JEAN-DEN-30'), (SELECT id FROM product_variants WHERE sku = 'JEAN-DEN-30'), (SELECT id FROM users WHERE email = 'phamducan@gmail.com'), (SELECT id FROM orders WHERE order_code = 'GLA20250118003'), 4, 'Quần jean đẹp, nhưng hơi dài một chút. Nhìn chung ok.', true, false, CURRENT_TIMESTAMP - INTERVAL '12 hours'),
 ((SELECT product_id FROM product_variants WHERE sku = 'MAXI-HOA-M'), (SELECT id FROM product_variants WHERE sku = 'MAXI-HOA-M'), (SELECT id FROM users WHERE email = 'lethihoa@gmail.com'), (SELECT id FROM orders WHERE order_code = 'GLA20250115002'), 5, 'Đầm xinh lắm, chất vải mềm mại thoáng mát!', true, false, CURRENT_TIMESTAMP - INTERVAL '1 day');
