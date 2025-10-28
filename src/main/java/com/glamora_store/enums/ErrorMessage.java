@@ -18,6 +18,9 @@ public enum ErrorMessage {
   // Message cụ thể
   GENDER_INVALID("Gender must be one of: MALE, FEMALE, OTHER (or male, female, other). Unknown"),
   USER_NOT_EXISTED("User not existed"),
+  EMAIL_NOT_REGISTERED("User with this email does not exist"),
+  PASSWORD_INCORRECT("Incorrect password"),
+  ACCOUNT_NOT_VERIFIED("Account has not been verified. Please check your email"),
   CANNOT_CREATE_TOKEN("Cannot create token"),
   INVALID_TOKEN_FORMAT("Invalid token format"),
   ROLE_NOT_FOUND("Role not found"),

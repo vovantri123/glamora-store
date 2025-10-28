@@ -10,4 +10,6 @@ public interface OtpRepository extends JpaRepository<Otp, Long> {
   Optional<Otp> findByEmailAndOtpAndPurpose(String email, String otp, OtpPurpose purpose);
 
   void deleteAllByEmailAndPurpose(String email, OtpPurpose purpose);
+
+  boolean existsByEmailAndPurpose(String email, OtpPurpose purpose);
 }

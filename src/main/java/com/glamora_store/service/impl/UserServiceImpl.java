@@ -14,6 +14,7 @@ import com.glamora_store.enums.ErrorMessage;
 import com.glamora_store.enums.OtpPurpose;
 import com.glamora_store.enums.RoleName;
 import com.glamora_store.mapper.UserMapper;
+import com.glamora_store.repository.OtpRepository;
 import com.glamora_store.repository.RoleRepository;
 import com.glamora_store.repository.UserRepository;
 import com.glamora_store.service.OtpEmailService;
@@ -43,6 +44,7 @@ public class UserServiceImpl implements UserService {
 
   private final UserRepository userRepository;
   private final RoleRepository roleRepository;
+  private final OtpRepository otpRepository;
 
   private final UserMapper userMapper;
 
@@ -56,20 +58,32 @@ public class UserServiceImpl implements UserService {
 
     if (existingUserOpt.isPresent()) {
       User existingUser = existingUserOpt.get();
+
       if (Boolean.FALSE.equals(existingUser.getIsDeleted())) {
+        // User is active → email already exists
         throw ExceptionUtil.badRequest(ErrorMessage.USER_EXISTED);
       }
 
-      // user chưa active → gửi OTP mới
-      otpEmailService.sendOtp(request.getEmail(), OtpPurpose.REGISTER);
+      // User is deleted → check if has pending OTP verification
+      boolean hasPendingOtp = otpRepository.existsByEmailAndPurpose(request.getEmail(), OtpPurpose.REGISTER);
+
+      if (hasPendingOtp) {
+        // Has pending OTP → allow re-registration (delete old OTP and continue)
+        otpRepository.deleteAllByEmailAndPurpose(request.getEmail(), OtpPurpose.REGISTER);
+        // Delete old user record
+        userRepository.delete(existingUser);
+      } else {
+        // No pending OTP → truly deleted account, contact support
+        throw ExceptionUtil.badRequest(ErrorMessage.USER_DELETED);
+      }
     }
 
-    // user chưa tồn tại → tạo mới
+    // Create new user (either first time or re-registration after OTP expiry)
     User user = userMapper.toUser(request);
     user.setAvatar(
       "https://img.freepik.com/premium-vector/profile-picture-placeholder-avatar-silhouette-gray-tones-icon-colored-shapes-gradient_1076610-40164.jpg?w=360");
     user.setPassword(passwordEncoder.encode(request.getPassword()));
-    user.setIsDeleted(true);
+    user.setIsDeleted(true); // Will be set to false after OTP verification
 
     Role userRole = roleRepository
       .findById(RoleName.USER.name())
@@ -78,7 +92,7 @@ public class UserServiceImpl implements UserService {
     user.setRoles(Set.of(userRole));
     userRepository.save(user);
 
-    // gửi OTP lần đầu
+    // Send OTP for email verification
     otpEmailService.sendOtp(request.getEmail(), OtpPurpose.REGISTER);
   }
 

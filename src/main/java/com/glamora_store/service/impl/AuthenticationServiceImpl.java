@@ -5,6 +5,8 @@ import com.glamora_store.dto.request.common.iam.IntrospectRequest;
 import com.glamora_store.dto.response.common.iam.AuthenticationResponse;
 import com.glamora_store.entity.User;
 import com.glamora_store.enums.ErrorMessage;
+import com.glamora_store.enums.OtpPurpose;
+import com.glamora_store.repository.OtpRepository;
 import com.glamora_store.repository.UserRepository;
 import com.glamora_store.service.AuthenticationService;
 import com.glamora_store.util.ExceptionUtil;
@@ -33,21 +35,39 @@ import java.util.Set;
 @Slf4j
 public class AuthenticationServiceImpl implements AuthenticationService {
   private final UserRepository userRepository;
+  private final OtpRepository otpRepository;
 
   @Value("${jwt.secretKey}")
   protected String SECRET_KEY;
 
   public AuthenticationResponse authenticate(AuthenticationRequest request) {
     PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
+
+    // Check if user exists
     User user = userRepository
       .findByEmailAndIsDeletedFalse(request.getEmail())
-      .orElseThrow(() -> ExceptionUtil.badRequest(ErrorMessage.USER_NOT_EXISTED));
+      .orElseThrow(() -> ExceptionUtil.badRequest(ErrorMessage.EMAIL_NOT_REGISTERED));
 
-    boolean authenticated = passwordEncoder.matches(request.getPassword(), user.getPassword());
-    if (!authenticated) {
-      throw ExceptionUtil.badRequest(ErrorMessage.UNAUTHENTICATED);
+    // Check if user has been deleted/deactivated
+    if (user.getIsDeleted()) {
+      throw ExceptionUtil.badRequest(ErrorMessage.USER_DELETED);
     }
 
+    // Check if account is verified (no pending OTP for REGISTER)
+    boolean hasUnverifiedOtp = otpRepository.existsByEmailAndPurpose(
+      request.getEmail(),
+      OtpPurpose.REGISTER);
+    if (hasUnverifiedOtp) {
+      throw ExceptionUtil.badRequest(ErrorMessage.ACCOUNT_NOT_VERIFIED);
+    }
+
+    // Check password
+    boolean authenticated = passwordEncoder.matches(request.getPassword(), user.getPassword());
+    if (!authenticated) {
+      throw ExceptionUtil.badRequest(ErrorMessage.PASSWORD_INCORRECT);
+    }
+
+    // Generate token
     String accessToken = generateToken(user);
 
     return AuthenticationResponse.builder()

@@ -3,6 +3,7 @@ package com.glamora_store.config;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -25,21 +26,21 @@ public class SecurityConfig {
 
   // spotless:off
   public static final String[] PUBLIC_ENDPOINTS = {
-    "/api-docs",
-    "/api-docs/**",
-    "/swagger-ui/**",
-    "/swagger-ui.html",
-    "/v3/api-docs/**",
+      "/api-docs",
+      "/api-docs/**",
+      "/swagger-ui/**",
+      "/swagger-ui.html",
+      "/v3/api-docs/**",
 
-    "/public/**"
+      "/public/**"
   };
 
   public static final String[] USER_ENDPOINTS = {
-    "/user/**"
+      "/user/**"
   };
 
   public static final String[] ADMIN_ENDPOINTS = {
-    "/admin/**"
+      "/admin/**"
   };
   // spotless:on
 
@@ -49,14 +50,16 @@ public class SecurityConfig {
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
     httpSecurity.authorizeHttpRequests(request -> request
-      .requestMatchers(PUBLIC_ENDPOINTS).permitAll()
-      .requestMatchers(USER_ENDPOINTS).hasAnyRole("USER", "ADMIN")
-      .requestMatchers(ADMIN_ENDPOINTS).hasRole("ADMIN")
-      .anyRequest().authenticated());
+        // Allow CORS preflight requests (OPTIONS)
+        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+        .requestMatchers(PUBLIC_ENDPOINTS).permitAll()
+        .requestMatchers(USER_ENDPOINTS).hasAnyRole("USER", "ADMIN")
+        .requestMatchers(ADMIN_ENDPOINTS).hasRole("ADMIN")
+        .anyRequest().authenticated());
 
     httpSecurity.oauth2ResourceServer(oauth2 -> oauth2.jwt(
         jwtConfigurer -> jwtConfigurer.decoder(jwtDecoder()).jwtAuthenticationConverter(jwtAuthenticationConverter()))
-      .authenticationEntryPoint(new JwtAuthenticationEntryPoint()));
+        .authenticationEntryPoint(new JwtAuthenticationEntryPoint()));
 
     httpSecurity.csrf(AbstractHttpConfigurer::disable);
 
@@ -82,8 +85,8 @@ public class SecurityConfig {
     SecretKeySpec secretKeySpec = new SecretKeySpec(SECRET_KEY.getBytes(), "HS512");
 
     return NimbusJwtDecoder.withSecretKey(secretKeySpec)
-      .macAlgorithm(MacAlgorithm.HS512)
-      .build();
+        .macAlgorithm(MacAlgorithm.HS512)
+        .build();
   }
 
   @Bean
