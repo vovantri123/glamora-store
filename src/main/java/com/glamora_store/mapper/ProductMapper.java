@@ -3,6 +3,7 @@ package com.glamora_store.mapper;
 import com.glamora_store.dto.request.admin.product.ProductCreateRequest;
 import com.glamora_store.dto.request.admin.product.ProductUpdateRequest;
 import com.glamora_store.dto.response.admin.product.ProductAdminResponse;
+import com.glamora_store.dto.response.common.product.ProductImageResponse;
 import com.glamora_store.dto.response.common.product.ProductResponse;
 import com.glamora_store.dto.response.common.product.ProductVariantResponse;
 import com.glamora_store.dto.response.common.product.VariantAttributeResponse;
@@ -15,6 +16,8 @@ import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,6 +27,7 @@ public interface ProductMapper {
   @Mapping(target = "categoryId", source = "category.id")
   @Mapping(target = "categoryName", source = "category.name")
   @Mapping(target = "thumbnailUrl", expression = "java(getThumbnailUrl(product))")
+  @Mapping(target = "images", expression = "java(getAllImages(product))")
   @Mapping(target = "minPrice", expression = "java(getMinPrice(product))")
   @Mapping(target = "maxPrice", expression = "java(getMaxPrice(product))")
   @Mapping(target = "totalStock", expression = "java(getTotalStock(product))")
@@ -74,6 +78,39 @@ public interface ProductMapper {
             .findFirst() // 6. Lấy hình ảnh đầu tiên bất kỳ
             .map(ProductImage::getImageUrl)) // 7. Chuyển đổi sang imageUrl
         .orElse(null); // 8. Nếu vẫn không có, trả về null
+  }
+
+  // Load product images first (sorted by displayOrder), then variant images
+  default List<ProductImageResponse> getAllImages(Product product) {
+    List<ProductImageResponse> allImages = new ArrayList<>();
+
+    // 1. Add product images sorted by displayOrder
+    List<ProductImageResponse> productImages = product.getImages().stream()
+        .sorted(Comparator.comparing(ProductImage::getDisplayOrder))
+        .map(img -> ProductImageResponse.builder()
+            .id(img.getId())
+            .imageUrl(img.getImageUrl())
+            .altText(img.getAltText())
+            .isThumbnail(img.getIsThumbnail())
+            .displayOrder(img.getDisplayOrder())
+            .build())
+        .collect(Collectors.toList());
+    allImages.addAll(productImages);
+
+    // 2. Add variant images (each variant has 1 image)
+    List<ProductImageResponse> variantImages = product.getVariants().stream()
+        .filter(variant -> variant.getImageUrl() != null && !variant.getImageUrl().isEmpty())
+        .map(variant -> ProductImageResponse.builder()
+            .id(variant.getId()) // Using variant ID for unique identification
+            .imageUrl(variant.getImageUrl())
+            .altText(variant.getSku())
+            .isThumbnail(false)
+            .displayOrder(999 + variant.getId().intValue()) // Higher order to place after product images
+            .build())
+        .collect(Collectors.toList());
+    allImages.addAll(variantImages);
+
+    return allImages;
   }
 
   default BigDecimal getMinPrice(Product product) {

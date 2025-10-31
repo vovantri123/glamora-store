@@ -10,6 +10,7 @@ CREATE TABLE product_variants (
     price NUMERIC(10,2) NOT NULL,
     sku VARCHAR(100) NOT NULL UNIQUE,
     stock INTEGER NOT NULL,
+    image_url TEXT,
     product_id BIGINT NOT NULL,
     FOREIGN KEY (product_id) REFERENCES products(id)
 );

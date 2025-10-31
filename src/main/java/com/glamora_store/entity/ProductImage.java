@@ -34,10 +34,4 @@ public class ProductImage extends AuditableEntity {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "product_id", nullable = false)
   private Product product; // Ảnh thuộc về product nào
-
-  // Ảnh riêng cho từng variant (ví dụ: áo đỏ vs áo xanh có ảnh khác nhau)
-  // Có thể bỏ nếu không dùng ảnh riêng cho variant
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "variant_id")
-  private ProductVariant variant;
 }

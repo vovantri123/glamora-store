@@ -19,8 +19,6 @@ public class ProductImageAdminResponse {
     private Integer displayOrder;
     private Long productId;
     private String productName;
-    private Long variantId;
-    private String variantSku;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

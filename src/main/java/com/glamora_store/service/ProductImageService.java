@@ -16,5 +16,5 @@ public interface ProductImageService {
 
     ProductImageAdminResponse getProductImageById(Long id);
 
-    PageResponse<ProductImageAdminResponse> getAllProductImages(Long productId, Long variantId, Pageable pageable);
+    PageResponse<ProductImageAdminResponse> getAllProductImages(Long productId, Pageable pageable);
 }

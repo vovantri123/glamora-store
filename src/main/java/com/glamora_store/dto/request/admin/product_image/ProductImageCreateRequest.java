@@ -24,6 +24,4 @@ public class ProductImageCreateRequest {
 
     @NotNull(message = "PRODUCT_IMAGE_PRODUCT_ID_REQUIRED")
     private Long productId;
-
-    private Long variantId;
 }

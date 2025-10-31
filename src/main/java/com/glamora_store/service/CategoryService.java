@@ -19,6 +19,8 @@ public interface CategoryService {
 
     List<CategoryResponse> getCategoryChildren(Long parentId);
 
+    List<CategoryResponse> getCategoryPathFromRootToCurrent(Long id);
+
     // Admin methods
     CategoryAdminResponse createCategory(CategoryCreateRequest request);
 

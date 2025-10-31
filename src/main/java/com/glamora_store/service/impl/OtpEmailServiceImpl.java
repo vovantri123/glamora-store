@@ -8,7 +8,6 @@ import com.glamora_store.repository.OtpRepository;
 import com.glamora_store.repository.UserRepository;
 import com.glamora_store.service.OtpEmailService;
 import com.glamora_store.util.ExceptionUtil;
-import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

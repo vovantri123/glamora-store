@@ -22,6 +22,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.math.BigDecimal;
+
 @Service
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
@@ -42,14 +44,14 @@ public class ProductServiceImpl implements ProductService {
 
   @Override
   @Transactional(readOnly = true)
-  public PageResponse<ProductResponse> searchProducts(Long categoryId, String keyword, int page, int size,
-      String sortBy, String sortDir) {
+  public PageResponse<ProductResponse> searchProducts(Long categoryId, String keyword, BigDecimal minPrice,
+      BigDecimal maxPrice, int page, int size, String sortBy, String sortDir) {
     Sort sort = sortDir.equalsIgnoreCase("asc")
         ? Sort.by(sortBy).ascending()
         : Sort.by(sortBy).descending();
     Pageable pageable = PageRequest.of(page, size, sort);
 
-    Page<Product> productPage = productRepository.searchProducts(categoryId, keyword, pageable);
+    Page<Product> productPage = productRepository.searchProducts(categoryId, keyword, minPrice, maxPrice, pageable);
 
     return PageResponse.from(productPage.map(productMapper::toProductResponse));
   }

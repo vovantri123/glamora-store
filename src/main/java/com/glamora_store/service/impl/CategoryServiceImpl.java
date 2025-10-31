@@ -58,6 +58,26 @@ public class CategoryServiceImpl implements CategoryService {
     return categoryMapper.toCategoryResponseList(children);
   }
 
+  @Override
+  @Transactional(readOnly = true)
+  public List<CategoryResponse> getCategoryPathFromRootToCurrent(Long id) {
+    Category category = categoryRepository.findByIdAndIsDeletedFalse(id)
+        .orElseThrow(() -> new ResponseStatusException(
+            HttpStatus.NOT_FOUND,
+            ErrorMessage.CATEGORY_NOT_FOUND.getMessage()));
+
+    List<CategoryResponse> path = new java.util.ArrayList<>();
+    Category current = category;
+
+    // Build path from current to root
+    while (current != null) {
+      path.add(0, categoryMapper.toCategoryResponse(current)); // Add 0 to insert at the beginning
+      current = current.getParent();
+    }
+
+    return path;
+  }
+
   // Admin methods implementation
   @Override
   @Transactional

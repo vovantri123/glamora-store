@@ -218,130 +218,130 @@ INSERT INTO products (name, description, category_id, is_deleted, created_at) VA
 -- ============================================
 
 -- Áo Thun Nam Basic Cotton (product_id=1) - 6 variants
-INSERT INTO product_variants (sku, price, compare_at_price, stock, product_id, is_deleted, created_at) VALUES
-('ATBC-DEN-M', 199000, 250000, 50, 1, false, CURRENT_TIMESTAMP),
-('ATBC-DEN-L', 199000, 250000, 45, 1, false, CURRENT_TIMESTAMP),
-('ATBC-TRANG-M', 199000, 250000, 40, 1, false, CURRENT_TIMESTAMP),
-('ATBC-TRANG-L', 199000, 250000, 35, 1, false, CURRENT_TIMESTAMP),
-('ATBC-XAM-M', 199000, 250000, 30, 1, false, CURRENT_TIMESTAMP),
-('ATBC-XAM-L', 199000, 250000, 25, 1, false, CURRENT_TIMESTAMP);
+INSERT INTO product_variants (sku, price, compare_at_price, stock, product_id, image_url, is_deleted, created_at) VALUES
+('ATBC-DEN-M', 199000, 250000, 50, 1, 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800', false, CURRENT_TIMESTAMP),
+('ATBC-DEN-L', 199000, 250000, 45, 1, 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800', false, CURRENT_TIMESTAMP),
+('ATBC-TRANG-M', 199000, 250000, 40, 1, 'https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=800', false, CURRENT_TIMESTAMP),
+('ATBC-TRANG-L', 199000, 250000, 35, 1, 'https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=800', false, CURRENT_TIMESTAMP),
+('ATBC-XAM-M', 199000, 250000, 30, 1, 'https://images.unsplash.com/photo-1562157873-818bc0726f68?w=800', false, CURRENT_TIMESTAMP),
+('ATBC-XAM-L', 199000, 250000, 25, 1, 'https://images.unsplash.com/photo-1562157873-818bc0726f68?w=800', false, CURRENT_TIMESTAMP);
 
 -- Áo Polo Nam (product_id=2)
-INSERT INTO product_variants (sku, price, compare_at_price, stock, product_id, is_deleted, created_at) VALUES
-('POLO-DEN-M', 299000, 350000, 40, 2, false, CURRENT_TIMESTAMP),
-('POLO-DEN-L', 299000, 350000, 35, 2, false, CURRENT_TIMESTAMP),
-('POLO-NAVY-M', 299000, 350000, 30, 2, false, CURRENT_TIMESTAMP),
-('POLO-NAVY-L', 299000, 350000, 25, 2, false, CURRENT_TIMESTAMP);
+INSERT INTO product_variants (sku, price, compare_at_price, stock, product_id, image_url, is_deleted, created_at) VALUES
+('POLO-DEN-M', 299000, 350000, 40, 2, 'https://images.unsplash.com/photo-1586790170083-2f9ceadc732d?w=800', false, CURRENT_TIMESTAMP),
+('POLO-DEN-L', 299000, 350000, 35, 2, 'https://images.unsplash.com/photo-1586790170083-2f9ceadc732d?w=800', false, CURRENT_TIMESTAMP),
+('POLO-NAVY-M', 299000, 350000, 30, 2, 'https://images.unsplash.com/photo-1626497764679-6725f9390a07?w=800', false, CURRENT_TIMESTAMP),
+('POLO-NAVY-L', 299000, 350000, 25, 2, 'https://images.unsplash.com/photo-1626497764679-6725f9390a07?w=800', false, CURRENT_TIMESTAMP);
 
 -- Áo Thun Oversize (product_id=3)
-INSERT INTO product_variants (sku, price, compare_at_price, stock, product_id, is_deleted, created_at) VALUES
-('OVER-DEN-L', 249000, 299000, 60, 3, false, CURRENT_TIMESTAMP),
-('OVER-DEN-XL', 249000, 299000, 50, 3, false, CURRENT_TIMESTAMP),
-('OVER-TRANG-L', 249000, 299000, 45, 3, false, CURRENT_TIMESTAMP),
-('OVER-TRANG-XL', 249000, 299000, 40, 3, false, CURRENT_TIMESTAMP);
+INSERT INTO product_variants (sku, price, compare_at_price, stock, product_id, image_url, is_deleted, created_at) VALUES
+('OVER-DEN-L', 249000, 299000, 60, 3, 'https://images.unsplash.com/photo-1562157873-818bc0726f68?w=800', false, CURRENT_TIMESTAMP),
+('OVER-DEN-XL', 249000, 299000, 50, 3, 'https://images.unsplash.com/photo-1562157873-818bc0726f68?w=800', false, CURRENT_TIMESTAMP),
+('OVER-TRANG-L', 249000, 299000, 45, 3, 'https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=800', false, CURRENT_TIMESTAMP),
+('OVER-TRANG-XL', 249000, 299000, 40, 3, 'https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=800', false, CURRENT_TIMESTAMP);
 
 -- Áo Sơ Mi Trắng (product_id=4)
-INSERT INTO product_variants (sku, price, compare_at_price, stock, product_id, is_deleted, created_at) VALUES
-('SM-TRANG-M', 279000, 320000, 55, 4, false, CURRENT_TIMESTAMP),
-('SM-TRANG-L', 279000, 320000, 50, 4, false, CURRENT_TIMESTAMP),
-('SM-TRANG-XL', 279000, 320000, 40, 4, false, CURRENT_TIMESTAMP);
+INSERT INTO product_variants (sku, price, compare_at_price, stock, product_id, image_url, is_deleted, created_at) VALUES
+('SM-TRANG-M', 279000, 320000, 55, 4, 'https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=800', false, CURRENT_TIMESTAMP),
+('SM-TRANG-L', 279000, 320000, 50, 4, 'https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=800', false, CURRENT_TIMESTAMP),
+('SM-TRANG-XL', 279000, 320000, 40, 4, 'https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=800', false, CURRENT_TIMESTAMP);
 
 -- Áo Sơ Mi Kẻ (product_id=5)
-INSERT INTO product_variants (sku, price, compare_at_price, stock, product_id, is_deleted, created_at) VALUES
-('SMK-NAVY-M', 289000, 340000, 45, 5, false, CURRENT_TIMESTAMP),
-('SMK-NAVY-L', 289000, 340000, 40, 5, false, CURRENT_TIMESTAMP);
+INSERT INTO product_variants (sku, price, compare_at_price, stock, product_id, image_url, is_deleted, created_at) VALUES
+('SMK-NAVY-M', 289000, 340000, 45, 5, 'https://images.unsplash.com/photo-1603252109303-2751441dd157?w=800', false, CURRENT_TIMESTAMP),
+('SMK-NAVY-L', 289000, 340000, 40, 5, 'https://images.unsplash.com/photo-1603252109303-2751441dd157?w=800', false, CURRENT_TIMESTAMP);
 
 -- Áo Sơ Mi Linen (product_id=6)
-INSERT INTO product_variants (sku, price, compare_at_price, stock, product_id, is_deleted, created_at) VALUES
-('LINEN-BE-M', 349000, 420000, 35, 6, false, CURRENT_TIMESTAMP),
-('LINEN-BE-L', 349000, 420000, 30, 6, false, CURRENT_TIMESTAMP),
-('LINEN-TRANG-M', 349000, 420000, 25, 6, false, CURRENT_TIMESTAMP);
+INSERT INTO product_variants (sku, price, compare_at_price, stock, product_id, image_url, is_deleted, created_at) VALUES
+('LINEN-BE-M', 349000, 420000, 35, 6, 'https://images.unsplash.com/photo-1598032895397-b9c88a8df1f7?w=800', false, CURRENT_TIMESTAMP),
+('LINEN-BE-L', 349000, 420000, 30, 6, 'https://images.unsplash.com/photo-1598032895397-b9c88a8df1f7?w=800', false, CURRENT_TIMESTAMP),
+('LINEN-TRANG-M', 349000, 420000, 25, 6, 'https://images.unsplash.com/photo-1620799139834-6b8f844a2ecc?w=800', false, CURRENT_TIMESTAMP);
 
 -- Áo Khoác Jean (product_id=7)
-INSERT INTO product_variants (sku, price, compare_at_price, stock, product_id, is_deleted, created_at) VALUES
-('JEAN-DENIM-M', 599000, 750000, 30, 7, false, CURRENT_TIMESTAMP),
-('JEAN-DENIM-L', 599000, 750000, 25, 7, false, CURRENT_TIMESTAMP),
-('JEAN-DENIM-XL', 599000, 750000, 20, 7, false, CURRENT_TIMESTAMP);
+INSERT INTO product_variants (sku, price, compare_at_price, stock, product_id, image_url, is_deleted, created_at) VALUES
+('JEAN-DENIM-M', 599000, 750000, 30, 7, 'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=800', false, CURRENT_TIMESTAMP),
+('JEAN-DENIM-L', 599000, 750000, 25, 7, 'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=800', false, CURRENT_TIMESTAMP),
+('JEAN-DENIM-XL', 599000, 750000, 20, 7, 'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=800', false, CURRENT_TIMESTAMP);
 
 -- Áo Hoodie (product_id=8)
-INSERT INTO product_variants (sku, price, compare_at_price, stock, product_id, is_deleted, created_at) VALUES
-('HOOD-DEN-L', 399000, 480000, 50, 8, false, CURRENT_TIMESTAMP),
-('HOOD-DEN-XL', 399000, 480000, 45, 8, false, CURRENT_TIMESTAMP),
-('HOOD-XAM-L', 399000, 480000, 40, 8, false, CURRENT_TIMESTAMP),
-('HOOD-XAM-XL', 399000, 480000, 35, 8, false, CURRENT_TIMESTAMP);
+INSERT INTO product_variants (sku, price, compare_at_price, stock, product_id, image_url, is_deleted, created_at) VALUES
+('HOOD-DEN-L', 399000, 480000, 50, 8, 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=800', false, CURRENT_TIMESTAMP),
+('HOOD-DEN-XL', 399000, 480000, 45, 8, 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=800', false, CURRENT_TIMESTAMP),
+('HOOD-XAM-L', 399000, 480000, 40, 8, 'https://images.unsplash.com/photo-1578587018452-892bacefd3f2?w=800', false, CURRENT_TIMESTAMP),
+('HOOD-XAM-XL', 399000, 480000, 35, 8, 'https://images.unsplash.com/photo-1578587018452-892bacefd3f2?w=800', false, CURRENT_TIMESTAMP);
 
 -- Áo Bomber (product_id=9)
-INSERT INTO product_variants (sku, price, compare_at_price, stock, product_id, is_deleted, created_at) VALUES
-('BOMBER-DEN-M', 699000, 850000, 20, 9, false, CURRENT_TIMESTAMP),
-('BOMBER-DEN-L', 699000, 850000, 18, 9, false, CURRENT_TIMESTAMP),
-('BOMBER-NAU-M', 699000, 850000, 15, 9, false, CURRENT_TIMESTAMP);
+INSERT INTO product_variants (sku, price, compare_at_price, stock, product_id, image_url, is_deleted, created_at) VALUES
+('BOMBER-DEN-M', 699000, 850000, 20, 9, 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=800', false, CURRENT_TIMESTAMP),
+('BOMBER-DEN-L', 699000, 850000, 18, 9, 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=800', false, CURRENT_TIMESTAMP),
+('BOMBER-NAU-M', 699000, 850000, 15, 9, 'https://images.unsplash.com/photo-1578932750294-f5075e85f44a?w=800', false, CURRENT_TIMESTAMP);
 
 -- Quần Jean Nam (product_id=10)
-INSERT INTO product_variants (sku, price, compare_at_price, stock, product_id, is_deleted, created_at) VALUES
-('JEAN-DEN-29', 449000, 550000, 40, 10, false, CURRENT_TIMESTAMP),
-('JEAN-DEN-30', 449000, 550000, 45, 10, false, CURRENT_TIMESTAMP),
-('JEAN-DEN-31', 449000, 550000, 40, 10, false, CURRENT_TIMESTAMP),
-('JEAN-DEN-32', 449000, 550000, 35, 10, false, CURRENT_TIMESTAMP);
+INSERT INTO product_variants (sku, price, compare_at_price, stock, product_id, image_url, is_deleted, created_at) VALUES
+('JEAN-DEN-29', 449000, 550000, 40, 10, 'https://images.unsplash.com/photo-1542272604-787c3835535d?w=800', false, CURRENT_TIMESTAMP),
+('JEAN-DEN-30', 449000, 550000, 45, 10, 'https://images.unsplash.com/photo-1542272604-787c3835535d?w=800', false, CURRENT_TIMESTAMP),
+('JEAN-DEN-31', 449000, 550000, 40, 10, 'https://images.unsplash.com/photo-1542272604-787c3835535d?w=800', false, CURRENT_TIMESTAMP),
+('JEAN-DEN-32', 449000, 550000, 35, 10, 'https://images.unsplash.com/photo-1542272604-787c3835535d?w=800', false, CURRENT_TIMESTAMP);
 
 -- Quần Tây (product_id=11)
-INSERT INTO product_variants (sku, price, compare_at_price, stock, product_id, is_deleted, created_at) VALUES
-('TAY-DEN-29', 399000, 480000, 35, 11, false, CURRENT_TIMESTAMP),
-('TAY-DEN-30', 399000, 480000, 40, 11, false, CURRENT_TIMESTAMP),
-('TAY-XAM-29', 399000, 480000, 30, 11, false, CURRENT_TIMESTAMP),
-('TAY-XAM-30', 399000, 480000, 35, 11, false, CURRENT_TIMESTAMP);
+INSERT INTO product_variants (sku, price, compare_at_price, stock, product_id, image_url, is_deleted, created_at) VALUES
+('TAY-DEN-29', 399000, 480000, 35, 11, 'https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?w=800', false, CURRENT_TIMESTAMP),
+('TAY-DEN-30', 399000, 480000, 40, 11, 'https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?w=800', false, CURRENT_TIMESTAMP),
+('TAY-XAM-29', 399000, 480000, 30, 11, 'https://images.unsplash.com/photo-1594938291221-94f18cbb5660?w=800', false, CURRENT_TIMESTAMP),
+('TAY-XAM-30', 399000, 480000, 35, 11, 'https://images.unsplash.com/photo-1594938291221-94f18cbb5660?w=800', false, CURRENT_TIMESTAMP);
 
 -- Quần Kaki (product_id=12)
-INSERT INTO product_variants (sku, price, compare_at_price, stock, product_id, is_deleted, created_at) VALUES
-('KAKI-BE-30', 379000, 450000, 45, 12, false, CURRENT_TIMESTAMP),
-('KAKI-BE-31', 379000, 450000, 40, 12, false, CURRENT_TIMESTAMP),
-('KAKI-NAU-30', 379000, 450000, 35, 12, false, CURRENT_TIMESTAMP);
+INSERT INTO product_variants (sku, price, compare_at_price, stock, product_id, image_url, is_deleted, created_at) VALUES
+('KAKI-BE-30', 379000, 450000, 45, 12, 'https://images.unsplash.com/photo-1473966968600-fa801b869a1a?w=800', false, CURRENT_TIMESTAMP),
+('KAKI-BE-31', 379000, 450000, 40, 12, 'https://images.unsplash.com/photo-1473966968600-fa801b869a1a?w=800', false, CURRENT_TIMESTAMP),
+('KAKI-NAU-30', 379000, 450000, 35, 12, 'https://images.unsplash.com/photo-1506629082955-511b1aa562c8?w=800', false, CURRENT_TIMESTAMP);
 
 -- Áo Croptop Nữ (product_id=13)
-INSERT INTO product_variants (sku, price, compare_at_price, stock, product_id, is_deleted, created_at) VALUES
-('CROP-DEN-S', 149000, 199000, 60, 13, false, CURRENT_TIMESTAMP),
-('CROP-DEN-M', 149000, 199000, 55, 13, false, CURRENT_TIMESTAMP),
-('CROP-TRANG-S', 149000, 199000, 50, 13, false, CURRENT_TIMESTAMP),
-('CROP-TRANG-M', 149000, 199000, 45, 13, false, CURRENT_TIMESTAMP);
+INSERT INTO product_variants (sku, price, compare_at_price, stock, product_id, image_url, is_deleted, created_at) VALUES
+('CROP-DEN-S', 149000, 199000, 60, 13, 'https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=800', false, CURRENT_TIMESTAMP),
+('CROP-DEN-M', 149000, 199000, 55, 13, 'https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=800', false, CURRENT_TIMESTAMP),
+('CROP-TRANG-S', 149000, 199000, 50, 13, 'https://images.unsplash.com/photo-1581044777550-4cfa60707c03?w=800', false, CURRENT_TIMESTAMP),
+('CROP-TRANG-M', 149000, 199000, 45, 13, 'https://images.unsplash.com/photo-1581044777550-4cfa60707c03?w=800', false, CURRENT_TIMESTAMP);
 
 -- Áo Kiểu Tay Bồng (product_id=14)
-INSERT INTO product_variants (sku, price, compare_at_price, stock, product_id, is_deleted, created_at) VALUES
-('KIEU-TRANG-M', 329000, 399000, 40, 14, false, CURRENT_TIMESTAMP),
-('KIEU-TRANG-L', 329000, 399000, 35, 14, false, CURRENT_TIMESTAMP),
-('KIEU-HONG-M', 329000, 399000, 30, 14, false, CURRENT_TIMESTAMP);
+INSERT INTO product_variants (sku, price, compare_at_price, stock, product_id, image_url, is_deleted, created_at) VALUES
+('KIEU-TRANG-M', 329000, 399000, 40, 14, 'https://images.unsplash.com/photo-1485968579580-b6d095142e6e?w=800', false, CURRENT_TIMESTAMP),
+('KIEU-TRANG-L', 329000, 399000, 35, 14, 'https://images.unsplash.com/photo-1485968579580-b6d095142e6e?w=800', false, CURRENT_TIMESTAMP),
+('KIEU-HONG-M', 329000, 399000, 30, 14, 'https://images.unsplash.com/photo-1564859228273-274232fdb516?w=800', false, CURRENT_TIMESTAMP);
 
 -- Áo Sơ Mi Lụa Nữ (product_id=15)
-INSERT INTO product_variants (sku, price, compare_at_price, stock, product_id, is_deleted, created_at) VALUES
-('SMNU-TRANG-M', 399000, 499000, 35, 15, false, CURRENT_TIMESTAMP),
-('SMNU-TRANG-L', 399000, 499000, 30, 15, false, CURRENT_TIMESTAMP);
+INSERT INTO product_variants (sku, price, compare_at_price, stock, product_id, image_url, is_deleted, created_at) VALUES
+('SMNU-TRANG-M', 399000, 499000, 35, 15, 'https://images.unsplash.com/photo-1594846497743-9f0dd0d6d3b6?w=800', false, CURRENT_TIMESTAMP),
+('SMNU-TRANG-L', 399000, 499000, 30, 15, 'https://images.unsplash.com/photo-1594846497743-9f0dd0d6d3b6?w=800', false, CURRENT_TIMESTAMP);
 
 -- Áo Blazer Nữ (product_id=16)
-INSERT INTO product_variants (sku, price, compare_at_price, stock, product_id, is_deleted, created_at) VALUES
-('BLAZ-DEN-M', 699000, 850000, 25, 16, false, CURRENT_TIMESTAMP),
-('BLAZ-DEN-L', 699000, 850000, 20, 16, false, CURRENT_TIMESTAMP),
-('BLAZ-BE-M', 699000, 850000, 18, 16, false, CURRENT_TIMESTAMP);
+INSERT INTO product_variants (sku, price, compare_at_price, stock, product_id, image_url, is_deleted, created_at) VALUES
+('BLAZ-DEN-M', 699000, 850000, 25, 16, 'https://images.unsplash.com/photo-1591369822096-ffd140ec948f?w=800', false, CURRENT_TIMESTAMP),
+('BLAZ-DEN-L', 699000, 850000, 20, 16, 'https://images.unsplash.com/photo-1591369822096-ffd140ec948f?w=800', false, CURRENT_TIMESTAMP),
+('BLAZ-BE-M', 699000, 850000, 18, 16, 'https://images.unsplash.com/photo-1594223515816-1ad1f9166a4b?w=800', false, CURRENT_TIMESTAMP);
 
 -- Quần Jean Nữ (product_id=17)
-INSERT INTO product_variants (sku, price, compare_at_price, stock, product_id, is_deleted, created_at) VALUES
-('JEANNU-DENIM-28', 429000, 520000, 40, 17, false, CURRENT_TIMESTAMP),
-('JEANNU-DENIM-29', 429000, 520000, 45, 17, false, CURRENT_TIMESTAMP),
-('JEANNU-DENIM-30', 429000, 520000, 35, 17, false, CURRENT_TIMESTAMP);
+INSERT INTO product_variants (sku, price, compare_at_price, stock, product_id, image_url, is_deleted, created_at) VALUES
+('JEANNU-DENIM-28', 429000, 520000, 40, 17, 'https://images.unsplash.com/photo-1582552938357-32b906df40cb?w=800', false, CURRENT_TIMESTAMP),
+('JEANNU-DENIM-29', 429000, 520000, 45, 17, 'https://images.unsplash.com/photo-1582552938357-32b906df40cb?w=800', false, CURRENT_TIMESTAMP),
+('JEANNU-DENIM-30', 429000, 520000, 35, 17, 'https://images.unsplash.com/photo-1582552938357-32b906df40cb?w=800', false, CURRENT_TIMESTAMP);
 
 -- Chân Váy Midi (product_id=18)
-INSERT INTO product_variants (sku, price, compare_at_price, stock, product_id, is_deleted, created_at) VALUES
-('VAY-DEN-S', 299000, 380000, 35, 18, false, CURRENT_TIMESTAMP),
-('VAY-DEN-M', 299000, 380000, 40, 18, false, CURRENT_TIMESTAMP),
-('VAY-BE-S', 299000, 380000, 30, 18, false, CURRENT_TIMESTAMP);
+INSERT INTO product_variants (sku, price, compare_at_price, stock, product_id, image_url, is_deleted, created_at) VALUES
+('VAY-DEN-S', 299000, 380000, 35, 18, 'https://images.unsplash.com/photo-1583496661160-fb5886a0aaaa?w=800', false, CURRENT_TIMESTAMP),
+('VAY-DEN-M', 299000, 380000, 40, 18, 'https://images.unsplash.com/photo-1583496661160-fb5886a0aaaa?w=800', false, CURRENT_TIMESTAMP),
+('VAY-BE-S', 299000, 380000, 30, 18, 'https://images.unsplash.com/photo-1566174053879-31528523f8ae?w=800', false, CURRENT_TIMESTAMP);
 
 -- Đầm Maxi (product_id=19)
-INSERT INTO product_variants (sku, price, compare_at_price, stock, product_id, is_deleted, created_at) VALUES
-('MAXI-HOA-M', 549000, 680000, 25, 19, false, CURRENT_TIMESTAMP),
-('MAXI-HOA-L', 549000, 680000, 20, 19, false, CURRENT_TIMESTAMP);
+INSERT INTO product_variants (sku, price, compare_at_price, stock, product_id, image_url, is_deleted, created_at) VALUES
+('MAXI-HOA-M', 549000, 680000, 25, 19, 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=800', false, CURRENT_TIMESTAMP),
+('MAXI-HOA-L', 549000, 680000, 20, 19, 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=800', false, CURRENT_TIMESTAMP);
 
 -- Váy Dự Tiệc (product_id=20)
-INSERT INTO product_variants (sku, price, compare_at_price, stock, product_id, is_deleted, created_at) VALUES
-('TIEC-DO-M', 799000, 999000, 15, 20, false, CURRENT_TIMESTAMP),
-('TIEC-DO-L', 799000, 999000, 12, 20, false, CURRENT_TIMESTAMP),
-('TIEC-DEN-M', 799000, 999000, 10, 20, false, CURRENT_TIMESTAMP);
+INSERT INTO product_variants (sku, price, compare_at_price, stock, product_id, image_url, is_deleted, created_at) VALUES
+('TIEC-DO-M', 799000, 999000, 15, 20, 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=800', false, CURRENT_TIMESTAMP),
+('TIEC-DO-L', 799000, 999000, 12, 20, 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=800', false, CURRENT_TIMESTAMP),
+('TIEC-DEN-M', 799000, 999000, 10, 20, 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=800', false, CURRENT_TIMESTAMP);
 
 -- ============================================
 -- PRODUCT VARIANT VALUES - Kết nối variant với attribute values
@@ -535,142 +535,99 @@ INSERT INTO product_variant_values (variant_id, attribute_value_id, created_at) 
 (63, (SELECT id FROM attribute_values WHERE value = 'L' LIMIT 1), CURRENT_TIMESTAMP);
 
 -- ============================================
--- PRODUCT IMAGES - Hình ảnh sản phẩm
+-- PRODUCT IMAGES - Hình ảnh sản phẩm (chỉ ảnh hiển thị của product, không liên kết variant)
 -- ============================================
 
 -- Áo Thun Nam Basic (product_id=1)
-INSERT INTO product_images (image_url, alt_text, is_thumbnail, display_order, product_id, variant_id, created_at) VALUES
-('https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800', 'Áo thun nam basic đen', true, 1, 1, 1, CURRENT_TIMESTAMP),
-('https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=800', 'Áo thun nam basic trắng', false, 2, 1, 3, CURRENT_TIMESTAMP),
-('https://images.unsplash.com/photo-1562157873-818bc0726f68?w=800', 'Áo thun nam basic xám', false, 3, 1, 5, CURRENT_TIMESTAMP);
+INSERT INTO product_images (image_url, alt_text, is_thumbnail, display_order, product_id, created_at) VALUES
+('https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800', 'Áo thun nam basic đen', true, 1, 1, CURRENT_TIMESTAMP),
+('https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=800', 'Áo thun nam basic trắng', false, 2, 1, CURRENT_TIMESTAMP),
+('https://images.unsplash.com/photo-1562157873-818bc0726f68?w=800', 'Áo thun nam basic xám', false, 3, 1, CURRENT_TIMESTAMP);
 
 -- Áo Polo (product_id=2)
-INSERT INTO product_images (image_url, alt_text, is_thumbnail, display_order, product_id, variant_id, created_at) VALUES
-('https://images.unsplash.com/photo-1586790170083-2f9ceadc732d?w=800', 'Áo polo nam đen', true, 1, 2, 7, CURRENT_TIMESTAMP),
-('https://images.unsplash.com/photo-1626497764679-6725f9390a07?w=800', 'Áo polo nam xanh navy', false, 2, 2, 9, CURRENT_TIMESTAMP);
-
--- Áo Sơ Mi (product_id=4)
-INSERT INTO product_images (image_url, alt_text, is_thumbnail, display_order, product_id, variant_id, created_at) VALUES
-('https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=800', 'Áo sơ mi trắng công sở', true, 1, 4, 15, CURRENT_TIMESTAMP),
-('https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=800', 'Chi tiết áo sơ mi', false, 2, 4, NULL, CURRENT_TIMESTAMP);
-
--- Áo Khoác Jean (product_id=7)
-INSERT INTO product_images (image_url, alt_text, is_thumbnail, display_order, product_id, variant_id, created_at) VALUES
-('https://images.unsplash.com/photo-1551028719-00167b16eac5?w=800', 'Áo khoác jean vintage', true, 1, 7, 21, CURRENT_TIMESTAMP),
-('https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=800', 'Detail áo khoác jean', false, 2, 7, NULL, CURRENT_TIMESTAMP);
-
--- Quần Jean Nam (product_id=10)
-INSERT INTO product_images (image_url, alt_text, is_thumbnail, display_order, product_id, variant_id, created_at) VALUES
-('https://images.unsplash.com/photo-1542272604-787c3835535d?w=800', 'Quần jean nam slim fit', true, 1, 10, 30, CURRENT_TIMESTAMP),
-('https://images.unsplash.com/photo-1473966968600-fa801b869a1a?w=800', 'Chi tiết quần jean', false, 2, 10, NULL, CURRENT_TIMESTAMP);
-
--- Áo Croptop Nữ (product_id=13)
-INSERT INTO product_images (image_url, alt_text, is_thumbnail, display_order, product_id, variant_id, created_at) VALUES
-('https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=800', 'Áo croptop nữ đen', true, 1, 13, 42, CURRENT_TIMESTAMP),
-('https://images.unsplash.com/photo-1581044777550-4cfa60707c03?w=800', 'Áo croptop nữ trắng', false, 2, 13, 44, CURRENT_TIMESTAMP);
-
--- Đầm Maxi (product_id=19)
-INSERT INTO product_images (image_url, alt_text, is_thumbnail, display_order, product_id, variant_id, created_at) VALUES
-('https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=800', 'Đầm maxi hoa', true, 1, 19, 62, CURRENT_TIMESTAMP),
-('https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=800', 'Chi tiết đầm maxi', false, 2, 19, NULL, CURRENT_TIMESTAMP);
+INSERT INTO product_images (image_url, alt_text, is_thumbnail, display_order, product_id, created_at) VALUES
+('https://images.unsplash.com/photo-1586790170083-2f9ceadc732d?w=800', 'Áo polo nam đen', true, 1, 2, CURRENT_TIMESTAMP),
+('https://images.unsplash.com/photo-1626497764679-6725f9390a07?w=800', 'Áo polo nam xanh navy', false, 2, 2, CURRENT_TIMESTAMP);
 
 -- Áo Oversize (product_id=3)
-INSERT INTO product_images (image_url, alt_text, is_thumbnail, display_order, product_id, variant_id, created_at) VALUES
-('https://images.unsplash.com/photo-1562157873-818bc0726f68?w=800', 'Áo thun oversize đen', true, 1, 3, 11, CURRENT_TIMESTAMP),
-('https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=800', 'Áo thun oversize trắng', false, 2, 3, 13, CURRENT_TIMESTAMP);
+INSERT INTO product_images (image_url, alt_text, is_thumbnail, display_order, product_id, created_at) VALUES
+('https://images.unsplash.com/photo-1562157873-818bc0726f68?w=800', 'Áo thun oversize đen', true, 1, 3, CURRENT_TIMESTAMP),
+('https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=800', 'Áo thun oversize trắng', false, 2, 3, CURRENT_TIMESTAMP);
+
+-- Áo Sơ Mi (product_id=4)
+INSERT INTO product_images (image_url, alt_text, is_thumbnail, display_order, product_id, created_at) VALUES
+('https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=800', 'Áo sơ mi trắng công sở', true, 1, 4, CURRENT_TIMESTAMP),
+('https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=800', 'Chi tiết áo sơ mi', false, 2, 4, CURRENT_TIMESTAMP);
 
 -- Áo Sơ Mi Kẻ (product_id=5)
-INSERT INTO product_images (image_url, alt_text, is_thumbnail, display_order, product_id, variant_id, created_at) VALUES
-('https://images.unsplash.com/photo-1603252109303-2751441dd157?w=800', 'Áo sơ mi kẻ sọc navy', true, 1, 5, 18, CURRENT_TIMESTAMP),
-('https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=800', 'Chi tiết áo sơ mi kẻ', false, 2, 5, NULL, CURRENT_TIMESTAMP);
+INSERT INTO product_images (image_url, alt_text, is_thumbnail, display_order, product_id, created_at) VALUES
+('https://images.unsplash.com/photo-1603252109303-2751441dd157?w=800', 'Áo sơ mi kẻ sọc navy', true, 1, 5, CURRENT_TIMESTAMP),
+('https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=800', 'Chi tiết áo sơ mi kẻ', false, 2, 5, CURRENT_TIMESTAMP);
 
 -- Áo Sơ Mi Linen (product_id=6)
-INSERT INTO product_images (image_url, alt_text, is_thumbnail, display_order, product_id, variant_id, created_at) VALUES
-('https://images.unsplash.com/photo-1598032895397-b9c88a8df1f7?w=800', 'Áo sơ mi linen be', true, 1, 6, 20, CURRENT_TIMESTAMP),
-('https://images.unsplash.com/photo-1620799139834-6b8f844a2ecc?w=800', 'Áo sơ mi linen trắng', false, 2, 6, 22, CURRENT_TIMESTAMP);
+INSERT INTO product_images (image_url, alt_text, is_thumbnail, display_order, product_id, created_at) VALUES
+('https://images.unsplash.com/photo-1598032895397-b9c88a8df1f7?w=800', 'Áo sơ mi linen be', true, 1, 6, CURRENT_TIMESTAMP),
+('https://images.unsplash.com/photo-1620799139834-6b8f844a2ecc?w=800', 'Áo sơ mi linen trắng', false, 2, 6, CURRENT_TIMESTAMP);
+
+-- Áo Khoác Jean (product_id=7)
+INSERT INTO product_images (image_url, alt_text, is_thumbnail, display_order, product_id, created_at) VALUES
+('https://images.unsplash.com/photo-1551028719-00167b16eac5?w=800', 'Áo khoác jean vintage', true, 1, 7, CURRENT_TIMESTAMP),
+('https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=800', 'Detail áo khoác jean', false, 2, 7, CURRENT_TIMESTAMP);
 
 -- Áo Hoodie (product_id=8)
-INSERT INTO product_images (image_url, alt_text, is_thumbnail, display_order, product_id, variant_id, created_at) VALUES
-('https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=800', 'Áo hoodie đen', true, 1, 8, 26, CURRENT_TIMESTAMP),
-('https://images.unsplash.com/photo-1578587018452-892bacefd3f2?w=800', 'Áo hoodie xám', false, 2, 8, 28, CURRENT_TIMESTAMP);
+INSERT INTO product_images (image_url, alt_text, is_thumbnail, display_order, product_id, created_at) VALUES
+('https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=800', 'Áo hoodie đen', true, 1, 8, CURRENT_TIMESTAMP),
+('https://images.unsplash.com/photo-1578587018452-892bacefd3f2?w=800', 'Áo hoodie xám', false, 2, 8, CURRENT_TIMESTAMP);
 
 -- Áo Bomber (product_id=9)
-INSERT INTO product_images (image_url, alt_text, is_thumbnail, display_order, product_id, variant_id, created_at) VALUES
-('https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=800', 'Áo bomber đen', true, 1, 9, 30, CURRENT_TIMESTAMP),
-('https://images.unsplash.com/photo-1578932750294-f5075e85f44a?w=800', 'Áo bomber nâu', false, 2, 9, 32, CURRENT_TIMESTAMP);
+INSERT INTO product_images (image_url, alt_text, is_thumbnail, display_order, product_id, created_at) VALUES
+('https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=800', 'Áo bomber đen', true, 1, 9, CURRENT_TIMESTAMP),
+('https://images.unsplash.com/photo-1578932750294-f5075e85f44a?w=800', 'Áo bomber nâu', false, 2, 9, CURRENT_TIMESTAMP);
+
+-- Quần Jean Nam (product_id=10)
+INSERT INTO product_images (image_url, alt_text, is_thumbnail, display_order, product_id, created_at) VALUES
+('https://images.unsplash.com/photo-1542272604-787c3835535d?w=800', 'Quần jean nam slim fit', true, 1, 10, CURRENT_TIMESTAMP),
+('https://images.unsplash.com/photo-1473966968600-fa801b869a1a?w=800', 'Chi tiết quần jean', false, 2, 10, CURRENT_TIMESTAMP);
 
 -- Quần Jean Straight (product_id=11)
-INSERT INTO product_images (image_url, alt_text, is_thumbnail, display_order, product_id, variant_id, created_at) VALUES
-('https://images.unsplash.com/photo-1542272604-787c3835535d?w=800', 'Quần jean straight đen', true, 1, 11, 33, CURRENT_TIMESTAMP),
-('https://images.unsplash.com/photo-1604176354204-9268737828e4?w=800', 'Chi tiết quần jean', false, 2, 11, NULL, CURRENT_TIMESTAMP);
+INSERT INTO product_images (image_url, alt_text, is_thumbnail, display_order, product_id, created_at) VALUES
+('https://images.unsplash.com/photo-1542272604-787c3835535d?w=800', 'Quần jean straight đen', true, 1, 11, CURRENT_TIMESTAMP),
+('https://images.unsplash.com/photo-1604176354204-9268737828e4?w=800', 'Chi tiết quần jean', false, 2, 11, CURRENT_TIMESTAMP);
 
 -- Quần Tây Nam (product_id=12)
-INSERT INTO product_images (image_url, alt_text, is_thumbnail, display_order, product_id, variant_id, created_at) VALUES
-('https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?w=800', 'Quần tây công sở đen', true, 1, 12, 37, CURRENT_TIMESTAMP),
-('https://images.unsplash.com/photo-1594938291221-94f18cbb5660?w=800', 'Quần tây xám', false, 2, 12, 39, CURRENT_TIMESTAMP);
+INSERT INTO product_images (image_url, alt_text, is_thumbnail, display_order, product_id, created_at) VALUES
+('https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?w=800', 'Quần tây công sở đen', true, 1, 12, CURRENT_TIMESTAMP),
+('https://images.unsplash.com/photo-1594938291221-94f18cbb5660?w=800', 'Quần tây xám', false, 2, 12, CURRENT_TIMESTAMP);
 
--- Quần Kaki (product_id=13)
-INSERT INTO product_images (image_url, alt_text, is_thumbnail, display_order, product_id, variant_id, created_at) VALUES
-('https://images.unsplash.com/photo-1473966968600-fa801b869a1a?w=800', 'Quần kaki túi hộp be', true, 1, 13, 41, CURRENT_TIMESTAMP),
-('https://images.unsplash.com/photo-1506629082955-511b1aa562c8?w=800', 'Quần kaki nâu', false, 2, 13, 43, CURRENT_TIMESTAMP);
+-- Áo Croptop Nữ (product_id=13)
+INSERT INTO product_images (image_url, alt_text, is_thumbnail, display_order, product_id, created_at) VALUES
+('https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=800', 'Áo croptop nữ đen', true, 1, 13, CURRENT_TIMESTAMP),
+('https://images.unsplash.com/photo-1581044777550-4cfa60707c03?w=800', 'Áo croptop nữ trắng', false, 2, 13, CURRENT_TIMESTAMP);
 
--- Áo Thun Form Rộng Nữ (product_id=15)
-INSERT INTO product_images (image_url, alt_text, is_thumbnail, display_order, product_id, variant_id, created_at) VALUES
-('https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800', 'Áo thun form rộng', true, 1, 15, 51, CURRENT_TIMESTAMP),
-('https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=800', 'Chi tiết áo thun', false, 2, 15, NULL, CURRENT_TIMESTAMP);
+-- Áo Kiểu Tay Bồng (product_id=14)
+INSERT INTO product_images (image_url, alt_text, is_thumbnail, display_order, product_id, created_at) VALUES
+('https://images.unsplash.com/photo-1485968579580-b6d095142e6e?w=800', 'Áo kiểu tay bồng trắng', true, 1, 14, CURRENT_TIMESTAMP),
+('https://images.unsplash.com/photo-1564859228273-274232fdb516?w=800', 'Áo kiểu hồng', false, 2, 14, CURRENT_TIMESTAMP);
 
--- Áo Kiểu Tay Bồng (product_id=16)
-INSERT INTO product_images (image_url, alt_text, is_thumbnail, display_order, product_id, variant_id, created_at) VALUES
-('https://images.unsplash.com/photo-1485968579580-b6d095142e6e?w=800', 'Áo kiểu tay bồng trắng', true, 1, 16, 48, CURRENT_TIMESTAMP),
-('https://images.unsplash.com/photo-1564859228273-274232fdb516?w=800', 'Áo kiểu hồng', false, 2, 16, 50, CURRENT_TIMESTAMP);
+-- Áo Sơ Mi Lụa Nữ (product_id=15)
+INSERT INTO product_images (image_url, alt_text, is_thumbnail, display_order, product_id, created_at) VALUES
+('https://images.unsplash.com/photo-1594846497743-9f0dd0d6d3b6?w=800', 'Áo sơ mi lụa trắng', true, 1, 15, CURRENT_TIMESTAMP),
+('https://images.unsplash.com/photo-1609251297586-5d8e7c2e5f2c?w=800', 'Chi tiết áo sơ mi lụa', false, 2, 15, CURRENT_TIMESTAMP);
 
--- Áo Sơ Mi Lụa Nữ (product_id=17)
-INSERT INTO product_images (image_url, alt_text, is_thumbnail, display_order, product_id, variant_id, created_at) VALUES
-('https://images.unsplash.com/photo-1594846497743-9f0dd0d6d3b6?w=800', 'Áo sơ mi lụa trắng', true, 1, 17, 51, CURRENT_TIMESTAMP),
-('https://images.unsplash.com/photo-1609251297586-5d8e7c2e5f2c?w=800', 'Chi tiết áo sơ mi lụa', false, 2, 17, NULL, CURRENT_TIMESTAMP);
+-- Áo Blazer Nữ (product_id=16)
+INSERT INTO product_images (image_url, alt_text, is_thumbnail, display_order, product_id, created_at) VALUES
+('https://images.unsplash.com/photo-1591369822096-ffd140ec948f?w=800', 'Áo blazer đen', true, 1, 16, CURRENT_TIMESTAMP),
+('https://images.unsplash.com/photo-1594223515816-1ad1f9166a4b?w=800', 'Áo blazer be', false, 2, 16, CURRENT_TIMESTAMP);
 
--- Áo Blazer Nữ (product_id=18)
-INSERT INTO product_images (image_url, alt_text, is_thumbnail, display_order, product_id, variant_id, created_at) VALUES
-('https://images.unsplash.com/photo-1591369822096-ffd140ec948f?w=800', 'Áo blazer đen', true, 1, 18, 53, CURRENT_TIMESTAMP),
-('https://images.unsplash.com/photo-1594223515816-1ad1f9166a4b?w=800', 'Áo blazer be', false, 2, 18, 55, CURRENT_TIMESTAMP);
+-- Chân Váy Midi (product_id=18)
+INSERT INTO product_images (image_url, alt_text, is_thumbnail, display_order, product_id, created_at) VALUES
+('https://images.unsplash.com/photo-1583496661160-fb5886a0aaaa?w=800', 'Chân váy chữ A midi đen', true, 1, 18, CURRENT_TIMESTAMP),
+('https://images.unsplash.com/photo-1566174053879-31528523f8ae?w=800', 'Chân váy be', false, 2, 18, CURRENT_TIMESTAMP);
 
--- Quần Jean Nữ Ống Đứng (product_id=20)
-INSERT INTO product_images (image_url, alt_text, is_thumbnail, display_order, product_id, variant_id, created_at) VALUES
-('https://images.unsplash.com/photo-1582552938357-32b906df40cb?w=800', 'Quần jean nữ ống đứng', true, 1, 20, 56, CURRENT_TIMESTAMP),
-('https://images.unsplash.com/photo-1584370848010-d7fe6bc767ec?w=800', 'Chi tiết quần jean nữ', false, 2, 20, NULL, CURRENT_TIMESTAMP);
-
--- Quần Jean Skinny (product_id=21)
-INSERT INTO product_images (image_url, alt_text, is_thumbnail, display_order, product_id, variant_id, created_at) VALUES
-('https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=800', 'Quần jean skinny', true, 1, 21, NULL, CURRENT_TIMESTAMP);
-
--- Quần Tây Ống Suông (product_id=22)
-INSERT INTO product_images (image_url, alt_text, is_thumbnail, display_order, product_id, variant_id, created_at) VALUES
-('https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=800', 'Quần tây ống suông', true, 1, 22, NULL, CURRENT_TIMESTAMP);
-
--- Quần Baggy (product_id=23)
-INSERT INTO product_images (image_url, alt_text, is_thumbnail, display_order, product_id, variant_id, created_at) VALUES
-('https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?w=800', 'Quần baggy ulzzang', true, 1, 23, NULL, CURRENT_TIMESTAMP);
-
--- Chân Váy Midi (product_id=24)
-INSERT INTO product_images (image_url, alt_text, is_thumbnail, display_order, product_id, variant_id, created_at) VALUES
-('https://images.unsplash.com/photo-1583496661160-fb5886a0aaaa?w=800', 'Chân váy chữ A midi đen', true, 1, 24, 59, CURRENT_TIMESTAMP),
-('https://images.unsplash.com/photo-1566174053879-31528523f8ae?w=800', 'Chân váy be', false, 2, 24, 61, CURRENT_TIMESTAMP);
-
--- Váy Xòe Dự Tiệc (product_id=25)
-INSERT INTO product_images (image_url, alt_text, is_thumbnail, display_order, product_id, variant_id, created_at) VALUES
-('https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=800', 'Váy xòe dự tiệc', true, 1, 25, NULL, CURRENT_TIMESTAMP);
-
--- Chân Váy Jean (product_id=26)
-INSERT INTO product_images (image_url, alt_text, is_thumbnail, display_order, product_id, variant_id, created_at) VALUES
-('https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?w=800', 'Chân váy jean xẻ tà', true, 1, 26, NULL, CURRENT_TIMESTAMP);
-
--- Đầm Suông (product_id=28)
-INSERT INTO product_images (image_url, alt_text, is_thumbnail, display_order, product_id, variant_id, created_at) VALUES
-('https://images.unsplash.com/photo-1566174053879-31528523f8ae?w=800', 'Đầm suông công sở', true, 1, 28, NULL, CURRENT_TIMESTAMP);
-
--- Đầm Dự Tiệc (product_id=29)
-INSERT INTO product_images (image_url, alt_text, is_thumbnail, display_order, product_id, variant_id, created_at) VALUES
-('https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=800', 'Đầm dự tiệc sang trọng', true, 1, 29, NULL, CURRENT_TIMESTAMP);
+-- Đầm Maxi (product_id=19)
+INSERT INTO product_images (image_url, alt_text, is_thumbnail, display_order, product_id, created_at) VALUES
+('https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=800', 'Đầm maxi hoa', true, 1, 19, CURRENT_TIMESTAMP),
+('https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=800', 'Chi tiết đầm maxi', false, 2, 19, CURRENT_TIMESTAMP);
 
 -- ============================================
 -- CARTS & ADDRESSES - Giỏ hàng & Địa chỉ mẫu

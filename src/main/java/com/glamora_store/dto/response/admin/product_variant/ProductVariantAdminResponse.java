@@ -19,6 +19,7 @@ public class ProductVariantAdminResponse {
     private BigDecimal price;
     private BigDecimal compareAtPrice;
     private Integer stock;
+    private String imageUrl;
     private Boolean isDeleted;
     private Long productId;
     private String productName;

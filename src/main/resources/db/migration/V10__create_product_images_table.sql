@@ -10,7 +10,5 @@ CREATE TABLE product_images (
     image_url TEXT NOT NULL,
     is_thumbnail BOOLEAN,
     product_id BIGINT NOT NULL,
-    variant_id BIGINT,
-    FOREIGN KEY (product_id) REFERENCES products(id),
-    FOREIGN KEY (variant_id) REFERENCES product_variants(id)
+    FOREIGN KEY (product_id) REFERENCES products(id)
 );

@@ -18,6 +18,4 @@ public class ProductImageUpdateRequest {
     private Boolean isThumbnail;
 
     private Integer displayOrder;
-
-    private Long variantId;
 }

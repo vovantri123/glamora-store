@@ -24,5 +24,7 @@ public class ProductVariantUpdateRequest {
     @Min(value = 0, message = "PRODUCT_VARIANT_STOCK_INVALID")
     private Integer stock;
 
+    private String imageUrl; // Single image URL for this variant
+
     private List<Long> attributeValueIds;
 }

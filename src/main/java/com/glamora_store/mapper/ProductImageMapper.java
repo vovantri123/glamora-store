@@ -14,13 +14,10 @@ public interface ProductImageMapper {
 
   @Mapping(target = "productId", source = "product.id")
   @Mapping(target = "productName", source = "product.name")
-  @Mapping(target = "variantId", source = "variant.id")
-  @Mapping(target = "variantSku", source = "variant.sku")
   ProductImageAdminResponse toProductImageAdminResponse(ProductImage productImage);
 
   @Mapping(target = "id", ignore = true)
   @Mapping(target = "product", ignore = true)
-  @Mapping(target = "variant", ignore = true)
   @Mapping(target = "createdAt", ignore = true)
   @Mapping(target = "updatedAt", ignore = true)
   @Mapping(target = "createdBy", ignore = true)
@@ -29,7 +26,6 @@ public interface ProductImageMapper {
 
   @Mapping(target = "id", ignore = true)
   @Mapping(target = "product", ignore = true)
-  @Mapping(target = "variant", ignore = true)
   @Mapping(target = "createdAt", ignore = true)
   @Mapping(target = "updatedAt", ignore = true)
   @Mapping(target = "createdBy", ignore = true)

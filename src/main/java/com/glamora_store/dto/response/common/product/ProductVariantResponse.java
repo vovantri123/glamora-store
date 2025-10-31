@@ -16,5 +16,6 @@ public class ProductVariantResponse {
     private BigDecimal price;
     private BigDecimal compareAtPrice;
     private Integer stock;
+    private String imageUrl;
     private List<VariantAttributeResponse> attributes;
 }

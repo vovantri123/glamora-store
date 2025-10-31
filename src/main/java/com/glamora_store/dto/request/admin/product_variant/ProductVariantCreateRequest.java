@@ -30,6 +30,8 @@ public class ProductVariantCreateRequest {
     @Min(value = 0, message = "PRODUCT_VARIANT_STOCK_INVALID")
     private Integer stock;
 
+    private String imageUrl; // Single image URL for this variant
+
     @NotNull(message = "PRODUCT_VARIANT_PRODUCT_ID_REQUIRED")
     private Long productId;
 

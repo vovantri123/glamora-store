@@ -34,6 +34,9 @@ public class ProductVariant extends AuditableEntity {
   @Builder.Default
   private Integer stock = 0;
 
+  @Column(name = "image_url", columnDefinition = "TEXT")
+  private String imageUrl; // Mỗi variant có 1 ảnh riêng
+
   // Soft delete field
   @Column(name = "is_deleted", nullable = false)
   @Builder.Default
