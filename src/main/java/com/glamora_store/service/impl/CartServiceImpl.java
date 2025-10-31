@@ -32,7 +32,7 @@ public class CartServiceImpl implements CartService {
   private final CartMapper cartMapper;
 
   @Override
-  @Transactional(readOnly = true)
+  @Transactional
   public CartResponse getMyCart() {
     Long userId = SecurityUtil.getCurrentUserId();
     Cart cart = getOrCreateCart(userId);
