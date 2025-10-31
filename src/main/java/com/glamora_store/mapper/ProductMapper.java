@@ -31,6 +31,8 @@ public interface ProductMapper {
   @Mapping(target = "minPrice", expression = "java(getMinPrice(product))")
   @Mapping(target = "maxPrice", expression = "java(getMaxPrice(product))")
   @Mapping(target = "totalStock", expression = "java(getTotalStock(product))")
+  @Mapping(target = "averageRating", expression = "java(getAverageRating(product))")
+  @Mapping(target = "totalReviews", expression = "java(getTotalReviews(product))")
   ProductResponse toProductResponse(Product product);
 
   List<ProductResponse> toProductResponseList(List<Product> products);
@@ -131,6 +133,20 @@ public interface ProductMapper {
     return product.getVariants().stream()
         .mapToInt(ProductVariant::getStock)
         .sum();
+  }
+
+  default Double getAverageRating(Product product) {
+    return product.getReviews().stream()
+        .filter(review -> !review.getIsDeleted())
+        .mapToInt(review -> review.getRating())
+        .average()
+        .orElse(0.0);
+  }
+
+  default Long getTotalReviews(Product product) {
+    return product.getReviews().stream()
+        .filter(review -> !review.getIsDeleted())
+        .count();
   }
 
   default List<VariantAttributeResponse> mapVariantAttributes(ProductVariant variant) {

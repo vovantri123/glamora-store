@@ -23,5 +23,7 @@ public class ProductResponse {
     private List<ProductImageResponse> images;
     private List<ProductVariantResponse> variants;
     private Integer totalStock;
+    private Double averageRating;
+    private Long totalReviews;
     private LocalDateTime createdAt;
 }
