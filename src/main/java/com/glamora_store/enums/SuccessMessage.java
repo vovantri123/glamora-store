@@ -70,6 +70,7 @@ public enum SuccessMessage {
   COLLECT_VOUCHER_SUCCESS("Collect voucher successfully"),
   REVOKE_VOUCHER_SUCCESS("Revoke voucher successfully"),
   CALCULATE_VOUCHER_DISCOUNT_SUCCESS("Calculate voucher discount successfully"),
+  APPLY_VOUCHER_SUCCESS("Apply voucher successfully"),
   // Shipping method messages
   CREATE_SHIPPING_METHOD_SUCCESS("Create shipping method successfully"),
   UPDATE_SHIPPING_METHOD_SUCCESS("Update shipping method successfully"),

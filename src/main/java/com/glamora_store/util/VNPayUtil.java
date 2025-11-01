@@ -50,6 +50,9 @@ public class VNPayUtil {
    * Nó đảm bảo rằng dữ liệu của bạn không bị chỉnh sửa trên đường truyền giữa
    * server của bạn và VNPAY.
    *
+   * IMPORTANT: VNPay requires hashing the URL-ENCODED query string, not raw
+   * values
+   *
    * @param fields    the map of VNPay parameters
    * @param secretKey the VNPay secret key
    * @return the HMAC-SHA512 hash of all fields
@@ -60,23 +63,28 @@ public class VNPayUtil {
    *         Output: "a1b2c3d4e5f6..."
    */
   public static String hashAllFields(Map<String, String> fields, String secretKey) {
-    List<String> fieldNames = new ArrayList<>(fields.keySet());
-    Collections.sort(fieldNames);
-    StringBuilder sb = new StringBuilder();
-    Iterator<String> itr = fieldNames.iterator();
-    while (itr.hasNext()) {
-      String fieldName = itr.next();
-      String fieldValue = fields.get(fieldName);
-      if ((fieldValue != null) && (fieldValue.length() > 0)) {
-        sb.append(fieldName);
-        sb.append("=");
-        sb.append(fieldValue);
+    try {
+      List<String> fieldNames = new ArrayList<>(fields.keySet());
+      Collections.sort(fieldNames);
+      StringBuilder sb = new StringBuilder();
+      Iterator<String> itr = fieldNames.iterator();
+      while (itr.hasNext()) {
+        String fieldName = itr.next();
+        String fieldValue = fields.get(fieldName);
+        if ((fieldValue != null) && (fieldValue.length() > 0)) {
+          // MUST URL encode both field name and value before hashing
+          sb.append(URLEncoder.encode(fieldName, StandardCharsets.UTF_8.toString()));
+          sb.append("=");
+          sb.append(URLEncoder.encode(fieldValue, StandardCharsets.UTF_8.toString()));
+          if (itr.hasNext()) {
+            sb.append("&");
+          }
+        }
       }
-      if (itr.hasNext()) {
-        sb.append("&");
-      }
+      return hmacSHA512(secretKey, sb.toString());
+    } catch (UnsupportedEncodingException e) {
+      throw new RuntimeException("Failed to create hash", e);
     }
-    return hmacSHA512(secretKey, sb.toString());
   }
 
   /**

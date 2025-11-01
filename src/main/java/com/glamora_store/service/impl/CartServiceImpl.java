@@ -17,6 +17,9 @@ import com.glamora_store.service.CartService;
 import com.glamora_store.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -145,6 +148,21 @@ public class CartServiceImpl implements CartService {
 
     cartItemRepository.deleteByCartId(cart.getId());
     cart.getItems().clear();
+    cartRepository.save(cart);
+  }
+
+  @Override
+  @Transactional
+  public void removeCartItemsByVariantIds(Long userId, List<Long> variantIds) {
+    Cart cart = cartRepository.findByUserIdAndUser_IsDeletedFalse(userId)
+        .orElse(null);
+
+    if (cart == null || variantIds == null || variantIds.isEmpty()) {
+      return; // Nothing to remove
+    }
+
+    // Tìm và xóa các cart items có variant ID trong danh sách
+    cart.getItems().removeIf(item -> variantIds.contains(item.getVariant().getId()));
     cartRepository.save(cart);
   }
 

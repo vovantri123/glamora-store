@@ -7,12 +7,16 @@ import com.glamora_store.dto.response.common.payment.PaymentResponse;
 import com.glamora_store.entity.Order;
 import com.glamora_store.entity.Payment;
 import com.glamora_store.entity.PaymentMethod;
+import com.glamora_store.entity.Voucher;
 import com.glamora_store.enums.ErrorMessage;
+import com.glamora_store.enums.OrderStatus;
 import com.glamora_store.enums.PaymentStatus;
 import com.glamora_store.mapper.PaymentMapper;
 import com.glamora_store.repository.OrderRepository;
 import com.glamora_store.repository.PaymentMethodRepository;
 import com.glamora_store.repository.PaymentRepository;
+import com.glamora_store.repository.VoucherRepository;
+import com.glamora_store.service.CartService;
 import com.glamora_store.service.PaymentService;
 import com.glamora_store.util.VNPayUtil;
 import java.math.BigDecimal;
@@ -34,6 +38,8 @@ public class PaymentServiceImpl implements PaymentService {
   private final PaymentRepository paymentRepository;
   private final PaymentMethodRepository paymentMethodRepository;
   private final OrderRepository orderRepository;
+  private final VoucherRepository voucherRepository;
+  private final CartService cartService;
   private final PaymentMapper paymentMapper;
   private final VNPayConfig vnPayConfig;
 
@@ -90,9 +96,27 @@ public class PaymentServiceImpl implements PaymentService {
       String payUrl = createVNPayPaymentUrl(order);
       payment.setPayUrl(payUrl);
     }
-    // Nếu là COD, set status = PENDING
+    // Nếu là COD, set status = SUCCESS ngay và xử lý order + cart
     else if (paymentMethod.getName().contains("COD")) {
-      payment.setStatus(PaymentStatus.PENDING);
+      payment.setStatus(PaymentStatus.SUCCESS);
+      payment.setPaymentDate(LocalDateTime.now());
+
+      // Cập nhật order status thành PAID
+      order.setStatus(OrderStatus.PAID);
+      orderRepository.save(order);
+
+      // Tăng usedCount của voucher nếu có
+      if (order.getVoucher() != null) {
+        Voucher voucher = order.getVoucher();
+        voucher.setUsedCount(voucher.getUsedCount() + 1);
+        voucherRepository.save(voucher);
+      }
+
+      // Xóa các cart items đã mua (theo variant IDs trong order)
+      List<Long> variantIds = order.getOrderItems().stream()
+          .map(item -> item.getVariant().getId())
+          .toList();
+      cartService.removeCartItemsByVariantIds(order.getUser().getId(), variantIds);
     }
 
     payment = paymentRepository.save(payment);
@@ -165,6 +189,24 @@ public class PaymentServiceImpl implements PaymentService {
       // Thanh toán thành công
       payment.setStatus(PaymentStatus.SUCCESS);
       payment.setPaymentDate(LocalDateTime.now());
+
+      // Cập nhật trạng thái Order thành PAID
+      Order order = payment.getOrder();
+      order.setStatus(OrderStatus.PAID);
+      orderRepository.save(order);
+
+      // Tăng usedCount của voucher nếu có
+      if (order.getVoucher() != null) {
+        Voucher voucher = order.getVoucher();
+        voucher.setUsedCount(voucher.getUsedCount() + 1);
+        voucherRepository.save(voucher);
+      }
+
+      // Xóa các cart items đã mua (theo variant IDs trong order)
+      List<Long> variantIds = order.getOrderItems().stream()
+          .map(item -> item.getVariant().getId())
+          .toList();
+      cartService.removeCartItemsByVariantIds(order.getUser().getId(), variantIds);
     } else if ("24".equals(responseCode)) {
       // Giao dịch bị hủy bởi user
       payment.setStatus(PaymentStatus.CANCELLED);

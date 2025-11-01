@@ -115,9 +115,8 @@ public class OrderServiceImpl implements OrderService {
     if (voucher != null) {
       discountAmount = voucher.calculateDiscount(subtotal);
 
-      // Update voucher usage
-      voucher.setUsedCount(voucher.getUsedCount() + 1);
-      voucherRepository.save(voucher);
+      // KHÔNG tăng usedCount ở đây - chỉ tăng khi payment thành công
+      // Voucher usage will be updated in PaymentService when payment succeeds
     }
 
     // Calculate total

@@ -45,5 +45,7 @@ public interface VoucherService {
   // Kiểm tra và tính toán giảm giá của voucher
   VoucherDiscountResponse calculateVoucherDiscount(String voucherCode, BigDecimal orderAmount);
 
+  // Áp dụng voucher trực tiếp (không cần collect trước) - dùng cho checkout
+  VoucherDiscountResponse applyVoucherDirectly(String voucherCode, BigDecimal orderAmount);
 
 }

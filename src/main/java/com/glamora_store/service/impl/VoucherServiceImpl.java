@@ -205,6 +205,41 @@ public class VoucherServiceImpl implements VoucherService {
 
   }
 
+  @Override
+  @Transactional(readOnly = true)
+  public VoucherDiscountResponse applyVoucherDirectly(String voucherCode, BigDecimal orderAmount) {
+    Long userId = SecurityUtil.getCurrentUserId();
+
+    // Tìm voucher
+    Voucher voucher = voucherRepository.findByCodeAndIsDeletedFalse(voucherCode)
+      .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.VOUCHER_NOT_FOUND.getMessage()));
+
+    // Kiểm tra voucher có hiệu lực không
+    validateVoucherAvailability(voucher);
+
+    // Kiểm tra giá trị đơn hàng tối thiểu
+    if (voucher.getMinOrderValue() != null && orderAmount.compareTo(voucher.getMinOrderValue()) < 0) {
+      throw new IllegalArgumentException(ErrorMessage.VOUCHER_MIN_ORDER_NOT_MET.getMessage());
+    }
+
+    // Kiểm tra user đã dùng voucher này bao nhiêu lần (không cần collect trước)
+    int usageCount = userVoucherRepository.countByUserIdAndVoucherIdAndIsDeletedFalse(userId, voucher.getId());
+    if (usageCount >= voucher.getUsagePerUser()) {
+      throw new IllegalArgumentException(ErrorMessage.VOUCHER_USER_LIMIT_EXCEEDED.getMessage());
+    }
+
+    // Tính toán giảm giá
+    BigDecimal discountAmount = voucher.calculateDiscount(orderAmount);
+    BigDecimal finalAmount = orderAmount.subtract(discountAmount);
+
+    return VoucherDiscountResponse.builder()
+      .voucherCode(voucherCode)
+      .discountAmount(discountAmount)
+      .originalAmount(orderAmount)
+      .finalAmount(finalAmount)
+      .build();
+  }
+
   /**
    * Validate voucher có khả dụng không
    */

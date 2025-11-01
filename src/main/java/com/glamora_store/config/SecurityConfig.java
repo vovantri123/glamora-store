@@ -32,7 +32,10 @@ public class SecurityConfig {
       "/swagger-ui.html",
       "/v3/api-docs/**",
 
-      "/public/**"
+      "/public/**",
+
+      // VNPay callback endpoint - VNPay will redirect here after payment
+      "/user/payments/vnpay-return"
   };
 
   public static final String[] USER_ENDPOINTS = {
