@@ -35,12 +35,7 @@ public class Order extends AuditableEntity {
   @JoinColumn(name = "address_id", nullable = false)
   private Address shippingAddress;
 
-  // phương thức vận chuyển
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "shipping_method_id")
-  private ShippingMethod shippingMethod;
-
-  // Voucher được sử dụng
+  // Voucher applied to this order (nullable - only set if user applied voucher)
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "voucher_id")
   private Voucher voucher;
@@ -55,6 +50,9 @@ public class Order extends AuditableEntity {
   @Column(name = "discount_amount", columnDefinition = "DECIMAL(12,2)")
   @Builder.Default
   private BigDecimal discountAmount = BigDecimal.ZERO; // Số tiền giảm từ voucher
+
+  @Column(name = "distance", columnDefinition = "DECIMAL(10,2)")
+  private BigDecimal distance; // Distance from store to delivery address in km
 
   @Column(name = "shipping_fee", columnDefinition = "DECIMAL(10,2)")
   @Builder.Default

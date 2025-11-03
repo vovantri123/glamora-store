@@ -162,8 +162,15 @@ public class CartServiceImpl implements CartService {
     }
 
     // Tìm và xóa các cart items có variant ID trong danh sách
-    cart.getItems().removeIf(item -> variantIds.contains(item.getVariant().getId()));
-    cartRepository.save(cart);
+    List<CartItem> itemsToRemove = cart.getItems().stream()
+        .filter(item -> variantIds.contains(item.getVariant().getId()))
+        .toList();
+
+    if (!itemsToRemove.isEmpty()) {
+      cart.getItems().removeAll(itemsToRemove);
+      cartItemRepository.deleteAll(itemsToRemove);
+      cartRepository.save(cart);
+    }
   }
 
   private Cart getOrCreateCart(Long userId) {

@@ -128,14 +128,8 @@ INSERT INTO attribute_values (value, attribute_id, created_at) VALUES
 ('32', (SELECT id FROM attributes WHERE name = 'Kích thước'), CURRENT_TIMESTAMP);
 
 -- ============================================
--- SHIPPING & PAYMENT METHODS
+-- PAYMENT METHODS
 -- ============================================
-INSERT INTO shipping_methods (name, code, base_fee, estimated_days, fee_per_km, is_active, logo_url, description, created_at) VALUES
-('Giao Hàng Tiết Kiệm', 'GHTK', 25000.00, 5, 3000, true, 'data:image/png;base64,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', 'Giao hàng nhanh toàn quốc với giá rẻ', CURRENT_TIMESTAMP),
-('Giao Hàng Nhanh', 'GHN', 30000.00, 3, 3500, true, 'https://cellphones.com.vn/sforum/wp-content/uploads/2023/09/tong-dai-giao-hang-nhanh-1.jpg', 'Dịch vụ giao hàng nhanh chóng', CURRENT_TIMESTAMP),
-('J&T Express', 'JT', 28000.00, 4, 3200, true, 'https://jtexpress.vn/themes/jtexpress/assets/images/logo.png', 'Vận chuyển nhanh chóng, uy tín', CURRENT_TIMESTAMP),
-('Viettel Post', 'VIETTEL', 27000.00, 4, 3100, true, 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Viettel_Post_logo.svg/2560px-Viettel_Post_logo.svg.png', 'Bưu chính Viettel - Giao hàng toàn quốc', CURRENT_TIMESTAMP);
-
 INSERT INTO payment_methods (name, is_active, logo_url, description, created_at) VALUES
 ('COD', true, 'https://img.freepik.com/premium-vector/cash-delivery-label_686319-773.jpg', 'Thanh toán tiền mặt khi nhận hàng', CURRENT_TIMESTAMP),
 ('VNPay', true, 'https://vinadesign.vn/uploads/images/2023/05/vnpay-logo-vinadesign-25-12-57-55.jpg', 'Thanh toán qua VNPay - Hỗ trợ thẻ ATM, Visa, MasterCard', CURRENT_TIMESTAMP);
@@ -675,25 +669,19 @@ INSERT INTO user_vouchers (user_id, voucher_id, is_deleted, created_at) VALUES
 -- ============================================
 -- ORDERS - Đơn hàng mẫu
 -- ============================================
-INSERT INTO orders (order_code, user_id, address_id, shipping_method_id, voucher_id, status, subtotal, discount_amount, shipping_fee, total_amount, note, created_at) VALUES
+INSERT INTO orders (order_code, user_id, address_id, status, subtotal, discount_amount, distance, shipping_fee, total_amount, note, created_at) VALUES
 ('GLA20250101001',
  (SELECT id FROM users WHERE email = 'vovantri204@gmail.com'),
  (SELECT id FROM addresses WHERE user_id = (SELECT id FROM users WHERE email = 'vovantri204@gmail.com') AND is_default = true),
- (SELECT id FROM shipping_methods WHERE code = 'GHTK'),
- (SELECT id FROM vouchers WHERE code = 'GLAMORA2025'),
- 'COMPLETED', 647000, 97050, 25000, 574950, 'Giao hàng giờ hành chính', CURRENT_TIMESTAMP - INTERVAL '10 days'),
+ 'COMPLETED', 647000, 0, 5.2, 10400, 657400, 'Giao hàng giờ hành chính', CURRENT_TIMESTAMP - INTERVAL '10 days'),
 ('GLA20250115002',
  (SELECT id FROM users WHERE email = 'lethihoa@gmail.com'),
  (SELECT id FROM addresses WHERE user_id = (SELECT id FROM users WHERE email = 'lethihoa@gmail.com') LIMIT 1),
- (SELECT id FROM shipping_methods WHERE code = 'GHN'),
- NULL,
- 'SHIPPING', 549000, 0, 30000, 579000, NULL, CURRENT_TIMESTAMP - INTERVAL '2 days'),
+ 'SHIPPING', 549000, 0, 7.8, 15600, 564600, NULL, CURRENT_TIMESTAMP - INTERVAL '2 days'),
 ('GLA20250118003',
  (SELECT id FROM users WHERE email = 'phamducan@gmail.com'),
  (SELECT id FROM addresses WHERE user_id = (SELECT id FROM users WHERE email = 'phamducan@gmail.com') LIMIT 1),
- (SELECT id FROM shipping_methods WHERE code = 'GHTK'),
- (SELECT id FROM vouchers WHERE code = 'FREESHIP50K'),
- 'PAID', 449000, 50000, 25000, 424000, 'Gọi trước khi giao', CURRENT_TIMESTAMP - INTERVAL '1 day');
+ 'PAID', 449000, 0, 3.5, 7000, 456000, 'Gọi trước khi giao', CURRENT_TIMESTAMP - INTERVAL '1 day');
 
 -- Order Items
 INSERT INTO order_items (order_id, variant_id, quantity, price, total_price, created_at) VALUES
@@ -745,13 +733,11 @@ INSERT INTO payments (order_id, payment_method_id, amount, status, transaction_i
  CURRENT_TIMESTAMP - INTERVAL '1 day 10 minutes', CURRENT_TIMESTAMP - INTERVAL '1 day');
 
 -- Thêm 1 đơn PENDING với payment PENDING (COD)
-INSERT INTO orders (order_code, user_id, address_id, shipping_method_id, voucher_id, status, subtotal, discount_amount, shipping_fee, total_amount, note, created_at) VALUES
+INSERT INTO orders (order_code, user_id, address_id, status, subtotal, discount_amount, distance, shipping_fee, total_amount, note, created_at) VALUES
 ('GLA20250119004',
  (SELECT id FROM users WHERE email = 'vovantri204@gmail.com'),
  (SELECT id FROM addresses WHERE user_id = (SELECT id FROM users WHERE email = 'vovantri204@gmail.com') AND is_default = true),
- (SELECT id FROM shipping_methods WHERE code = 'JT'),
- NULL,
- 'PENDING', 199000, 0, 28000, 227000, 'Đơn hàng mới tạo, chưa thanh toán', CURRENT_TIMESTAMP - INTERVAL '2 hours');
+ 'PENDING', 199000, 0, 2.5, 28000, 227000, 'Đơn hàng mới tạo, chưa thanh toán', CURRENT_TIMESTAMP - INTERVAL '2 hours');
 
 INSERT INTO order_items (order_id, variant_id, quantity, price, total_price, created_at) VALUES
 ((SELECT id FROM orders WHERE order_code = 'GLA20250119004'), (SELECT id FROM product_variants WHERE sku = 'ATBC-TRANG-L'), 1, 199000, 199000, CURRENT_TIMESTAMP - INTERVAL '2 hours');
@@ -763,13 +749,11 @@ INSERT INTO payments (order_id, payment_method_id, amount, status, transaction_i
  CURRENT_TIMESTAMP - INTERVAL '2 hours', CURRENT_TIMESTAMP - INTERVAL '2 hours');
 
 -- Thêm 1 đơn CANCELLED với payment CANCELLED
-INSERT INTO orders (order_code, user_id, address_id, shipping_method_id, voucher_id, status, subtotal, discount_amount, shipping_fee, total_amount, note, canceled_reason, created_at) VALUES
+INSERT INTO orders (order_code, user_id, address_id, status, subtotal, discount_amount, distance, shipping_fee, total_amount, note, canceled_reason, created_at) VALUES
 ('GLA20250117005',
  (SELECT id FROM users WHERE email = 'phamducan@gmail.com'),
  (SELECT id FROM addresses WHERE user_id = (SELECT id FROM users WHERE email = 'phamducan@gmail.com') LIMIT 1),
- (SELECT id FROM shipping_methods WHERE code = 'GHTK'),
- NULL,
- 'CANCELED', 249000, 0, 25000, 274000, NULL, 'Khách hàng đổi ý không mua nữa', CURRENT_TIMESTAMP - INTERVAL '3 days');
+ 'CANCELED', 249000, 0, 4.0, 25000, 274000, NULL, 'Khách hàng đổi ý không mua nữa', CURRENT_TIMESTAMP - INTERVAL '3 days');
 
 INSERT INTO order_items (order_id, variant_id, quantity, price, total_price, created_at) VALUES
 ((SELECT id FROM orders WHERE order_code = 'GLA20250117005'), (SELECT id FROM product_variants WHERE sku = 'OVER-DEN-L'), 1, 249000, 249000, CURRENT_TIMESTAMP - INTERVAL '3 days');

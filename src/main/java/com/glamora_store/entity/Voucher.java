@@ -76,10 +76,6 @@ public class Voucher extends AuditableEntity {
   @Builder.Default
   private Set<UserVoucher> userVouchers = new HashSet<>();
 
-  @OneToMany(mappedBy = "voucher")
-  @Builder.Default
-  private Set<Order> orders = new HashSet<>();
-
   // Kiểm tra voucher còn hiệu lực không
   public boolean isValid() {
     LocalDateTime now = LocalDateTime.now();

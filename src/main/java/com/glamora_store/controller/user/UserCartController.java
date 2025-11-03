@@ -25,8 +25,7 @@ public class UserCartController {
         ApiResponse.<CartResponse>builder()
             .message(SuccessMessage.GET_CART_SUCCESS.getMessage())
             .data(cart)
-            .build()
-    );
+            .build());
   }
 
   @PostMapping("/items")
@@ -36,8 +35,7 @@ public class UserCartController {
         ApiResponse.<CartResponse>builder()
             .message(SuccessMessage.ADD_TO_CART_SUCCESS.getMessage())
             .data(cart)
-            .build()
-    );
+            .build());
   }
 
   @PutMapping("/items/{cartItemId}")
@@ -49,8 +47,7 @@ public class UserCartController {
         ApiResponse.<CartResponse>builder()
             .message(SuccessMessage.UPDATE_CART_ITEM_SUCCESS.getMessage())
             .data(cart)
-            .build()
-    );
+            .build());
   }
 
   @DeleteMapping("/items/{cartItemId}")
@@ -60,8 +57,7 @@ public class UserCartController {
         ApiResponse.<CartResponse>builder()
             .message(SuccessMessage.REMOVE_CART_ITEM_SUCCESS.getMessage())
             .data(cart)
-            .build()
-    );
+            .build());
   }
 
   @DeleteMapping
@@ -70,7 +66,6 @@ public class UserCartController {
     return ResponseEntity.ok(
         ApiResponse.<Void>builder()
             .message(SuccessMessage.CLEAR_CART_SUCCESS.getMessage())
-            .build()
-    );
+            .build());
   }
 }

@@ -7,7 +7,6 @@ import com.glamora_store.dto.response.common.payment.PaymentResponse;
 import com.glamora_store.entity.Order;
 import com.glamora_store.entity.Payment;
 import com.glamora_store.entity.PaymentMethod;
-import com.glamora_store.entity.Voucher;
 import com.glamora_store.enums.ErrorMessage;
 import com.glamora_store.enums.OrderStatus;
 import com.glamora_store.enums.PaymentStatus;
@@ -15,7 +14,6 @@ import com.glamora_store.mapper.PaymentMapper;
 import com.glamora_store.repository.OrderRepository;
 import com.glamora_store.repository.PaymentMethodRepository;
 import com.glamora_store.repository.PaymentRepository;
-import com.glamora_store.repository.VoucherRepository;
 import com.glamora_store.service.CartService;
 import com.glamora_store.service.PaymentService;
 import com.glamora_store.util.VNPayUtil;
@@ -38,7 +36,6 @@ public class PaymentServiceImpl implements PaymentService {
   private final PaymentRepository paymentRepository;
   private final PaymentMethodRepository paymentMethodRepository;
   private final OrderRepository orderRepository;
-  private final VoucherRepository voucherRepository;
   private final CartService cartService;
   private final PaymentMapper paymentMapper;
   private final VNPayConfig vnPayConfig;
@@ -105,12 +102,8 @@ public class PaymentServiceImpl implements PaymentService {
       order.setStatus(OrderStatus.PAID);
       orderRepository.save(order);
 
-      // Tăng usedCount của voucher nếu có
-      if (order.getVoucher() != null) {
-        Voucher voucher = order.getVoucher();
-        voucher.setUsedCount(voucher.getUsedCount() + 1);
-        voucherRepository.save(voucher);
-      }
+      // Voucher will be applied separately via Payment API, not at order creation
+      // No need to increment voucher usage here
 
       // Xóa các cart items đã mua (theo variant IDs trong order)
       List<Long> variantIds = order.getOrderItems().stream()
@@ -195,12 +188,8 @@ public class PaymentServiceImpl implements PaymentService {
       order.setStatus(OrderStatus.PAID);
       orderRepository.save(order);
 
-      // Tăng usedCount của voucher nếu có
-      if (order.getVoucher() != null) {
-        Voucher voucher = order.getVoucher();
-        voucher.setUsedCount(voucher.getUsedCount() + 1);
-        voucherRepository.save(voucher);
-      }
+      // Voucher will be applied separately via Payment API, not at order creation
+      // No need to increment voucher usage here
 
       // Xóa các cart items đã mua (theo variant IDs trong order)
       List<Long> variantIds = order.getOrderItems().stream()

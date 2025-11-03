@@ -9,16 +9,15 @@ CREATE TABLE orders (
     discount_amount NUMERIC(12,2),
     note TEXT,
     order_code VARCHAR(255) NOT NULL UNIQUE,
+    distance NUMERIC(10,2), -- Distance from store to delivery address in km
     shipping_fee NUMERIC(10,2),
     status VARCHAR(20) CHECK (status IN ('PENDING', 'PAID', 'SHIPPING', 'COMPLETED', 'CANCELED')),
     subtotal NUMERIC(12,2) NOT NULL,
     total_amount NUMERIC(12,2) NOT NULL,
     address_id BIGINT NOT NULL,
-    shipping_method_id BIGINT,
     user_id BIGINT NOT NULL,
-    voucher_id BIGINT,
+    voucher_id BIGINT, -- Voucher applied to this order (nullable)
     FOREIGN KEY (address_id) REFERENCES addresses(id),
-    FOREIGN KEY (shipping_method_id) REFERENCES shipping_methods(id),
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (voucher_id) REFERENCES vouchers(id)
 );

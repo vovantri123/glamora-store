@@ -77,6 +77,11 @@ public enum ErrorMessage {
   CART_ITEM_NOT_FOUND("Cart item not found"),
   INSUFFICIENT_STOCK("Insufficient stock available"),
 
+  ADDRESS_MISSING_COORDINATES("Address must have valid coordinates (latitude and longitude)"),
+
+  DISTANCE_NULL("Distance cannot be null"),
+  DISTANCE_NEGATIVE("Distance cannot be negative"),
+
   VOUCHER_NOT_FOUND("Voucher not found"),
   VOUCHER_CODE_ALREADY_EXISTS("Voucher code already exists"),
   VOUCHER_EXPIRED("Voucher has expired"),

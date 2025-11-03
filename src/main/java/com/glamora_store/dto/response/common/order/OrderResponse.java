@@ -20,6 +20,7 @@ public class OrderResponse {
   private OrderStatus status;
   private BigDecimal subtotal;
   private BigDecimal discountAmount;
+  private BigDecimal distance; // Distance from store to delivery address in km
   private BigDecimal shippingFee;
   private BigDecimal totalAmount;
   private String note;
@@ -35,14 +36,6 @@ public class OrderResponse {
   // Shipping address
   private Long addressId;
   private String shippingAddressDetail;
-
-  // Shipping method
-  private Long shippingMethodId;
-  private String shippingMethodName;
-
-  // Voucher
-  private Long voucherId;
-  private String voucherCode;
 
   // Order items
   private List<OrderItemResponse> orderItems;

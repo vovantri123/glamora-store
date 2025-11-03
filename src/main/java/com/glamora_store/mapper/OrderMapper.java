@@ -16,10 +16,6 @@ public interface OrderMapper {
     @Mapping(target = "userFullName", source = "user.fullName")
     @Mapping(target = "addressId", source = "shippingAddress.id")
     @Mapping(target = "shippingAddressDetail", expression = "java(formatAddress(order))")
-    @Mapping(target = "shippingMethodId", source = "shippingMethod.id")
-    @Mapping(target = "shippingMethodName", source = "shippingMethod.name")
-    @Mapping(target = "voucherId", source = "voucher.id")
-    @Mapping(target = "voucherCode", source = "voucher.code")
     @Mapping(target = "orderItems", source = "orderItems")
     OrderResponse toOrderResponse(Order order);
 

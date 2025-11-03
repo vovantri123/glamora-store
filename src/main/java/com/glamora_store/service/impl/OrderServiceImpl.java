@@ -12,6 +12,7 @@ import com.glamora_store.enums.OrderStatus;
 import com.glamora_store.mapper.OrderMapper;
 import com.glamora_store.repository.*;
 import com.glamora_store.service.OrderService;
+import com.glamora_store.util.DistanceCalculator;
 import com.glamora_store.util.SecurityUtil;
 import com.glamora_store.util.specification.OrderSpecification;
 import lombok.RequiredArgsConstructor;
@@ -35,10 +36,9 @@ public class OrderServiceImpl implements OrderService {
   private final OrderRepository orderRepository;
   private final UserRepository userRepository;
   private final AddressRepository addressRepository;
-  private final ShippingMethodRepository shippingMethodRepository;
-  private final VoucherRepository voucherRepository;
   private final ProductVariantRepository productVariantRepository;
   private final PaymentRepository paymentRepository;
+  private final VoucherRepository voucherRepository;
   private final OrderMapper orderMapper;
 
   @Override
@@ -58,25 +58,9 @@ public class OrderServiceImpl implements OrderService {
       throw new ResponseStatusException(HttpStatus.FORBIDDEN, ErrorMessage.ORDER_ACCESS_DENIED.getMessage());
     }
 
-    // Validate shipping method
-    ShippingMethod shippingMethod = shippingMethodRepository.findById(request.getShippingMethodId())
-        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-            ErrorMessage.SHIPPING_METHOD_NOT_FOUND.getMessage()));
-
-    if (Boolean.FALSE.equals(shippingMethod.getIsActive())) {
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ErrorMessage.SHIPPING_METHOD_INACTIVE.getMessage());
-    }
-
-    // Validate voucher if provided
-    Voucher voucher = null;
-    if (request.getVoucherId() != null) {
-      voucher = voucherRepository.findById(request.getVoucherId())
-          .orElseThrow(
-              () -> new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessage.VOUCHER_NOT_FOUND.getMessage()));
-
-      if (!voucher.isValid()) {
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ErrorMessage.VOUCHER_INACTIVE.getMessage());
-      }
+    // Validate address has coordinates
+    if (address.getLatitude() == null || address.getLongitude() == null) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ErrorMessage.ADDRESS_MISSING_COORDINATES.getMessage());
     }
 
     // Create order items and calculate subtotal
@@ -110,17 +94,50 @@ public class OrderServiceImpl implements OrderService {
       orderItems.add(orderItem);
     }
 
-    // Calculate discount
-    BigDecimal discountAmount = BigDecimal.ZERO;
-    if (voucher != null) {
-      discountAmount = voucher.calculateDiscount(subtotal);
+    // Calculate distance and shipping fee based on coordinates
+    // Store location: SPKT (Glamora Store)
+    BigDecimal distance = DistanceCalculator.calculateDistance(
+        DistanceCalculator.STORE_LATITUDE,
+        DistanceCalculator.STORE_LONGITUDE,
+        BigDecimal.valueOf(address.getLatitude()),
+        BigDecimal.valueOf(address.getLongitude()));
 
-      // KHÔNG tăng usedCount ở đây - chỉ tăng khi payment thành công
-      // Voucher usage will be updated in PaymentService when payment succeeds
+    // Fixed shipping fee: 2000 VND per km
+    BigDecimal shippingFee = DistanceCalculator.calculateShippingFee(distance);
+
+    // Validate and apply voucher if provided
+    Voucher voucher = null;
+    BigDecimal discountAmount = BigDecimal.ZERO;
+
+    if (request.getVoucherId() != null) {
+      voucher = voucherRepository.findById(request.getVoucherId())
+          .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+              ErrorMessage.VOUCHER_NOT_FOUND.getMessage()));
+
+      // Check if voucher has remaining usage (IMPORTANT: prevent race condition)
+      if (voucher.getUsedCount() >= voucher.getUsageLimit()) {
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+            ErrorMessage.VOUCHER_USAGE_LIMIT_EXCEEDED.getMessage());
+      }
+
+      // Validate discount amount from frontend matches voucher rules
+      if (request.getDiscountAmount() != null && request.getDiscountAmount().compareTo(BigDecimal.ZERO) > 0) {
+        discountAmount = request.getDiscountAmount();
+      }
+
+      // CRITICAL: Reserve voucher immediately to prevent race condition
+      // Scenario: User creates Order 1 with voucher → creates Order 2 with same
+      // voucher
+      // → if we don't reserve here, both orders can use the same voucher
+      // Solution: Increase usedCount NOW to reserve the voucher
+      voucher.setUsedCount(voucher.getUsedCount() + 1);
+      voucherRepository.save(voucher);
+
+      // Note: If user cancels order or payment fails, we will decrease usageCount
+      // in cancelMyOrder() method to release the voucher
     }
 
-    // Calculate total
-    BigDecimal shippingFee = shippingMethod.getBaseFee(); // Chưa cộng phí theo khoảng cách km
+    // Calculate total: subtotal - discount + shipping
     BigDecimal totalAmount = subtotal.subtract(discountAmount).add(shippingFee);
 
     // Create order
@@ -129,11 +146,11 @@ public class OrderServiceImpl implements OrderService {
         .orderCode(orderCode)
         .user(currentUser)
         .shippingAddress(address)
-        .shippingMethod(shippingMethod)
-        .voucher(voucher)
+        .voucher(voucher) // Save voucher reference
         .status(OrderStatus.PENDING)
         .subtotal(subtotal)
-        .discountAmount(discountAmount)
+        .discountAmount(discountAmount) // Save discount amount from voucher
+        .distance(distance) // Save calculated distance
         .shippingFee(shippingFee)
         .totalAmount(totalAmount)
         .note(request.getNote())
@@ -221,10 +238,10 @@ public class OrderServiceImpl implements OrderService {
       productVariantRepository.save(variant);
     }
 
-    // Restore voucher usage
+    // Release voucher if it was used (decrease usedCount)
     if (order.getVoucher() != null) {
       Voucher voucher = order.getVoucher();
-      voucher.setUsedCount(voucher.getUsedCount() - 1);
+      voucher.setUsedCount(Math.max(0, voucher.getUsedCount() - 1)); // Prevent negative
       voucherRepository.save(voucher);
     }
 
