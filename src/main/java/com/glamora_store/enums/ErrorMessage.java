@@ -101,7 +101,7 @@ public enum ErrorMessage {
 
   ORDER_NOT_FOUND("Order not found"),
   ORDER_ACCESS_DENIED("You do not have permission to access this order"),
-  ORDER_CANNOT_CANCEL("Order can only be canceled when in PENDING or PAID status"),
+  ORDER_CANNOT_CANCEL("Order can only be canceled when in PENDING or CONFIRMED status"),
   ORDER_CANNOT_DELETE("Order can only be deleted when in CANCELED status"),
   ORDER_INVALID_STATUS_TRANSITION("Invalid order status transition"),
   ORDER_STATUS_CANNOT_CHANGE_COMPLETED("Cannot change status of completed orders"),

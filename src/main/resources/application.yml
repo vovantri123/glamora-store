@@ -75,7 +75,7 @@ scheduler:
   payment:
     expiry-check:
       enabled: true
-      cron: 0 */5 * * * * # Default: every 5 minutes
+      cron: 0 */5 * * * * # Every 5 minutes
 
 springdoc:
   api-docs:

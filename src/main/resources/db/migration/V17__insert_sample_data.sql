@@ -3,8 +3,7 @@
 -- ============================================
 INSERT INTO roles (name, description) VALUES
 ('ADMIN', 'Quản trị viên - Toàn quyền quản lý hệ thống'),
-('USER', 'Khách hàng - Quyền mua hàng và quản lý đơn hàng cá nhân'),
-('MANAGER', 'Quản lý - Quản lý sản phẩm và đơn hàng');
+('USER', 'Khách hàng - Quyền mua hàng và quản lý đơn hàng cá nhân');
 
 INSERT INTO permissions (name, description) VALUES
 ('USER_READ', 'Xem thông tin người dùng'),
@@ -25,10 +24,6 @@ INSERT INTO role_permissions (role_name, permission_name) VALUES
 ('ADMIN', 'PRODUCT_READ'), ('ADMIN', 'PRODUCT_WRITE'), ('ADMIN', 'PRODUCT_DELETE'),
 ('ADMIN', 'ORDER_READ'), ('ADMIN', 'ORDER_WRITE'), ('ADMIN', 'ORDER_DELETE'),
 ('ADMIN', 'CATEGORY_MANAGE'), ('ADMIN', 'VOUCHER_MANAGE'),
--- Manager quản lý sản phẩm và đơn hàng
-('MANAGER', 'PRODUCT_READ'), ('MANAGER', 'PRODUCT_WRITE'),
-('MANAGER', 'ORDER_READ'), ('MANAGER', 'ORDER_WRITE'),
-('MANAGER', 'CATEGORY_MANAGE'),
 -- User chỉ xem và mua hàng
 ('USER', 'PRODUCT_READ'), ('USER', 'ORDER_READ');
 
@@ -37,7 +32,7 @@ INSERT INTO role_permissions (role_name, permission_name) VALUES
 -- ============================================
 INSERT INTO users (email, full_name, password, gender, dob, is_deleted, created_at, avatar) VALUES
 ('admin@gmail.com', 'Nguyễn Văn Admin', '$2a$10$iNjWX4Qmk14lTn4L30KzouZnMJ/mecJwVIonOUHIhEItP0n77ylOe', 'MALE', '1990-01-15', false, CURRENT_TIMESTAMP, 'https://i.pravatar.cc/150?img=12'),
-('manager@gmail.com', 'Trần Thị Mai', '$2a$10$iNjWX4Qmk14lTn4L30KzouZnMJ/mecJwVIonOUHIhEItP0n77ylOe', 'FEMALE', '1992-05-20', false, CURRENT_TIMESTAMP, 'https://i.pravatar.cc/150?img=47'),
+('user@gmail.com', 'Trần Thị Mai', '$2a$10$iNjWX4Qmk14lTn4L30KzouZnMJ/mecJwVIonOUHIhEItP0n77ylOe', 'FEMALE', '1992-05-20', false, CURRENT_TIMESTAMP, 'https://i.pravatar.cc/150?img=47'),
 ('vovantri204@gmail.com', 'Võ Văn Trí', '$2a$10$iNjWX4Qmk14lTn4L30KzouZnMJ/mecJwVIonOUHIhEItP0n77ylOe', 'MALE', '2003-08-25', false, CURRENT_TIMESTAMP, 'https://i.pravatar.cc/150?img=33'),
 ('lethihoa@gmail.com', 'Lê Thị Hoa', '$2a$10$iNjWX4Qmk14lTn4L30KzouZnMJ/mecJwVIonOUHIhEItP0n77ylOe', 'FEMALE', '1998-12-10', false, CURRENT_TIMESTAMP, 'https://i.pravatar.cc/150?img=45'),
 ('phamducan@gmail.com', 'Phạm Đức An', '$2a$10$iNjWX4Qmk14lTn4L30KzouZnMJ/mecJwVIonOUHIhEItP0n77ylOe', 'MALE', '1995-03-18', false, CURRENT_TIMESTAMP, 'https://i.pravatar.cc/150?img=15');
@@ -45,8 +40,8 @@ INSERT INTO users (email, full_name, password, gender, dob, is_deleted, created_
 -- Gán role cho users
 INSERT INTO user_roles (user_id, role_name) VALUES
 ((SELECT id FROM users WHERE email = 'admin@gmail.com'), 'ADMIN'),
-((SELECT id FROM users WHERE email = 'manager@gmail.com'), 'MANAGER'),
-((SELECT id FROM users WHERE email = 'vovantri204@gmail.com'), 'USER'),
+((SELECT id FROM users WHERE email = 'user@gmail.com'), 'USER'),
+((SELECT id FROM users WHERE email = 'vovantri204@gmail.com'), 'ADMIN'),
 ((SELECT id FROM users WHERE email = 'lethihoa@gmail.com'), 'USER'),
 ((SELECT id FROM users WHERE email = 'phamducan@gmail.com'), 'USER');
 
@@ -669,19 +664,19 @@ INSERT INTO user_vouchers (user_id, voucher_id, is_deleted, created_at) VALUES
 -- ============================================
 -- ORDERS - Đơn hàng mẫu
 -- ============================================
-INSERT INTO orders (order_code, user_id, address_id, status, subtotal, discount_amount, distance, shipping_fee, total_amount, note, created_at) VALUES
+INSERT INTO orders (order_code, user_id, address_id, status, subtotal, discount_amount, distance, shipping_fee, total_amount, note, recipient_name, recipient_phone, payment_method_id, created_at) VALUES
 ('GLA20250101001',
  (SELECT id FROM users WHERE email = 'vovantri204@gmail.com'),
  (SELECT id FROM addresses WHERE user_id = (SELECT id FROM users WHERE email = 'vovantri204@gmail.com') AND is_default = true),
- 'COMPLETED', 647000, 0, 5.2, 10400, 657400, 'Giao hàng giờ hành chính', CURRENT_TIMESTAMP - INTERVAL '10 days'),
+ 'COMPLETED', 647000, 0, 5.2, 10400, 657400, 'Giao hàng giờ hành chính', 'Võ Văn Trí', '0987654321', (SELECT id FROM payment_methods WHERE name = 'COD'), CURRENT_TIMESTAMP - INTERVAL '10 days'),
 ('GLA20250115002',
  (SELECT id FROM users WHERE email = 'lethihoa@gmail.com'),
  (SELECT id FROM addresses WHERE user_id = (SELECT id FROM users WHERE email = 'lethihoa@gmail.com') LIMIT 1),
- 'SHIPPING', 549000, 0, 7.8, 15600, 564600, NULL, CURRENT_TIMESTAMP - INTERVAL '2 days'),
+ 'SHIPPING', 549000, 0, 7.8, 15600, 564600, NULL, 'Lê Thị Hoa', '0912345678', (SELECT id FROM payment_methods WHERE name = 'VNPay'), CURRENT_TIMESTAMP - INTERVAL '2 days'),
 ('GLA20250118003',
  (SELECT id FROM users WHERE email = 'phamducan@gmail.com'),
  (SELECT id FROM addresses WHERE user_id = (SELECT id FROM users WHERE email = 'phamducan@gmail.com') LIMIT 1),
- 'PAID', 449000, 0, 3.5, 7000, 456000, 'Gọi trước khi giao', CURRENT_TIMESTAMP - INTERVAL '1 day');
+ 'CONFIRMED', 449000, 0, 3.5, 7000, 456000, 'Gọi trước khi giao', 'Phạm Đức An', '0901234567', (SELECT id FROM payment_methods WHERE name = 'VNPay'), CURRENT_TIMESTAMP - INTERVAL '1 day');
 
 -- Order Items
 INSERT INTO order_items (order_id, variant_id, quantity, price, total_price, created_at) VALUES
@@ -724,7 +719,7 @@ INSERT INTO payments (order_id, payment_method_id, amount, status, transaction_i
  'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html?vnp_TxnRef=14153188...', 
  CURRENT_TIMESTAMP - INTERVAL '2 days 5 minutes', CURRENT_TIMESTAMP - INTERVAL '2 days');
 
--- Payment cho đơn GLA20250118003 (PAID) - User thanh toán VNPay xong, chờ giao hàng
+-- Payment cho đơn GLA20250118003 (CONFIRMED) - User thanh toán VNPay xong, chờ giao hàng
 INSERT INTO payments (order_id, payment_method_id, amount, status, transaction_id, payment_date, failed_reason, pay_url, created_at, updated_at) VALUES
 ((SELECT id FROM orders WHERE order_code = 'GLA20250118003'), 
  (SELECT id FROM payment_methods WHERE name = 'VNPay'), 
@@ -732,28 +727,12 @@ INSERT INTO payments (order_id, payment_method_id, amount, status, transaction_i
  'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html?vnp_TxnRef=14156892...', 
  CURRENT_TIMESTAMP - INTERVAL '1 day 10 minutes', CURRENT_TIMESTAMP - INTERVAL '1 day');
 
--- Thêm 1 đơn PENDING với payment PENDING (COD)
-INSERT INTO orders (order_code, user_id, address_id, status, subtotal, discount_amount, distance, shipping_fee, total_amount, note, created_at) VALUES
-('GLA20250119004',
- (SELECT id FROM users WHERE email = 'vovantri204@gmail.com'),
- (SELECT id FROM addresses WHERE user_id = (SELECT id FROM users WHERE email = 'vovantri204@gmail.com') AND is_default = true),
- 'PENDING', 199000, 0, 2.5, 28000, 227000, 'Đơn hàng mới tạo, chưa thanh toán', CURRENT_TIMESTAMP - INTERVAL '2 hours');
-
-INSERT INTO order_items (order_id, variant_id, quantity, price, total_price, created_at) VALUES
-((SELECT id FROM orders WHERE order_code = 'GLA20250119004'), (SELECT id FROM product_variants WHERE sku = 'ATBC-TRANG-L'), 1, 199000, 199000, CURRENT_TIMESTAMP - INTERVAL '2 hours');
-
-INSERT INTO payments (order_id, payment_method_id, amount, status, transaction_id, payment_date, failed_reason, pay_url, created_at, updated_at) VALUES
-((SELECT id FROM orders WHERE order_code = 'GLA20250119004'), 
- (SELECT id FROM payment_methods WHERE name = 'COD'), 
- 227000, 'PENDING', NULL, NULL, NULL, NULL,
- CURRENT_TIMESTAMP - INTERVAL '2 hours', CURRENT_TIMESTAMP - INTERVAL '2 hours');
-
 -- Thêm 1 đơn CANCELLED với payment CANCELLED
-INSERT INTO orders (order_code, user_id, address_id, status, subtotal, discount_amount, distance, shipping_fee, total_amount, note, canceled_reason, created_at) VALUES
+INSERT INTO orders (order_code, user_id, address_id, status, subtotal, discount_amount, distance, shipping_fee, total_amount, note, canceled_reason, recipient_name, recipient_phone, payment_method_id, created_at) VALUES
 ('GLA20250117005',
  (SELECT id FROM users WHERE email = 'phamducan@gmail.com'),
  (SELECT id FROM addresses WHERE user_id = (SELECT id FROM users WHERE email = 'phamducan@gmail.com') LIMIT 1),
- 'CANCELED', 249000, 0, 4.0, 25000, 274000, NULL, 'Khách hàng đổi ý không mua nữa', CURRENT_TIMESTAMP - INTERVAL '3 days');
+ 'CANCELED', 249000, 0, 4.0, 25000, 274000, NULL, 'Khách hàng đổi ý không mua nữa', 'Phạm Đức An', '0901234567', (SELECT id FROM payment_methods WHERE name = 'VNPay'), CURRENT_TIMESTAMP - INTERVAL '3 days');
 
 INSERT INTO order_items (order_id, variant_id, quantity, price, total_price, created_at) VALUES
 ((SELECT id FROM orders WHERE order_code = 'GLA20250117005'), (SELECT id FROM product_variants WHERE sku = 'OVER-DEN-L'), 1, 249000, 249000, CURRENT_TIMESTAMP - INTERVAL '3 days');

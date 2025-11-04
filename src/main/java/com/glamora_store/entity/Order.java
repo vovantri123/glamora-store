@@ -30,15 +30,15 @@ public class Order extends AuditableEntity {
   @JoinColumn(name = "user_id", nullable = false)
   private User user;
 
-  // địa chỉ nhận hàng
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "address_id", nullable = false)
-  private Address shippingAddress;
-
   // Voucher applied to this order (nullable - only set if user applied voucher)
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "voucher_id")
   private Voucher voucher;
+
+  // Payment method chosen at order creation (COD, VNPay, etc.)
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "payment_method_id", nullable = false)
+  private PaymentMethod paymentMethod;
 
   @Enumerated(EnumType.STRING)
   @Column(length = 20)
@@ -68,10 +68,25 @@ public class Order extends AuditableEntity {
   private String canceledReason; // Lý do hủy đơn (user hoặc admin) - thời gian hủy dùng updatedAt từ
                                  // AuditableEntity
 
+  // địa chỉ nhận hàng
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "address_id", nullable = false)
+  private Address shippingAddress;
+
+  // Recipient information at the time of order creation (snapshot from Address)
+  // This ensures that even if the user updates/deletes their address, the order
+  // still has the correct delivery info
+  @Column(name = "recipient_name", length = 100)
+  private String recipientName;
+
+  @Column(name = "recipient_phone", length = 20)
+  private String recipientPhone;
+
   @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
   @Builder.Default
   private Set<OrderItem> orderItems = new HashSet<>();
 
-  @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
-  private Payment payment;
+  @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+  @Builder.Default
+  private Set<Payment> payments = new HashSet<>();
 }

@@ -1,6 +1,7 @@
 package com.glamora_store.dto.response.common.order;
 
 import com.glamora_store.enums.OrderStatus;
+import com.glamora_store.enums.PaymentStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,6 +19,12 @@ public class OrderResponse {
   private Long id;
   private String orderCode;
   private OrderStatus status;
+  private PaymentStatus paymentStatus;
+
+  // Payment method info (saved at order creation)
+  private Long paymentMethodId;
+  private String paymentMethodName; // COD, VNPay, etc.
+
   private BigDecimal subtotal;
   private BigDecimal discountAmount;
   private BigDecimal distance; // Distance from store to delivery address in km
@@ -36,6 +43,10 @@ public class OrderResponse {
   // Shipping address
   private Long addressId;
   private String shippingAddressDetail;
+
+  // Recipient information (snapshot at order creation time)
+  private String recipientName;
+  private String recipientPhone;
 
   // Order items
   private List<OrderItemResponse> orderItems;

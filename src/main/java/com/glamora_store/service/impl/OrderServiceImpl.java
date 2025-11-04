@@ -39,6 +39,7 @@ public class OrderServiceImpl implements OrderService {
   private final ProductVariantRepository productVariantRepository;
   private final PaymentRepository paymentRepository;
   private final VoucherRepository voucherRepository;
+  private final PaymentMethodRepository paymentMethodRepository;
   private final OrderMapper orderMapper;
 
   @Override
@@ -62,6 +63,11 @@ public class OrderServiceImpl implements OrderService {
     if (address.getLatitude() == null || address.getLongitude() == null) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ErrorMessage.ADDRESS_MISSING_COORDINATES.getMessage());
     }
+
+    // Validate payment method exists
+    PaymentMethod paymentMethod = paymentMethodRepository.findById(request.getPaymentMethodId())
+        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+            ErrorMessage.PAYMENT_METHOD_NOT_FOUND.getMessage()));
 
     // Create order items and calculate subtotal
     Set<OrderItem> orderItems = new HashSet<>();
@@ -147,6 +153,7 @@ public class OrderServiceImpl implements OrderService {
         .user(currentUser)
         .shippingAddress(address)
         .voucher(voucher) // Save voucher reference
+        .paymentMethod(paymentMethod) // Save payment method chosen at order creation
         .status(OrderStatus.PENDING)
         .subtotal(subtotal)
         .discountAmount(discountAmount) // Save discount amount from voucher
@@ -154,6 +161,8 @@ public class OrderServiceImpl implements OrderService {
         .shippingFee(shippingFee)
         .totalAmount(totalAmount)
         .note(request.getNote())
+        .recipientName(address.getReceiverName()) // Snapshot recipient info at order creation
+        .recipientPhone(address.getReceiverPhone()) // Snapshot recipient info at order creation
         .orderItems(orderItems)
         .build();
 
@@ -172,7 +181,8 @@ public class OrderServiceImpl implements OrderService {
         .orElseThrow(
             () -> new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessage.ORDER_NOT_FOUND.getMessage()));
 
-    if (!order.getUser().getId().equals(userId)) {
+    // Admin can view all orders, users can only view their own orders
+    if (!SecurityUtil.isAdmin() && !order.getUser().getId().equals(userId)) {
       throw new ResponseStatusException(HttpStatus.FORBIDDEN, ErrorMessage.ORDER_ACCESS_DENIED.getMessage());
     }
 
@@ -186,7 +196,8 @@ public class OrderServiceImpl implements OrderService {
         .orElseThrow(
             () -> new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessage.ORDER_NOT_FOUND.getMessage()));
 
-    if (!order.getUser().getId().equals(userId)) {
+    // Admin can view all orders, users can only view their own orders
+    if (!SecurityUtil.isAdmin() && !order.getUser().getId().equals(userId)) {
       throw new ResponseStatusException(HttpStatus.FORBIDDEN, ErrorMessage.ORDER_ACCESS_DENIED.getMessage());
     }
 
@@ -194,10 +205,11 @@ public class OrderServiceImpl implements OrderService {
   }
 
   @Override
-  public PageResponse<OrderResponse> searchMyOrders(OrderStatus status, Pageable pageable) {
+  public PageResponse<OrderResponse> searchMyOrders(OrderStatus status, String orderCode, Pageable pageable) {
     Long userId = SecurityUtil.getCurrentUserId();
     Specification<Order> spec = OrderSpecification.hasUserId(userId)
-        .and(status != null ? OrderSpecification.hasStatus(status) : null);
+        .and(status != null ? OrderSpecification.hasStatus(status) : null)
+        .and(orderCode != null ? OrderSpecification.hasOrderCodeLike(orderCode) : null);
 
     Page<Order> orderPage = orderRepository.findAll(spec, pageable);
     Page<OrderResponse> mapped = orderPage.map(orderMapper::toOrderResponse);
@@ -212,12 +224,13 @@ public class OrderServiceImpl implements OrderService {
         .orElseThrow(
             () -> new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessage.ORDER_NOT_FOUND.getMessage()));
 
-    if (!order.getUser().getId().equals(userId)) {
+    // Admin can cancel any order, users can only cancel their own orders
+    if (!SecurityUtil.isAdmin() && !order.getUser().getId().equals(userId)) {
       throw new ResponseStatusException(HttpStatus.FORBIDDEN, ErrorMessage.ORDER_ACCESS_DENIED.getMessage());
     }
 
-    // Can only cancel PENDING orders (not PAID, because no refund logic
-    // implemented)
+    // Can only cancel PENDING orders (Trước mắt không cho hủy cái CONFIRMED,
+    // because no refund logic implemented)
     if (order.getStatus() != OrderStatus.PENDING) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ErrorMessage.ORDER_CANNOT_CANCEL.getMessage());
     }
@@ -260,8 +273,8 @@ public class OrderServiceImpl implements OrderService {
         .orElseThrow(
             () -> new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessage.ORDER_NOT_FOUND.getMessage()));
 
-    // Validate order belongs to current user
-    if (!order.getUser().getId().equals(userId)) {
+    // Admin can confirm any order, users can only confirm their own orders
+    if (!SecurityUtil.isAdmin() && !order.getUser().getId().equals(userId)) {
       throw new ResponseStatusException(HttpStatus.FORBIDDEN, ErrorMessage.ORDER_ACCESS_DENIED.getMessage());
     }
 
@@ -384,13 +397,13 @@ public class OrderServiceImpl implements OrderService {
     // Define valid transitions
     switch (from) {
       case PENDING:
-        if (to != OrderStatus.PAID && to != OrderStatus.CANCELED) {
+        if (to != OrderStatus.CONFIRMED && to != OrderStatus.CANCELED) {
           throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
               ErrorMessage.ORDER_INVALID_STATUS_TRANSITION.getMessage());
         }
         break;
-      case PAID:
-        if (to != OrderStatus.SHIPPING && to != OrderStatus.CANCELED) {
+      case CONFIRMED:
+        if (to != OrderStatus.SHIPPING) {
           throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
               ErrorMessage.ORDER_INVALID_STATUS_TRANSITION.getMessage());
         }

@@ -93,13 +93,13 @@ public class PaymentServiceImpl implements PaymentService {
       String payUrl = createVNPayPaymentUrl(order);
       payment.setPayUrl(payUrl);
     }
-    // Nếu là COD, set status = SUCCESS ngay và xử lý order + cart
+    // Nếu là COD, set payment status = PENDING và order status = CONFIRMED
     else if (paymentMethod.getName().contains("COD")) {
-      payment.setStatus(PaymentStatus.SUCCESS);
-      payment.setPaymentDate(LocalDateTime.now());
+      payment.setStatus(PaymentStatus.PENDING); // COD chưa thanh toán
+      payment.setPaymentDate(null); // Chưa có ngày thanh toán
 
-      // Cập nhật order status thành PAID
-      order.setStatus(OrderStatus.PAID);
+      // Cập nhật order status thành CONFIRMED (đã xác nhận đơn)
+      order.setStatus(OrderStatus.CONFIRMED);
       orderRepository.save(order);
 
       // Voucher will be applied separately via Payment API, not at order creation
@@ -183,9 +183,9 @@ public class PaymentServiceImpl implements PaymentService {
       payment.setStatus(PaymentStatus.SUCCESS);
       payment.setPaymentDate(LocalDateTime.now());
 
-      // Cập nhật trạng thái Order thành PAID
+      // Cập nhật trạng thái Order thành CONFIRMED
       Order order = payment.getOrder();
-      order.setStatus(OrderStatus.PAID);
+      order.setStatus(OrderStatus.CONFIRMED);
       orderRepository.save(order);
 
       // Voucher will be applied separately via Payment API, not at order creation

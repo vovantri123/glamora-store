@@ -4,6 +4,7 @@ import com.glamora_store.dto.response.common.order.OrderItemResponse;
 import com.glamora_store.dto.response.common.order.OrderResponse;
 import com.glamora_store.entity.Order;
 import com.glamora_store.entity.OrderItem;
+import com.glamora_store.enums.PaymentStatus;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.NullValuePropertyMappingStrategy;
@@ -16,6 +17,9 @@ public interface OrderMapper {
     @Mapping(target = "userFullName", source = "user.fullName")
     @Mapping(target = "addressId", source = "shippingAddress.id")
     @Mapping(target = "shippingAddressDetail", expression = "java(formatAddress(order))")
+    @Mapping(target = "paymentMethodId", source = "paymentMethod.id")
+    @Mapping(target = "paymentMethodName", source = "paymentMethod.name")
+    @Mapping(target = "paymentStatus", expression = "java(getPaymentStatus(order))")
     @Mapping(target = "orderItems", source = "orderItems")
     OrderResponse toOrderResponse(Order order);
 
@@ -64,5 +68,48 @@ public interface OrderMapper {
                 .findFirst()
                 .map(img -> img.getImageUrl())
                 .orElse(product.getImages().iterator().next().getImageUrl());
+    }
+
+    /*
+     * Hàm này giúp xác định trạng thái thanh toán đại diện cho toàn đơn hàng, bằng
+     * cách:
+     * 
+     * Bỏ qua payment null,
+     * 
+     * Ưu tiên SUCCESS cao nhất,
+     * 
+     * Nếu cùng mức, lấy payment mới nhất,
+     * 
+     * Trả về trạng thái đó.
+     */
+    default PaymentStatus getPaymentStatus(Order order) {
+        if (order.getPayments() == null || order.getPayments().isEmpty()) {
+            return null;
+        }
+        // Get the most recent payment or the one with highest priority status
+        return order.getPayments().stream()
+                .filter(payment -> payment.getStatus() != null)
+                .max((p1, p2) -> {
+                    // Priority: SUCCESS > FAILED > CANCELLED > EXPIRED > PENDING
+                    int priority1 = getStatusPriority(p1.getStatus());
+                    int priority2 = getStatusPriority(p2.getStatus());
+                    if (priority1 != priority2) {
+                        return Integer.compare(priority1, priority2);
+                    }
+                    // If same priority, get the most recent one
+                    return p1.getCreatedAt().compareTo(p2.getCreatedAt());
+                })
+                .map(payment -> payment.getStatus())
+                .orElse(null);
+    }
+
+    private int getStatusPriority(PaymentStatus status) {
+        return switch (status) {
+            case SUCCESS -> 5;
+            case FAILED -> 4;
+            case CANCELLED -> 3;
+            case EXPIRED -> 2;
+            case PENDING -> 1;
+        };
     }
 }

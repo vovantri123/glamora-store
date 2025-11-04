@@ -21,6 +21,9 @@ public class CreateOrderRequest {
   @NotNull(message = "ORDER_ADDRESS_ID_REQUIRED")
   private Long addressId;
 
+  @NotNull(message = "PAYMENT_METHOD_ID_REQUIRED")
+  private Long paymentMethodId; // Payment method chosen by user (COD, VNPay, etc.)
+
   @Size(max = 500, message = "ORDER_NOTE_TOO_LONG")
   private String note;
 

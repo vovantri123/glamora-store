@@ -34,3 +34,4 @@ CREATE TABLE user_vouchers (
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (voucher_id) REFERENCES vouchers(id)
 );
+

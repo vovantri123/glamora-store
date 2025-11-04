@@ -17,7 +17,7 @@ public interface OrderService {
 
   OrderResponse getMyOrderByCode(String orderCode);
 
-  PageResponse<OrderResponse> searchMyOrders(OrderStatus status, Pageable pageable);
+  PageResponse<OrderResponse> searchMyOrders(OrderStatus status, String orderCode, Pageable pageable);
 
   OrderResponse cancelMyOrder(Long orderId, CancelOrderRequest request);
 

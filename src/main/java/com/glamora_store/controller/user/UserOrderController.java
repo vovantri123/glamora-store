@@ -34,9 +34,10 @@ public class UserOrderController {
     }
 
     @GetMapping
-    @Operation(summary = "Get my orders or search by status", description = "Get paginated list of current user's orders. When status is provided, filters orders by that status.")
+    @Operation(summary = "Get my orders or search by status and order code", description = "Get paginated list of current user's orders. Can filter by status and/or search by order code.")
     public ApiResponse<PageResponse<OrderResponse>> getMyOrders(
             @RequestParam(required = false) OrderStatus status,
+            @RequestParam(required = false) String orderCode,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "createdAt") String sortBy,
@@ -46,7 +47,7 @@ public class UserOrderController {
 
         return new ApiResponse<>(
                 SuccessMessage.GET_ORDER_SUCCESS.getMessage(),
-                orderService.searchMyOrders(status, pageable));
+                orderService.searchMyOrders(status, orderCode, pageable));
     }
 
     @GetMapping("/{orderId}")
