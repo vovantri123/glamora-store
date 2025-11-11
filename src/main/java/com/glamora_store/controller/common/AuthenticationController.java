@@ -11,6 +11,7 @@ import com.glamora_store.service.AuthenticationService;
 import com.glamora_store.service.OtpEmailService;
 import com.glamora_store.service.UserService;
 import com.nimbusds.jose.JOSEException;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -28,10 +29,28 @@ public class AuthenticationController {
   private final UserService userService;
 
   @PostMapping("/login")
-  public ApiResponse<AuthenticationResponse> login(@Valid @RequestBody AuthenticationRequest request) {
-    AuthenticationResponse response = authenticationService.authenticate(request);
+  public ApiResponse<AuthenticationResponse> login(
+    @Valid @RequestBody AuthenticationRequest request,
+    HttpServletRequest httpRequest) {
+    AuthenticationResponse response = authenticationService.authenticate(request, httpRequest);
 
     return new ApiResponse<>(SuccessMessage.LOGIN_SUCCESS.getMessage(), response);
+  }
+
+  @PostMapping("/refresh")
+  public ApiResponse<AuthenticationResponse> refreshToken(
+    @Valid @RequestBody RefreshTokenRequest request,
+    HttpServletRequest httpRequest) {
+    AuthenticationResponse response = authenticationService.refreshToken(request, httpRequest);
+
+    return new ApiResponse<>(SuccessMessage.TOKEN_REFRESH_SUCCESS.getMessage(), response);
+  }
+
+  @PostMapping("/logout")
+  public ApiResponse<Void> logout(@Valid @RequestBody LogoutRequest request) {
+    authenticationService.logout(request);
+
+    return new ApiResponse<>(SuccessMessage.LOGOUT_SUCCESS.getMessage());
   }
 
   @PostMapping("/introspect")
@@ -40,8 +59,8 @@ public class AuthenticationController {
     Boolean result = authenticationService.introspect(request);
 
     String message = Boolean.TRUE.equals(result)
-      ? SuccessMessage.TOKEN_VALIDATION_SUCCESS.getMessage()
-      : SuccessMessage.TOKEN_VALIDATION_FAILURE.getMessage();
+      ? SuccessMessage.ACCESS_TOKEN_VALIDATION_SUCCESS.getMessage()
+      : SuccessMessage.ACCESS_TOKEN_VALIDATION_FAILURE.getMessage();
 
     return new ApiResponse<>(message);
   }

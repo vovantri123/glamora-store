@@ -16,6 +16,7 @@ import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.config.Customizer;
 
 import javax.crypto.spec.SecretKeySpec;
 
@@ -52,13 +53,18 @@ public class SecurityConfig {
 
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-    httpSecurity.authorizeHttpRequests(request -> request
-        // Allow CORS preflight requests (OPTIONS)
-        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-        .requestMatchers(PUBLIC_ENDPOINTS).permitAll()
-        .requestMatchers(USER_ENDPOINTS).hasAnyRole("USER", "ADMIN")
-        .requestMatchers(ADMIN_ENDPOINTS).hasRole("ADMIN")
-        .anyRequest().authenticated());
+    httpSecurity
+        // CorsFilter chỉ áp dụng cho request thành công: CorsConfig.java tạo
+        // CorsFilter, nhưng nó chạy sau Spring Security filter
+        // Nên cần thêm CORS headers vào TẤT CẢ response, kể cả lỗi 401/403.
+        .cors(Customizer.withDefaults())
+        .authorizeHttpRequests(request -> request
+            // Allow CORS preflight requests (OPTIONS)
+            .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+            .requestMatchers(PUBLIC_ENDPOINTS).permitAll()
+            .requestMatchers(USER_ENDPOINTS).hasAnyRole("USER", "ADMIN")
+            .requestMatchers(ADMIN_ENDPOINTS).hasRole("ADMIN")
+            .anyRequest().authenticated());
 
     httpSecurity.oauth2ResourceServer(oauth2 -> oauth2.jwt(
         jwtConfigurer -> jwtConfigurer.decoder(jwtDecoder()).jwtAuthenticationConverter(jwtAuthenticationConverter()))
@@ -87,9 +93,24 @@ public class SecurityConfig {
   JwtDecoder jwtDecoder() {
     SecretKeySpec secretKeySpec = new SecretKeySpec(SECRET_KEY.getBytes(), "HS512");
 
-    return NimbusJwtDecoder.withSecretKey(secretKeySpec)
+    NimbusJwtDecoder decoder = NimbusJwtDecoder.withSecretKey(secretKeySpec)
         .macAlgorithm(MacAlgorithm.HS512)
         .build();
+
+    // Disable clock skew (default is 60 seconds) to check expiration immediately
+    /*
+     * Clock skew (hay clock drift) là sự chênh lệch thời gian giữa các server trong
+     * hệ thống phân tán. Ví dụ:
+     * 
+     * Server A: 10:00:00
+     * Server B: 10:00:05 (chênh 5 giây)
+     * Khi JWT có exp (expiration time) = 10:00:00, server A sẽ reject ngay lập tức,
+     * nhưng server B vẫn chấp nhận trong 5 giây nữa.
+     */
+    decoder.setJwtValidator(new org.springframework.security.oauth2.jwt.JwtTimestampValidator(
+        java.time.Duration.ZERO));
+
+    return decoder;
   }
 
   @Bean

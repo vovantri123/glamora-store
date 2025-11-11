@@ -124,7 +124,10 @@ public enum ErrorMessage {
   PERMISSION_NAME_REQUIRED("Permission name is required"),
   LIST_ROLE_NAMES_EMPTY("List roleNames cannot be empty"),
   LIST_PERMISSION_NAMES_EMPTY("List permissionNames cannot be empty"),
-  TOKEN_REQUIRED("Token is required"),
+  ACCESS_TOKEN_REQUIRED("Access token is required"),
+  REFRESH_TOKEN_REQUIRED("Refresh token is required"),
+  INVALID_REFRESH_TOKEN("Invalid refresh token"),
+  REFRESH_TOKEN_EXPIRED("Refresh token has expired"),
 
   RECEIVER_NAME_REQUIRED("Receiver name is required"),
   RECEIVER_PHONE_REQUIRED("Receiver phone is required"),

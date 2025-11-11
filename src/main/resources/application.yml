@@ -54,6 +54,8 @@ spring:
 
 jwt:
   secretKey: ${JWT_SECRETKEY}
+  access-token-expiration: 604800 # 300 # (seconds) == 5 minutes in seconds
+  refresh-token-expiration: 604800 # 7 days in seconds
 
 cors:
   allowed-origins: ${FRONTEND_URL}
@@ -76,6 +78,10 @@ scheduler:
     expiry-check:
       enabled: true
       cron: 0 */5 * * * * # Every 5 minutes
+  refresh-token:
+    cleanup:
+      enabled: true
+      cron: 0 0 2 * * * # Every day at 2:00 AM
 
 springdoc:
   api-docs:

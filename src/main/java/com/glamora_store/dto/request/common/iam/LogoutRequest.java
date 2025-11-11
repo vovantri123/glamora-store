@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class IntrospectRequest {
-  @NotBlank(message = "ACCESS_TOKEN_REQUIRED")
-  private String accessToken;
+public class LogoutRequest {
+    @NotBlank(message = "REFRESH_TOKEN_REQUIRED")
+    private String refreshToken;
 }
