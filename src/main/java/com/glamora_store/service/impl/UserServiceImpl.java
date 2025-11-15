@@ -81,13 +81,13 @@ public class UserServiceImpl implements UserService {
     // Create new user (either first time or re-registration after OTP expiry)
     User user = userMapper.toUser(request);
     user.setAvatar(
-      "https://img.freepik.com/premium-vector/profile-picture-placeholder-avatar-silhouette-gray-tones-icon-colored-shapes-gradient_1076610-40164.jpg?w=360");
+        "https://img.freepik.com/premium-vector/profile-picture-placeholder-avatar-silhouette-gray-tones-icon-colored-shapes-gradient_1076610-40164.jpg?w=360");
     user.setPassword(passwordEncoder.encode(request.getPassword()));
     user.setIsDeleted(true); // Will be set to false after OTP verification
 
     Role userRole = roleRepository
-      .findById(RoleName.USER.name())
-      .orElseThrow(() -> ExceptionUtil.notFound(ErrorMessage.ROLE_NOT_FOUND));
+        .findById(RoleName.USER.name())
+        .orElseThrow(() -> ExceptionUtil.notFound(ErrorMessage.ROLE_NOT_FOUND));
 
     user.setRoles(Set.of(userRole));
     userRepository.save(user);
@@ -115,8 +115,8 @@ public class UserServiceImpl implements UserService {
     user.setIsDeleted(false);
 
     Role userRole = roleRepository
-      .findById(RoleName.USER.name())
-      .orElseThrow(() -> ExceptionUtil.notFound(ErrorMessage.ROLE_NOT_FOUND));
+        .findById(RoleName.USER.name())
+        .orElseThrow(() -> ExceptionUtil.notFound(ErrorMessage.ROLE_NOT_FOUND));
 
     user.setRoles(Set.of(userRole));
 
@@ -126,8 +126,8 @@ public class UserServiceImpl implements UserService {
   @Override
   public UserResponse updateUser(Long id, UserUpdateRequest request) {
     User user = userRepository
-      .findByIdAndIsDeletedFalse(id)
-      .orElseThrow(() -> ExceptionUtil.notFound(ErrorMessage.USER_NOT_FOUND));
+        .findByIdAndIsDeletedFalse(id)
+        .orElseThrow(() -> ExceptionUtil.notFound(ErrorMessage.USER_NOT_FOUND));
 
     userMapper.toUser(user, request);
 
@@ -137,8 +137,8 @@ public class UserServiceImpl implements UserService {
   @Override
   public UserProfileResponse updateMyProfile(Long userId, UserProfileUpdateRequest request) {
     User user = userRepository
-      .findByIdAndIsDeletedFalse(userId)
-      .orElseThrow(() -> ExceptionUtil.notFound(ErrorMessage.USER_NOT_FOUND));
+        .findByIdAndIsDeletedFalse(userId)
+        .orElseThrow(() -> ExceptionUtil.notFound(ErrorMessage.USER_NOT_FOUND));
 
     userMapper.toUser(user, request);
 
@@ -148,13 +148,13 @@ public class UserServiceImpl implements UserService {
   @Override
   public void updatePassword(Long userId, PasswordUpdateRequest request) {
     User user = userRepository
-      .findByIdAndIsDeletedFalse(userId)
-      .orElseThrow(() -> ExceptionUtil.notFound(ErrorMessage.USER_NOT_FOUND));
+        .findByIdAndIsDeletedFalse(userId)
+        .orElseThrow(() -> ExceptionUtil.notFound(ErrorMessage.USER_NOT_FOUND));
 
     // Nếu là USER thường thì bắt buộc kiểm tra oldPassword
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     boolean isAdmin = auth.getAuthorities().stream()
-      .anyMatch(granted -> granted.getAuthority().equals(RoleName.ADMIN.name()));
+        .anyMatch(granted -> granted.getAuthority().equals(RoleName.ADMIN.name()));
 
     if (!isAdmin) {
       if (!passwordEncoder.matches(request.getOldPassword(), user.getPassword())) {
@@ -170,8 +170,8 @@ public class UserServiceImpl implements UserService {
   @Override
   public void softDeleteUser(Long id) {
     User user = userRepository
-      .findByIdAndIsDeletedFalse(id)
-      .orElseThrow(() -> ExceptionUtil.notFound(ErrorMessage.USER_NOT_FOUND));
+        .findByIdAndIsDeletedFalse(id)
+        .orElseThrow(() -> ExceptionUtil.notFound(ErrorMessage.USER_NOT_FOUND));
 
     user.setIsDeleted(true);
 
@@ -180,12 +180,14 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public PageResponse<UserResponse> searchUsers(
-    String fullname, LocalDate dob, boolean includeDeleted, Pageable pageable) {
-    Specification<User> spec = includeDeleted
-      ? UserSpecification.hasFullNameLike(fullname).and(UserSpecification.hasDobEqual(dob))
-      : UserSpecification.isNotDeleted()
-      .and(UserSpecification.hasFullNameLike(fullname))
-      .and(UserSpecification.hasDobEqual(dob));
+      String fullname, LocalDate dob, boolean isDeleted, Pageable pageable) {
+    Specification<User> spec = isDeleted
+        ? UserSpecification.isDeleted()
+            .and(UserSpecification.hasFullNameLike(fullname))
+            .and(UserSpecification.hasDobEqual(dob))
+        : UserSpecification.isNotDeleted()
+            .and(UserSpecification.hasFullNameLike(fullname))
+            .and(UserSpecification.hasDobEqual(dob));
 
     Page<User> userPage = userRepository.findAll(spec, pageable);
     Page<UserResponse> userResponsePage = userPage.map(userMapper::toUserResponse);
@@ -195,8 +197,8 @@ public class UserServiceImpl implements UserService {
   @Override
   public UserProfileResponse getUserById(Long id) {
     User user = userRepository
-      .findByIdAndIsDeletedFalse(id)
-      .orElseThrow(() -> ExceptionUtil.notFound(ErrorMessage.USER_NOT_FOUND));
+        .findByIdAndIsDeletedFalse(id)
+        .orElseThrow(() -> ExceptionUtil.notFound(ErrorMessage.USER_NOT_FOUND));
     return userMapper.toUserProfileResponse(user);
   }
 
@@ -222,12 +224,12 @@ public class UserServiceImpl implements UserService {
     Set<String> foundRoleNames = roles.stream().map(Role::getName).collect(Collectors.toSet());
 
     Set<String> notFoundRoles = requestedRoleNames.stream()
-      .filter(r -> !foundRoleNames.contains(r))
-      .collect(Collectors.toSet());
+        .filter(r -> !foundRoleNames.contains(r))
+        .collect(Collectors.toSet());
 
     if (!notFoundRoles.isEmpty()) {
       throw ExceptionUtil.with(
-        HttpStatus.NOT_FOUND, ErrorMessage.ROLES_NOT_FOUND, String.join(", ", notFoundRoles));
+          HttpStatus.NOT_FOUND, ErrorMessage.ROLES_NOT_FOUND, String.join(", ", notFoundRoles));
     }
 
     user.setRoles(new HashSet<>(roles));
@@ -238,8 +240,8 @@ public class UserServiceImpl implements UserService {
   @Override
   public void resetPassword(String email, String newPassword) {
     User user = userRepository
-      .findByEmailAndIsDeletedFalse(email)
-      .orElseThrow(() -> ExceptionUtil.notFound(ErrorMessage.USER_NOT_FOUND));
+        .findByEmailAndIsDeletedFalse(email)
+        .orElseThrow(() -> ExceptionUtil.notFound(ErrorMessage.USER_NOT_FOUND));
     user.setPassword(passwordEncoder.encode(newPassword));
     userRepository.save(user);
   }

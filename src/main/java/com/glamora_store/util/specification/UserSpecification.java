@@ -16,6 +16,10 @@ public class UserSpecification {
     return (root, query, cb) -> cb.isFalse(root.get("isDeleted"));
   }
 
+  public static Specification<User> isDeleted() {
+    return (root, query, cb) -> cb.isTrue(root.get("isDeleted"));
+  }
+
   public static Specification<User> hasFullNameLike(String fullname) {
     return (root, query, cb) -> {
       if (fullname == null || fullname.trim().isEmpty())
