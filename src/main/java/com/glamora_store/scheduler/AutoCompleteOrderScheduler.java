@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * Scheduler to automatically complete orders that have been in SHIPPING status
  * for more than 7 days without user confirmation.
- * 
+ *
  * This prevents orders from being stuck in SHIPPING status indefinitely.
  * Runs daily at 2:00 AM.
  */
@@ -30,9 +30,9 @@ public class AutoCompleteOrderScheduler {
 
     /**
      * Auto-complete orders in SHIPPING status for more than 7 days
-     * Runs daily at 2:00 AM
+     * Runs daily at 7:00 AM
      */
-    @Scheduled(cron = "0 0 2 * * ?") // Every day at 2:00 AM
+    @Scheduled(cron = "0 0 7 * * *", zone = "Asia/Ho_Chi_Minh")
     @Transactional
     public void autoCompleteShippingOrders() {
         log.info("Starting auto-complete shipping orders scheduler");

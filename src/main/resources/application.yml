@@ -77,10 +77,9 @@ scheduler:
   payment:
     expiry-check:
       enabled: true
-      cron: 0 */5 * * * * # Every 5 minutes
+      cron: 0 */1 * * * * # Every minute
   refresh-token:
     cleanup:
-      enabled: true
       cron: 0 0 2 * * * # Every day at 2:00 AM
 
 springdoc:

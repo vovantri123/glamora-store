@@ -22,7 +22,7 @@ public class RefreshTokenCleanupScheduler {
      * Scheduled task to delete expired refresh tokens
      * Runs every day at 2:00 AM
      */
-    @Scheduled(cron = "${scheduler.refresh-token.cleanup.cron:0 0 2 * * *}")
+    @Scheduled(cron = "${scheduler.refresh-token.cleanup.cron:0 0 2 * * *}", zone = "Asia/Ho_Chi_Minh")
     @Transactional
     public void cleanupExpiredTokens() {
         log.info("Starting cleanup of expired refresh tokens");

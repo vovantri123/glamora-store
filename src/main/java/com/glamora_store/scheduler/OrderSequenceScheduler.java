@@ -14,10 +14,10 @@ public class OrderSequenceScheduler {
     private final OrderRepository orderRepository;
 
     /**
-     * Reset order sequence at midnight (00:00:00) every day
+     * Reset order sequence at (07:00:00) every day
      * This ensures order codes restart from -0001 each day
      */
-    @Scheduled(cron = "0 0 0 * * *", zone = "Asia/Ho_Chi_Minh")
+    @Scheduled(cron = "0 0 7 * * *", zone = "Asia/Ho_Chi_Minh")
     public void resetDailyOrderSequence() {
         try {
             orderRepository.resetOrderSequence();
