@@ -12,11 +12,13 @@ import com.glamora_store.mapper.ProductMapper;
 import com.glamora_store.repository.CategoryRepository;
 import com.glamora_store.repository.ProductRepository;
 import com.glamora_store.service.ProductService;
+import com.glamora_store.util.specification.ProductSpecification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -142,8 +144,16 @@ public class ProductServiceImpl implements ProductService {
   @Override
   @Transactional(readOnly = true)
   public PageResponse<ProductAdminResponse> searchProductsForAdmin(Long categoryId, String keyword,
-      Boolean includeDeleted, Pageable pageable) {
-    Page<Product> productPage = productRepository.searchProductsForAdmin(categoryId, keyword, includeDeleted, pageable);
+      Boolean isDeleted, Pageable pageable) {
+    Specification<Product> spec = isDeleted
+        ? ProductSpecification.isDeleted()
+            .and(ProductSpecification.hasCategoryId(categoryId))
+            .and(ProductSpecification.hasNameLike(keyword))
+        : ProductSpecification.isNotDeleted()
+            .and(ProductSpecification.hasCategoryId(categoryId))
+            .and(ProductSpecification.hasNameLike(keyword));
+
+    Page<Product> productPage = productRepository.findAll(spec, pageable);
 
     return PageResponse.from(productPage.map(productMapper::toProductAdminResponse));
   }

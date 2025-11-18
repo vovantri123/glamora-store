@@ -19,6 +19,8 @@ public class ProductAdminResponse {
 
   private String description;
 
+  private String thumbnailUrl;
+
   private Long categoryId;
 
   private String categoryName;

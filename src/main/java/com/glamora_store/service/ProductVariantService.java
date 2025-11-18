@@ -19,5 +19,5 @@ public interface ProductVariantService {
     ProductVariantAdminResponse getProductVariantById(Long id);
 
     PageResponse<ProductVariantAdminResponse> searchProductVariants(Long productId, String keyword,
-            Boolean includeDeleted, Pageable pageable);
+            Boolean isDeleted, Pageable pageable);
 }

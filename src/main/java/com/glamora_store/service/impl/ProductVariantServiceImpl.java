@@ -154,7 +154,7 @@ public class ProductVariantServiceImpl implements ProductVariantService {
 
   @Override
   public PageResponse<ProductVariantAdminResponse> searchProductVariants(Long productId, String keyword,
-      Boolean includeDeleted, Pageable pageable) {
+      Boolean isDeleted, Pageable pageable) {
     Specification<ProductVariant> spec = (root, query, cb) -> {
       List<Predicate> predicates = new ArrayList<>();
 
@@ -167,8 +167,8 @@ public class ProductVariantServiceImpl implements ProductVariantService {
         predicates.add(cb.like(cb.lower(root.get("sku")), searchPattern));
       }
 
-      if (includeDeleted == null || !includeDeleted) {
-        predicates.add(cb.isFalse(root.get("isDeleted")));
+      if (isDeleted != null) {
+        predicates.add(cb.equal(root.get("isDeleted"), isDeleted));
       }
 
       return cb.and(predicates.toArray(new Predicate[0]));

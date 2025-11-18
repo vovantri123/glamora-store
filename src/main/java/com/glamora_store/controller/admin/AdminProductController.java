@@ -22,66 +22,66 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("/admin/products")
 public class AdminProductController {
-    private final ProductService productService;
+        private final ProductService productService;
 
-    @PostMapping
-    public ApiResponse<ProductAdminResponse> createProduct(@Valid @RequestBody ProductCreateRequest request) {
-        return new ApiResponse<>(
-                SuccessMessage.CREATE_PRODUCT_SUCCESS.getMessage(),
-                productService.createProduct(request));
-    }
+        @PostMapping
+        public ApiResponse<ProductAdminResponse> createProduct(@Valid @RequestBody ProductCreateRequest request) {
+                return new ApiResponse<>(
+                                SuccessMessage.CREATE_PRODUCT_SUCCESS.getMessage(),
+                                productService.createProduct(request));
+        }
 
-    @PutMapping("/{productId}")
-    public ApiResponse<ProductAdminResponse> updateProduct(
-            @PathVariable Long productId,
-            @Valid @RequestBody ProductUpdateRequest request) {
-        return new ApiResponse<>(
-                SuccessMessage.UPDATE_PRODUCT_SUCCESS.getMessage(),
-                productService.updateProduct(productId, request));
-    }
+        @PutMapping("/{productId}")
+        public ApiResponse<ProductAdminResponse> updateProduct(
+                        @PathVariable Long productId,
+                        @Valid @RequestBody ProductUpdateRequest request) {
+                return new ApiResponse<>(
+                                SuccessMessage.UPDATE_PRODUCT_SUCCESS.getMessage(),
+                                productService.updateProduct(productId, request));
+        }
 
-    @DeleteMapping("/{productId}")
-    public ApiResponse<String> deleteProduct(@PathVariable Long productId) {
-        productService.deleteProduct(productId);
-        return new ApiResponse<>(SuccessMessage.DELETE_PRODUCT_SUCCESS.getMessage());
-    }
+        @DeleteMapping("/{productId}")
+        public ApiResponse<String> deleteProduct(@PathVariable Long productId) {
+                productService.deleteProduct(productId);
+                return new ApiResponse<>(SuccessMessage.DELETE_PRODUCT_SUCCESS.getMessage());
+        }
 
-    @PutMapping("/{productId}/activate")
-    public ApiResponse<ProductAdminResponse> activateProduct(@PathVariable Long productId) {
-        return new ApiResponse<>(
-                SuccessMessage.ACTIVATE_PRODUCT_SUCCESS.getMessage(),
-                productService.activateProduct(productId));
-    }
+        @PutMapping("/{productId}/activate")
+        public ApiResponse<ProductAdminResponse> activateProduct(@PathVariable Long productId) {
+                return new ApiResponse<>(
+                                SuccessMessage.ACTIVATE_PRODUCT_SUCCESS.getMessage(),
+                                productService.activateProduct(productId));
+        }
 
-    @GetMapping
-    public ApiResponse<PageResponse<ProductAdminResponse>> searchProducts(
-            @RequestParam(required = false) Long categoryId,
-            @RequestParam(required = false) String keyword,
-            @RequestParam(defaultValue = "false") boolean includeDeleted,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "id") String sortBy,
-            @RequestParam(defaultValue = "desc") String sortDir) {
+        @GetMapping
+        public ApiResponse<PageResponse<ProductAdminResponse>> searchProducts(
+                        @RequestParam(required = false) Long categoryId,
+                        @RequestParam(required = false) String keyword,
+                        @RequestParam(defaultValue = "false") boolean isDeleted,
+                        @RequestParam(defaultValue = "0") int page,
+                        @RequestParam(defaultValue = "10") int size,
+                        @RequestParam(defaultValue = "id") String sortBy,
+                        @RequestParam(defaultValue = "desc") String sortDir) {
 
-        Sort sort = sortDir.equalsIgnoreCase("asc")
-                ? Sort.by(sortBy).ascending()
-                : Sort.by(sortBy).descending();
+                Sort sort = sortDir.equalsIgnoreCase("asc")
+                                ? Sort.by(sortBy).ascending()
+                                : Sort.by(sortBy).descending();
 
-        Pageable pageable = PageRequest.of(page, size, sort);
-        PageResponse<ProductAdminResponse> result = productService.searchProductsForAdmin(categoryId, keyword,
-                includeDeleted, pageable);
+                Pageable pageable = PageRequest.of(page, size, sort);
+                PageResponse<ProductAdminResponse> result = productService.searchProductsForAdmin(categoryId, keyword,
+                                isDeleted, pageable);
 
-        String message = (result.getContent().isEmpty())
-                ? SuccessMessage.NO_DATA_FOUND.getMessage()
-                : SuccessMessage.SEARCH_PRODUCT_SUCCESS.getMessage();
+                String message = (result.getContent().isEmpty())
+                                ? SuccessMessage.NO_DATA_FOUND.getMessage()
+                                : SuccessMessage.SEARCH_PRODUCT_SUCCESS.getMessage();
 
-        return new ApiResponse<>(message, result);
-    }
+                return new ApiResponse<>(message, result);
+        }
 
-    @GetMapping("/{productId}")
-    public ApiResponse<ProductAdminResponse> getProductById(@PathVariable Long productId) {
-        return new ApiResponse<>(
-                SuccessMessage.GET_PRODUCT_SUCCESS.getMessage(),
-                productService.getProductByIdForAdmin(productId));
-    }
+        @GetMapping("/{productId}")
+        public ApiResponse<ProductAdminResponse> getProductById(@PathVariable Long productId) {
+                return new ApiResponse<>(
+                                SuccessMessage.GET_PRODUCT_SUCCESS.getMessage(),
+                                productService.getProductByIdForAdmin(productId));
+        }
 }

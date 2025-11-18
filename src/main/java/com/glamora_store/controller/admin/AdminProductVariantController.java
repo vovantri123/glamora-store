@@ -23,19 +23,19 @@ public class AdminProductVariantController {
 
   @PostMapping
   public ApiResponse<ProductVariantAdminResponse> createProductVariant(
-    @Valid @RequestBody ProductVariantCreateRequest request) {
+      @Valid @RequestBody ProductVariantCreateRequest request) {
     return new ApiResponse<>(
-      SuccessMessage.CREATE_PRODUCT_VARIANT_SUCCESS.getMessage(),
-      productVariantService.createProductVariant(request));
+        SuccessMessage.CREATE_PRODUCT_VARIANT_SUCCESS.getMessage(),
+        productVariantService.createProductVariant(request));
   }
 
   @PutMapping("/{variantId}")
   public ApiResponse<ProductVariantAdminResponse> updateProductVariant(
-    @PathVariable Long variantId,
-    @Valid @RequestBody ProductVariantUpdateRequest request) {
+      @PathVariable Long variantId,
+      @Valid @RequestBody ProductVariantUpdateRequest request) {
     return new ApiResponse<>(
-      SuccessMessage.UPDATE_PRODUCT_VARIANT_SUCCESS.getMessage(),
-      productVariantService.updateProductVariant(variantId, request));
+        SuccessMessage.UPDATE_PRODUCT_VARIANT_SUCCESS.getMessage(),
+        productVariantService.updateProductVariant(variantId, request));
   }
 
   @DeleteMapping("/{variantId}")
@@ -47,38 +47,38 @@ public class AdminProductVariantController {
   @PutMapping("/{variantId}/activate")
   public ApiResponse<ProductVariantAdminResponse> activateProductVariant(@PathVariable Long variantId) {
     return new ApiResponse<>(
-      SuccessMessage.ACTIVATE_PRODUCT_VARIANT_SUCCESS.getMessage(),
-      productVariantService.activateProductVariant(variantId));
+        SuccessMessage.ACTIVATE_PRODUCT_VARIANT_SUCCESS.getMessage(),
+        productVariantService.activateProductVariant(variantId));
   }
 
   @GetMapping("/{variantId}")
   public ApiResponse<ProductVariantAdminResponse> getProductVariant(@PathVariable Long variantId) {
     return new ApiResponse<>(
-      SuccessMessage.GET_PRODUCT_VARIANT_SUCCESS.getMessage(),
-      productVariantService.getProductVariantById(variantId));
+        SuccessMessage.GET_PRODUCT_VARIANT_SUCCESS.getMessage(),
+        productVariantService.getProductVariantById(variantId));
   }
 
   @GetMapping
   public ApiResponse<PageResponse<ProductVariantAdminResponse>> searchProductVariants(
-    @RequestParam(required = false) Long productId,
-    @RequestParam(required = false) String keyword,
-    @RequestParam(defaultValue = "false") boolean includeDeleted,
-    @RequestParam(defaultValue = "0") int page,
-    @RequestParam(defaultValue = "10") int size,
-    @RequestParam(defaultValue = "createdAt") String sortBy,
-    @RequestParam(defaultValue = "desc") String sortDir) {
+      @RequestParam(required = false) Long productId,
+      @RequestParam(required = false) String keyword,
+      @RequestParam(defaultValue = "false") boolean isDeleted,
+      @RequestParam(defaultValue = "0") int page,
+      @RequestParam(defaultValue = "10") int size,
+      @RequestParam(defaultValue = "createdAt") String sortBy,
+      @RequestParam(defaultValue = "desc") String sortDir) {
 
     Sort sort = sortDir.equalsIgnoreCase("asc")
-      ? Sort.by(sortBy).ascending()
-      : Sort.by(sortBy).descending();
+        ? Sort.by(sortBy).ascending()
+        : Sort.by(sortBy).descending();
 
     Pageable pageable = PageRequest.of(page, size, sort);
     PageResponse<ProductVariantAdminResponse> result = productVariantService.searchProductVariants(productId,
-      keyword, includeDeleted, pageable);
+        keyword, isDeleted, pageable);
 
     String message = (result.getContent().isEmpty())
-      ? SuccessMessage.NO_DATA_FOUND.getMessage()
-      : SuccessMessage.GET_ALL_PRODUCT_VARIANT_SUCCESS.getMessage();
+        ? SuccessMessage.NO_DATA_FOUND.getMessage()
+        : SuccessMessage.GET_ALL_PRODUCT_VARIANT_SUCCESS.getMessage();
 
     return new ApiResponse<>(message, result);
   }

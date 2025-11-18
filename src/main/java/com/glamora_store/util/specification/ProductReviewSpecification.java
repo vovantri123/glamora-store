@@ -13,6 +13,10 @@ public class ProductReviewSpecification {
         return (root, query, cb) -> cb.isFalse(root.get("isDeleted"));
     }
 
+    public static Specification<ProductReview> isDeleted() {
+        return (root, query, cb) -> cb.isTrue(root.get("isDeleted"));
+    }
+
     public static Specification<ProductReview> hasUserId(Long userId) {
         return (root, query, cb) -> {
             if (userId == null)

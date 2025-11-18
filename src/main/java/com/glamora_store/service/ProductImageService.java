@@ -16,5 +16,7 @@ public interface ProductImageService {
 
     ProductImageAdminResponse getProductImageById(Long id);
 
-    PageResponse<ProductImageAdminResponse> getAllProductImages(Long productId, Pageable pageable);
+    PageResponse<ProductImageAdminResponse> getAllProductImages(Long productId, Boolean isDeleted, Pageable pageable);
+
+    ProductImageAdminResponse setAsThumbnail(Long imageId);
 }

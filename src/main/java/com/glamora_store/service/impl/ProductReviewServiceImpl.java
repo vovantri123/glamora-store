@@ -257,11 +257,15 @@ public class ProductReviewServiceImpl implements ProductReviewService {
 
   @Override
   public PageResponse<ProductReviewAdminResponse> searchProductReviews(Long productId, Long userId, Integer rating,
-      Boolean includeDeleted, Pageable pageable) {
+      Boolean isDeleted, Pageable pageable) {
     Specification<ProductReview> spec = Specification.allOf();
 
-    if (includeDeleted == null || !includeDeleted) {
-      spec = spec.and(ProductReviewSpecification.isNotDeleted());
+    if (isDeleted != null) {
+      if (isDeleted) {
+        spec = spec.and(ProductReviewSpecification.isDeleted());
+      } else {
+        spec = spec.and(ProductReviewSpecification.isNotDeleted());
+      }
     }
 
     spec = spec.and(ProductReviewSpecification.hasProductId(productId))

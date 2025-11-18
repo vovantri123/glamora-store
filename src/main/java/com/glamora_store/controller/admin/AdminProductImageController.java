@@ -51,16 +51,23 @@ public class AdminProductImageController {
         productImageService.getProductImageById(imageId));
   }
 
+  @PutMapping("/{imageId}/set-thumbnail")
+  public ApiResponse<ProductImageAdminResponse> setAsThumbnail(@PathVariable Long imageId) {
+    return new ApiResponse<>(
+        "Set as thumbnail successfully",
+        productImageService.setAsThumbnail(imageId));
+  }
+
   @GetMapping
   public ApiResponse<PageResponse<ProductImageAdminResponse>> getAllProductImages(
       @RequestParam(required = false) Long productId,
+      @RequestParam(defaultValue = "false") boolean isDeleted,
       @RequestParam(defaultValue = "0") int page,
       @RequestParam(defaultValue = "10") int size,
-      @RequestParam(defaultValue = "created_at") String sortBy,
+      @RequestParam(defaultValue = "createdAt") String sortBy,
       @RequestParam(defaultValue = "desc") String sortDir) {
 
-    // Nếu không filter theo productId hoặc variantId, sort theo created_at thay vì
-    // displayOrder
+    // Nếu không filter theo productId, sort theo id
     if (productId == null) {
       sortBy = "id";
     }
@@ -70,7 +77,8 @@ public class AdminProductImageController {
         : Sort.by(sortBy).descending();
 
     Pageable pageable = PageRequest.of(page, size, sort);
-    PageResponse<ProductImageAdminResponse> result = productImageService.getAllProductImages(productId, pageable);
+    PageResponse<ProductImageAdminResponse> result = productImageService.getAllProductImages(productId, isDeleted,
+        pageable);
 
     String message = (result.getContent().isEmpty())
         ? SuccessMessage.NO_DATA_FOUND.getMessage()

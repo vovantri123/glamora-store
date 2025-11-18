@@ -25,7 +25,7 @@ public interface ProductService {
 
   ProductAdminResponse activateProduct(Long id);
 
-  PageResponse<ProductAdminResponse> searchProductsForAdmin(Long categoryId, String keyword, Boolean includeDeleted,
+  PageResponse<ProductAdminResponse> searchProductsForAdmin(Long categoryId, String keyword, Boolean isDeleted,
       Pageable pageable);
 
   ProductAdminResponse getProductByIdForAdmin(Long id);

@@ -26,24 +26,24 @@ public class AdminProductReviewController {
   @GetMapping
   @Operation(summary = "Search all reviews", description = "Get paginated list of all reviews with filters")
   public ApiResponse<PageResponse<ProductReviewAdminResponse>> searchReviews(
-    @RequestParam(required = false) Long productId,
-    @RequestParam(required = false) Long userId,
-    @RequestParam(required = false) Integer rating,
-    @RequestParam(defaultValue = "false") boolean includeDeleted,
-    @RequestParam(defaultValue = "0") int page,
-    @RequestParam(defaultValue = "10") int size,
-    @RequestParam(defaultValue = "createdAt") String sortBy,
-    @RequestParam(defaultValue = "desc") String sortDir) {
+      @RequestParam(required = false) Long productId,
+      @RequestParam(required = false) Long userId,
+      @RequestParam(required = false) Integer rating,
+      @RequestParam(defaultValue = "false") boolean isDeleted,
+      @RequestParam(defaultValue = "0") int page,
+      @RequestParam(defaultValue = "10") int size,
+      @RequestParam(defaultValue = "createdAt") String sortBy,
+      @RequestParam(defaultValue = "desc") String sortDir) {
 
     Sort sort = sortDir.equalsIgnoreCase("asc") ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
     Pageable pageable = PageRequest.of(page, size, sort);
 
     PageResponse<ProductReviewAdminResponse> result = reviewService.searchProductReviews(
-      productId, userId, rating, includeDeleted, pageable);
+        productId, userId, rating, isDeleted, pageable);
 
     String message = (result.getContent().isEmpty())
-      ? SuccessMessage.NO_DATA_FOUND.getMessage()
-      : SuccessMessage.GET_ALL_REVIEW_SUCCESS.getMessage();
+        ? SuccessMessage.NO_DATA_FOUND.getMessage()
+        : SuccessMessage.GET_ALL_REVIEW_SUCCESS.getMessage();
 
     return new ApiResponse<>(message, result);
   }
@@ -52,18 +52,18 @@ public class AdminProductReviewController {
   @Operation(summary = "Get review by ID", description = "Get detailed review information by ID")
   public ApiResponse<ProductReviewAdminResponse> getReview(@PathVariable Long reviewId) {
     return new ApiResponse<>(
-      SuccessMessage.GET_REVIEW_SUCCESS.getMessage(),
-      reviewService.getProductReviewByIdForAdmin(reviewId));
+        SuccessMessage.GET_REVIEW_SUCCESS.getMessage(),
+        reviewService.getProductReviewByIdForAdmin(reviewId));
   }
 
   @PutMapping("/{reviewId}")
   @Operation(summary = "Update review", description = "Update review rating and comment")
   public ApiResponse<ProductReviewAdminResponse> updateReview(
-    @PathVariable Long reviewId,
-    @Valid @RequestBody ProductReviewUpdateRequest request) {
+      @PathVariable Long reviewId,
+      @Valid @RequestBody ProductReviewUpdateRequest request) {
     return new ApiResponse<>(
-      SuccessMessage.UPDATE_REVIEW_SUCCESS.getMessage(),
-      reviewService.updateProductReview(reviewId, request));
+        SuccessMessage.UPDATE_REVIEW_SUCCESS.getMessage(),
+        reviewService.updateProductReview(reviewId, request));
   }
 
   @DeleteMapping("/{reviewId}")
@@ -77,7 +77,7 @@ public class AdminProductReviewController {
   @Operation(summary = "Activate review", description = "Restore a soft-deleted review")
   public ApiResponse<ProductReviewAdminResponse> activateReview(@PathVariable Long reviewId) {
     return new ApiResponse<>(
-      "Activate product review successfully",
-      reviewService.activateProductReview(reviewId));
+        "Activate product review successfully",
+        reviewService.activateProductReview(reviewId));
   }
 }

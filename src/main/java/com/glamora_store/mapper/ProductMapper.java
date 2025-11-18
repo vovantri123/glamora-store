@@ -43,6 +43,7 @@ public interface ProductMapper {
   // Admin mappings
   @Mapping(target = "categoryId", source = "category.id")
   @Mapping(target = "categoryName", source = "category.name")
+  @Mapping(target = "thumbnailUrl", expression = "java(getThumbnailUrl(product))")
   ProductAdminResponse toProductAdminResponse(Product product);
 
   List<ProductAdminResponse> toProductAdminResponseList(List<Product> products);

@@ -72,7 +72,7 @@ public class ProductImageServiceImpl implements ProductImageService {
   }
 
   @Override
-  public PageResponse<ProductImageAdminResponse> getAllProductImages(Long productId,
+  public PageResponse<ProductImageAdminResponse> getAllProductImages(Long productId, Boolean isDeleted,
       Pageable pageable) {
     Page<ProductImage> productImages;
 
@@ -83,5 +83,28 @@ public class ProductImageServiceImpl implements ProductImageService {
     }
 
     return PageResponse.from(productImages.map(productImageMapper::toProductImageAdminResponse));
+  }
+
+  @Override
+  @Transactional
+  public ProductImageAdminResponse setAsThumbnail(Long imageId) {
+    ProductImage productImage = productImageRepository.findById(imageId)
+        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+            ErrorMessage.PRODUCT_IMAGE_NOT_FOUND.getMessage()));
+
+    Product product = productImage.getProduct();
+
+    // Unset current thumbnail
+    productImageRepository.findByProductIdAndIsThumbnailTrue(product.getId())
+        .ifPresent(currentThumbnail -> {
+          currentThumbnail.setIsThumbnail(false);
+          productImageRepository.save(currentThumbnail);
+        });
+
+    // Set new thumbnail
+    productImage.setIsThumbnail(true);
+    ProductImage updatedImage = productImageRepository.save(productImage);
+
+    return productImageMapper.toProductImageAdminResponse(updatedImage);
   }
 }

@@ -38,7 +38,7 @@ public interface ProductReviewService {
   ProductReviewAdminResponse getProductReviewByIdForAdmin(Long id);
 
   PageResponse<ProductReviewAdminResponse> searchProductReviews(Long productId, Long userId, Integer rating,
-      Boolean includeDeleted, Pageable pageable);
+      Boolean isDeleted, Pageable pageable);
 
   PageResponse<ProductReviewResponse> getAllReviews(Pageable pageable);
 }

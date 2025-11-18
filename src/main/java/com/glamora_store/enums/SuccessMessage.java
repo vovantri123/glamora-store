@@ -39,6 +39,7 @@ public enum SuccessMessage {
   UPDATE_CATEGORY_SUCCESS("Update category successfully"),
   DELETE_CATEGORY_SUCCESS("Delete category successfully"),
   ACTIVATE_CATEGORY_SUCCESS("Activate category successfully"),
+  GET_ALL_ATTRIBUTE_SUCCESS("Get all attributes successfully"),
   GET_ALL_PRODUCT_SUCCESS("Get all products successfully"),
   GET_PRODUCT_SUCCESS("Get product successfully"),
   SEARCH_PRODUCT_SUCCESS("Search products successfully"),
