@@ -33,6 +33,7 @@ public class ProductVariantAdminResponse {
     @Builder
     public static class AttributeValueInfo {
         private Long attributeValueId;
+        private Long attributeId;
         private String attributeName;
         private String valueName;
     }

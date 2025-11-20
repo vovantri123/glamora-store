@@ -31,7 +31,7 @@ public interface ProductReviewService {
   // Admin endpoints
   ProductReviewAdminResponse updateProductReview(Long id, ProductReviewUpdateRequest request);
 
-  void deleteReview(Long reviewId);
+  void  deleteReview(Long reviewId);
 
   ProductReviewAdminResponse activateProductReview(Long id);
 

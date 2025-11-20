@@ -100,9 +100,14 @@ public class ProductVariantServiceImpl implements ProductVariantService {
     productVariantMapper.updateProductVariantFromRequest(request, productVariant);
 
     // Update attribute values if provided
-    if (request.getAttributeValueIds() != null) {
+    if (request.getAttributeValueIds() != null && !request.getAttributeValueIds().isEmpty()) {
+      // Delete existing variant values
       productVariantValueRepository.deleteByVariantId(id);
 
+      // Flush to ensure deletion is completed before insert
+      productVariantValueRepository.flush();
+
+      // Add new variant values
       for (Long attributeValueId : request.getAttributeValueIds()) {
         AttributeValue attributeValue = attributeValueRepository.findById(attributeValueId)
             .orElseThrow(

@@ -15,7 +15,7 @@ public class ProductImageUpdateRequest {
 
     private String altText;
 
-    private Boolean isThumbnail;
+//    private Boolean isThumbnail;
 
     private Integer displayOrder;
 }

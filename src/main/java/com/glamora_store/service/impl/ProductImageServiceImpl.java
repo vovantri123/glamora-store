@@ -34,6 +34,15 @@ public class ProductImageServiceImpl implements ProductImageService {
         .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
             ErrorMessage.PRODUCT_NOT_FOUND.getMessage()));
 
+    // If this image should be thumbnail, unset current thumbnail
+    if (Boolean.TRUE.equals(request.getIsThumbnail())) {
+      productImageRepository.findByProductIdAndIsThumbnailTrue(product.getId())
+          .ifPresent(currentThumbnail -> {
+            currentThumbnail.setIsThumbnail(false);
+            productImageRepository.save(currentThumbnail);
+          });
+    }
+
     ProductImage productImage = productImageMapper.toProductImage(request);
     productImage.setProduct(product);
 
