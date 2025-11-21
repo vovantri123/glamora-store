@@ -48,4 +48,12 @@ public class ProductReviewSpecification {
             return cb.equal(root.get("isVerifiedPurchase"), isVerifiedPurchase);
         };
     }
+
+    public static Specification<ProductReview> hasVariantId(Long variantId) {
+        return (root, query, cb) -> {
+            if (variantId == null)
+                return null;
+            return cb.equal(root.get("variant").get("id"), variantId);
+        };
+    }
 }

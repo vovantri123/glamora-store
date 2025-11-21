@@ -19,8 +19,6 @@ public class CreateReviewRequest {
     @NotNull(message = "REVIEW_VARIANT_ID_REQUIRED")
     private Long variantId; // REQUIRED - biến thể cụ thể (màu, size)
 
-    private Long orderId; // OPTIONAL - để verify purchase
-
     @NotNull(message = "REVIEW_RATING_REQUIRED")
     @Min(value = 1, message = "REVIEW_RATING_INVALID")
     @Max(value = 5, message = "REVIEW_RATING_INVALID")

@@ -18,9 +18,7 @@ public interface ProductReviewService {
 
   void deleteMyReview(Long reviewId);
 
-  ProductReviewResponse getReviewById(Long reviewId);
-
-  PageResponse<ProductReviewResponse> getMyReviews(Pageable pageable);
+  ProductReviewResponse getUserReviewForProduct(Long productId, Long variantId);
 
   // Common endpoints
   PageResponse<ProductReviewResponse> getReviewsByProductId(Long productId, Integer rating,
@@ -31,14 +29,13 @@ public interface ProductReviewService {
   // Admin endpoints
   ProductReviewAdminResponse updateProductReview(Long id, ProductReviewUpdateRequest request);
 
-  void  deleteReview(Long reviewId);
+  void deleteReview(Long reviewId);
 
   ProductReviewAdminResponse activateProductReview(Long id);
 
   ProductReviewAdminResponse getProductReviewByIdForAdmin(Long id);
 
-  PageResponse<ProductReviewAdminResponse> searchProductReviews(Long productId, Long userId, Integer rating,
+  PageResponse<ProductReviewAdminResponse> searchProductReviews(Long productId, Integer rating,
       Boolean isDeleted, Pageable pageable);
 
-  PageResponse<ProductReviewResponse> getAllReviews(Pageable pageable);
 }

@@ -9,12 +9,11 @@ CREATE TABLE product_reviews (
     is_deleted BOOLEAN NOT NULL,
     is_verified_purchase BOOLEAN,
     rating INTEGER NOT NULL,
-    order_id BIGINT,
     product_id BIGINT NOT NULL,
     user_id BIGINT NOT NULL,
-    variant_id BIGINT,
-    FOREIGN KEY (order_id) REFERENCES orders(id),
+    variant_id BIGINT NOT NULL,
     FOREIGN KEY (product_id) REFERENCES products(id),
     FOREIGN KEY (user_id) REFERENCES users(id),
-    FOREIGN KEY (variant_id) REFERENCES product_variants(id)
+    FOREIGN KEY (variant_id) REFERENCES product_variants(id),
+    UNIQUE (user_id, variant_id)
 );

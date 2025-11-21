@@ -14,8 +14,8 @@ public interface ProductReviewRepository
     // Tìm review theo id và chưa bị xóa
     Optional<ProductReview> findByIdAndIsDeletedFalse(Long id);
 
-    // Kiểm tra user đã review sản phẩm này chưa
-    boolean existsByUserIdAndProductIdAndIsDeletedFalse(Long userId, Long productId);
+    // Kiểm tra user đã review variant này chưa (mỗi user chỉ review 1 lần/variant)
+    boolean existsByUserIdAndVariantIdAndIsDeletedFalse(Long userId, Long variantId);
 
     // Tính rating trung bình của một sản phẩm (cần custom query cho AVG)
     @org.springframework.data.jpa.repository.Query("SELECT AVG(pr.rating) FROM ProductReview pr WHERE pr.product.id = :productId AND pr.isDeleted = false")

@@ -31,7 +31,7 @@ public class ProductReviewServiceImpl implements ProductReviewService {
   private final ProductReviewRepository reviewRepository;
   private final ProductRepository productRepository;
   private final ProductVariantRepository productVariantRepository;
-  private final OrderRepository orderRepository;
+  private final OrderItemRepository orderItemRepository;
   private final UserRepository userRepository;
   private final ProductReviewMapper reviewMapper;
 
@@ -50,8 +50,14 @@ public class ProductReviewServiceImpl implements ProductReviewService {
             () -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                 ErrorMessage.PRODUCT_NOT_FOUND.getMessage()));
 
-    // Check if user already reviewed this product
-    if (reviewRepository.existsByUserIdAndProductIdAndIsDeletedFalse(userId, request.getProductId())) {
+    // Validate variant exists
+    ProductVariant variant = productVariantRepository.findById(request.getVariantId())
+        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+            ErrorMessage.PRODUCT_VARIANT_NOT_FOUND.getMessage()));
+
+    // Check if user already reviewed this variant (mỗi user chỉ review 1
+    // lần/variant)
+    if (reviewRepository.existsByUserIdAndVariantIdAndIsDeletedFalse(userId, request.getVariantId())) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ErrorMessage.REVIEW_ALREADY_EXISTS.getMessage());
     }
 
@@ -59,34 +65,13 @@ public class ProductReviewServiceImpl implements ProductReviewService {
     ProductReview review = reviewMapper.toProductReview(request);
     review.setUser(currentUser);
     review.setProduct(product);
+    review.setVariant(variant);
 
-    // Set variant if provided
-    if (request.getVariantId() != null) {
-      ProductVariant variant = productVariantRepository.findById(request.getVariantId())
-          .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-              ErrorMessage.PRODUCT_VARIANT_NOT_FOUND.getMessage()));
-      review.setVariant(variant);
-    }
-
-    // Set order and verify purchase if provided
-    if (request.getOrderId() != null) {
-      Order order = orderRepository.findById(request.getOrderId())
-          .orElseThrow(
-              () -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                  ErrorMessage.ORDER_NOT_FOUND.getMessage()));
-
-      // Check if order belongs to user and is completed
-      if (!order.getUser().getId().equals(userId)) {
-        throw new ResponseStatusException(HttpStatus.FORBIDDEN, ErrorMessage.ORDER_ACCESS_DENIED.getMessage());
-      }
-
-      // Verify purchase if order is completed
-      if (order.getStatus() == OrderStatus.COMPLETED) {
-        review.setIsVerifiedPurchase(true);
-      }
-
-      review.setOrder(order);
-    }
+    // Tự động verify purchase: kiểm tra user đã mua variant này chưa (order
+    // COMPLETED)
+    boolean hasPurchased = orderItemRepository.existsByVariantIdAndUserIdAndOrderStatus(
+        request.getVariantId(), userId, OrderStatus.COMPLETED);
+    review.setIsVerifiedPurchase(hasPurchased);
 
     ProductReview savedReview = reviewRepository.save(review);
     return reviewMapper.toProductReviewResponse(savedReview);
@@ -108,6 +93,13 @@ public class ProductReviewServiceImpl implements ProductReviewService {
     }
 
     reviewMapper.toProductReview(review, request);
+
+    // Re-check verify purchase khi update (trường hợp user đã mua sau khi tạo
+    // review)
+    boolean hasPurchased = orderItemRepository.existsByVariantIdAndUserIdAndOrderStatus(
+        review.getVariant().getId(), userId, OrderStatus.COMPLETED);
+    review.setIsVerifiedPurchase(hasPurchased);
+
     ProductReview updatedReview = reviewRepository.save(review);
     return reviewMapper.toProductReviewResponse(updatedReview);
   }
@@ -144,16 +136,20 @@ public class ProductReviewServiceImpl implements ProductReviewService {
 
   @Override
   @Transactional(readOnly = true)
-  public PageResponse<ProductReviewResponse> getMyReviews(Pageable pageable) {
+  public ProductReviewResponse getUserReviewForProduct(Long productId, Long variantId) {
     Long userId = SecurityUtil.getCurrentUserId();
 
     Specification<ProductReview> spec = ProductReviewSpecification.isNotDeleted()
-        .and(ProductReviewSpecification.hasUserId(userId));
+        .and(ProductReviewSpecification.hasUserId(userId))
+        .and(ProductReviewSpecification.hasProductId(productId));
 
-    Page<ProductReview> reviewPage = reviewRepository.findAll(spec, pageable);
-    Page<ProductReviewResponse> responsePage = reviewPage.map(reviewMapper::toProductReviewResponse);
+    if (variantId != null) {
+      spec = spec.and(ProductReviewSpecification.hasVariantId(variantId));
+    }
 
-    return PageResponse.from(responsePage);
+    return reviewRepository.findOne(spec)
+        .map(reviewMapper::toProductReviewResponse)
+        .orElse(null);
   }
 
   @Override
@@ -213,15 +209,6 @@ public class ProductReviewServiceImpl implements ProductReviewService {
     reviewRepository.save(review);
   }
 
-  @Override
-  @Transactional(readOnly = true)
-  public PageResponse<ProductReviewResponse> getAllReviews(Pageable pageable) {
-    Page<ProductReview> reviewPage = reviewRepository.findAll(pageable);
-    Page<ProductReviewResponse> responsePage = reviewPage.map(reviewMapper::toProductReviewResponse);
-
-    return PageResponse.from(responsePage);
-  }
-
   // Admin-specific methods
   @Override
   @Transactional
@@ -256,7 +243,7 @@ public class ProductReviewServiceImpl implements ProductReviewService {
   }
 
   @Override
-  public PageResponse<ProductReviewAdminResponse> searchProductReviews(Long productId, Long userId, Integer rating,
+  public PageResponse<ProductReviewAdminResponse> searchProductReviews(Long productId, Integer rating,
       Boolean isDeleted, Pageable pageable) {
     Specification<ProductReview> spec = Specification.allOf();
 
@@ -269,7 +256,6 @@ public class ProductReviewServiceImpl implements ProductReviewService {
     }
 
     spec = spec.and(ProductReviewSpecification.hasProductId(productId))
-        .and(ProductReviewSpecification.hasUserId(userId))
         .and(ProductReviewSpecification.hasRating(rating));
 
     Page<ProductReview> reviews = reviewRepository.findAll(spec, pageable);

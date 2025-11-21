@@ -27,7 +27,6 @@ public class AdminProductReviewController {
   @Operation(summary = "Search all reviews", description = "Get paginated list of all reviews with filters")
   public ApiResponse<PageResponse<ProductReviewAdminResponse>> searchReviews(
       @RequestParam(required = false) Long productId,
-      @RequestParam(required = false) Long userId,
       @RequestParam(required = false) Integer rating,
       @RequestParam(defaultValue = "false") boolean isDeleted,
       @RequestParam(defaultValue = "0") int page,
@@ -39,7 +38,7 @@ public class AdminProductReviewController {
     Pageable pageable = PageRequest.of(page, size, sort);
 
     PageResponse<ProductReviewAdminResponse> result = reviewService.searchProductReviews(
-        productId, userId, rating, isDeleted, pageable);
+        productId, rating, isDeleted, pageable);
 
     String message = (result.getContent().isEmpty())
         ? SuccessMessage.NO_DATA_FOUND.getMessage()

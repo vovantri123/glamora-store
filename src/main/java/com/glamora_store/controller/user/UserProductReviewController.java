@@ -24,6 +24,18 @@ public class UserProductReviewController {
 
   private final ProductReviewService reviewService;
 
+  // Endpoint để check đã review cái (product, variant) này chưa là chủ yếu
+  @GetMapping("/product/{productId}")
+  @Operation(summary = "Get my review for product", description = "Get current user's review for a specific product/variant")
+  public ApiResponse<ProductReviewResponse> getUserReviewForProduct(
+      @PathVariable Long productId,
+      @RequestParam Long variantId) {
+    // Mặc định @RequestParam bắt buộc (required = true).
+    return new ApiResponse<>(
+        SuccessMessage.GET_REVIEW_SUCCESS.getMessage(),
+        reviewService.getUserReviewForProduct(productId, variantId));
+  }
+
   @PostMapping
   @Operation(summary = "Create new review", description = "Create a new review for a product")
   public ApiResponse<ProductReviewResponse> createReview(@Valid @RequestBody CreateReviewRequest request) {
@@ -47,22 +59,5 @@ public class UserProductReviewController {
   public ApiResponse<Void> deleteMyReview(@PathVariable Long reviewId) {
     reviewService.deleteMyReview(reviewId);
     return new ApiResponse<>(SuccessMessage.DELETE_REVIEW_SUCCESS.getMessage());
-  }
-
-  @GetMapping
-  @Operation(summary = "Get my reviews", description = "Get paginated list of current user's reviews")
-  public ApiResponse<PageResponse<ProductReviewResponse>> getMyReviews(
-      @RequestParam(defaultValue = "0") int page,
-      @RequestParam(defaultValue = "10") int size,
-      @RequestParam(defaultValue = "createdAt") String sortBy,
-      @RequestParam(defaultValue = "desc") String sortDir) {
-    Sort sort = sortDir.equalsIgnoreCase("asc")
-        ? Sort.by(sortBy).ascending()
-        : Sort.by(sortBy).descending();
-    Pageable pageable = PageRequest.of(page, size, sort);
-
-    return new ApiResponse<>(
-        SuccessMessage.GET_ALL_REVIEW_SUCCESS.getMessage(),
-        reviewService.getMyReviews(pageable));
   }
 }

@@ -22,8 +22,6 @@ public class ProductReviewResponse {
 
     private Long variantId;
 
-    private Long orderId;
-
     private Integer rating;
 
     private String comment;

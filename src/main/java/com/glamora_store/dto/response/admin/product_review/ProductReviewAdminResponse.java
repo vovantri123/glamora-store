@@ -20,7 +20,6 @@ public class ProductReviewAdminResponse {
   private String productName;
   private Long variantId;
   private String variantSku;
-  private Long orderId;
   private Integer rating;
   private String comment;
   private Boolean isVerifiedPurchase;

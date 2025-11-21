@@ -18,7 +18,6 @@ public interface ProductReviewMapper {
   @Mapping(target = "user", ignore = true)
   @Mapping(target = "product", ignore = true)
   @Mapping(target = "variant", ignore = true)
-  @Mapping(target = "order", ignore = true)
   @Mapping(target = "isVerifiedPurchase", ignore = true)
   @Mapping(target = "isDeleted", ignore = true)
   @Mapping(target = "createdAt", ignore = true)
@@ -35,7 +34,6 @@ public interface ProductReviewMapper {
   @Mapping(target = "productId", source = "product.id")
   @Mapping(target = "productName", source = "product.name")
   @Mapping(target = "variantId", source = "variant.id")
-  @Mapping(target = "orderId", source = "order.id")
   ProductReviewResponse toProductReviewResponse(ProductReview review);
 
   @Mapping(target = "averageRating", expression = "java(averageRating != null ? averageRating : 0.0)")
@@ -51,14 +49,12 @@ public interface ProductReviewMapper {
   @Mapping(target = "productName", source = "product.name")
   @Mapping(target = "variantId", source = "variant.id")
   @Mapping(target = "variantSku", source = "variant.sku")
-  @Mapping(target = "orderId", source = "order.id")
   ProductReviewAdminResponse toProductReviewAdminResponse(ProductReview productReview);
 
   @Mapping(target = "id", ignore = true)
   @Mapping(target = "user", ignore = true)
   @Mapping(target = "product", ignore = true)
   @Mapping(target = "variant", ignore = true)
-  @Mapping(target = "order", ignore = true)
   @Mapping(target = "isVerifiedPurchase", ignore = true)
   @Mapping(target = "isDeleted", ignore = true)
   @Mapping(target = "createdAt", ignore = true)

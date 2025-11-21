@@ -27,15 +27,10 @@ public class ProductReview extends AuditableEntity {
   @JoinColumn(name = "product_id", nullable = false)
   private Product product;
 
-  // Biến thể cụ thể (nếu có)
+  // Biến thể cụ thể (REQUIRED - mỗi review gắn với 1 variant cụ thể)
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "variant_id")
+  @JoinColumn(name = "variant_id", nullable = false)
   private ProductVariant variant;
-
-  // Order đã mua (để verify purchase)
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "order_id")
-  private Order order;
 
   @Column(nullable = false)
   private Integer rating; // 1–5 sao

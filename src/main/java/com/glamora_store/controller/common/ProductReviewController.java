@@ -22,14 +22,6 @@ public class ProductReviewController {
 
   private final ProductReviewService reviewService;
 
-  @GetMapping("/{reviewId}")
-  @Operation(summary = "Get review by ID", description = "Get detailed information of a specific review")
-  public ApiResponse<ProductReviewResponse> getReviewById(@PathVariable Long reviewId) {
-    return new ApiResponse<>(
-      SuccessMessage.GET_REVIEW_SUCCESS.getMessage(),
-      reviewService.getReviewById(reviewId));
-  }
-
   @GetMapping("/product/{productId}")
   @Operation(summary = "Get reviews by product", description = "Get paginated list of reviews for a specific product with optional filters for rating and verified purchase")
   public ApiResponse<PageResponse<ProductReviewResponse>> getReviewsByProductId(
